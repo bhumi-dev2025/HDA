@@ -1,0 +1,1717 @@
+// import React from 'react';
+// import { View, Text, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+// import Svg, { Path, Defs, LinearGradient, Stop } from 'react-native-svg';
+// import { SafeAreaView } from 'react-native-safe-area-context';
+// import { MaterialCommunityIcons, Ionicons, FontAwesome5 } from '@expo/vector-icons';
+
+// // --- CONFIGURATION ---
+// const { width } = Dimensions.get('window');
+// const ITEM_HEIGHT = 220; // sapce vadhri tena thi text no problem
+// const X_OFFSET = 80;     // zig zeg mate
+// const CIRCLE_SIZE = 80;  // button size
+
+// // --- DATA ---
+// const roadmapData = [
+//   { id: 1, label: "START", title: "Welcome to Academy", desc: "Rules & Onboarding", type: 'flag', status: 'completed' },
+//   { id: 2, label: "WEEK 1", title: "The Human Kit", desc: "Doodling & Habits ", type: 'book', status: 'unlocked' },
+//   { id: 3, label: "WEEK 2", title: "Mindful Meditation", desc: "Your Dream Product", type: 'brain', status: 'locked' },
+//   { id: 4, label: "WEEK 3", title: "Logo Design", desc: "Figma & AI Tools", type: 'design', status: 'locked' },
+//   { id: 5, label: "WEEK 4", title: "Web UI/UX", desc: "Brand Assets & Colors", type: 'web', status: 'locked' },
+//   { id: 6, label: "WEEK 5", title: "Mobile App Design", desc: "Prototyping & Framer", type: 'mobile', status: 'locked' },
+//   { id: 7, label: "WEEK 6", title: "Publishing", desc: "Spline 3D & Framer AI", type: '3d', status: 'locked' },
+//   { id: 8, label: "WEEK 7", title: "Premier Pro", desc: "Video Editing Basics", type: 'video', status: 'locked' },
+//   { id: 9, label: "WEEK 8", title: "Magic Editing", desc: "After Effects & Audio", type: 'magic', status: 'locked' },
+// ];
+
+// export default function RoadmapScreen() {
+
+//   // --- PATH CALCULATION ---
+//   const getPath = () => {
+//     let path = `M ${width / 2} 60`; // satrting point middale top
+
+//     roadmapData.forEach((_, index) => {
+//       const isLeft = index % 2 === 0;
+//       // બટન હવે સેન્ટરમાં રહેશે, તેની પાછળ લાઈન જશે
+//       const currentY = (index * ITEM_HEIGHT) + 100; 
+//       const nextY = ((index + 1) * ITEM_HEIGHT) + 100; 
+
+//       const currentX = width / 2 + (isLeft ? -X_OFFSET : X_OFFSET);
+//       const nextX = width / 2 + (isLeft ? X_OFFSET : -X_OFFSET);
+
+//       if (index === 0) {
+//            path += ` L ${currentX} ${currentY}`;
+//       }
+      
+//       path += ` C ${currentX} ${currentY + ITEM_HEIGHT / 2}, ${nextX} ${nextY - ITEM_HEIGHT / 2}, ${nextX} ${nextY}`;
+//     });
+
+//     return path;
+//   };
+
+//   const getIcon = (type: string, color: string) => {
+//     switch (type) {
+//       case 'flag': return <Ionicons name="flag" size={30} color={color} />;
+//       case 'book': return <FontAwesome5 name="book-open" size={26} color={color} />;
+//       case 'brain': return <MaterialCommunityIcons name="brain" size={30} color={color} />;
+//       case 'design': return <MaterialCommunityIcons name="pencil-ruler" size={30} color={color} />;
+//       case 'web': return <MaterialCommunityIcons name="web" size={30} color={color} />;
+//       case 'mobile': return <Ionicons name="phone-portrait" size={30} color={color} />;
+//       case '3d': return <MaterialCommunityIcons name="cube-scan" size={30} color={color} />;
+//       case 'video': return <MaterialCommunityIcons name="video-vintage" size={30} color={color} />;
+//       case 'magic': return <FontAwesome5 name="magic" size={26} color={color} />;
+//       default: return <Ionicons name="star" size={30} color={color} />;
+//     }
+//   };
+
+//   return (
+//     <SafeAreaView edges={['top']} className="flex-1 bg-black">
+//       <ScrollView 
+//         contentContainerStyle={{ paddingBottom: 150, paddingTop: 20 }}
+//         className="flex-1"
+//         showsVerticalScrollIndicator={false}
+//       >
+        
+//         {/* --- LAYER 1: NEON PATH --- */}
+//         <View className="absolute top-0 left-0 right-0 h-full" pointerEvents="none">
+//           <Svg height={roadmapData.length * ITEM_HEIGHT + 300} width={width}>
+//             <Defs>
+//               <LinearGradient id="pathGradient" x1="0" y1="0" x2="0" y2="1">
+//                 <Stop offset="0" stopColor="#00F0FF" stopOpacity="1" />
+//                 <Stop offset="0.8" stopColor="#00F0FF" stopOpacity="0.5" />
+//                 <Stop offset="1" stopColor="#000000" stopOpacity="0" />
+//               </LinearGradient>
+//             </Defs>
+
+//             <Path 
+//               d={getPath()} 
+//               stroke="#00F0FF" 
+//               strokeWidth="20" 
+//               strokeOpacity="0.15"
+//               fill="none"
+//               strokeLinecap="round"
+//             />
+//             <Path 
+//               d={getPath()} 
+//               stroke="url(#pathGradient)" 
+//               strokeWidth="6" 
+//               fill="none"
+//               strokeLinecap="round"
+//             />
+//           </Svg>
+//         </View>
+
+//         {/* --- LAYER 2: CONTENT --- */}
+//         {roadmapData.map((item, index) => {
+//           const isLeft = index % 2 === 0;
+//           const translateX = isLeft ? -X_OFFSET : X_OFFSET;
+//           const isLocked = item.status === 'locked';
+
+//           return (
+//             <View 
+//               key={item.id} 
+//               // અહીં height અને positioning મહત્વના છે
+//               style={{ height: ITEM_HEIGHT, transform: [{ translateX }] }} 
+//               className="items-center justify-start pt-10 relative"
+//             >
+              
+//               {/* --- A. FLOATING LABEL (સુધારેલું) --- */}
+//               {/* આને બટનની અડીને ઉપર લાવ્યું છે (-mb-3 એટલે margin-bottom negative) */}
+//               <View className="z-20 items-center -mb-4">
+//                  <View className="bg-white px-3 py-1 rounded-lg shadow-sm border border-gray-300">
+//                     <Text className="text-black font-extrabold text-[10px] tracking-widest">
+//                       {item.label}
+//                     </Text>
+//                  </View>
+//                  {/* Arrow */}
+//                  <View className="w-2 h-2 bg-white rotate-45 -mt-1" />
+//               </View>
+
+//               {/* --- B. BUTTON --- */}
+//               <TouchableOpacity 
+//                 activeOpacity={0.9}
+//                 className={`
+//                   w-20 h-20 rounded-full justify-center items-center z-10
+//                   border-4
+//                   ${isLocked 
+//                     ? 'bg-[#121212] border-[#333]' 
+//                     : 'bg-[#000] border-[#00F0FF] shadow-[0_0_20px_#00F0FF]'
+//                   }
+//                 `}
+//                 style={{ 
+//                   borderBottomWidth: isLocked ? 4 : 8,
+//                   borderColor: isLocked ? '#333' : '#00F0FF'
+//                 }}
+//               >
+//                 <View className={`w-16 h-16 rounded-full border border-white/10 justify-center items-center ${isLocked ? 'opacity-30' : 'opacity-100'}`}>
+//                    {getIcon(item.type, isLocked ? '#555' : '#fff')}
+//                 </View>
+
+//                 {isLocked && (
+//                   <View className="absolute bg-[#222] p-1.5 rounded-full bottom-0 -right-1 border border-black">
+//                      <Ionicons name="lock-closed" size={12} color="#666" />
+//                   </View>
+//                 )}
+//               </TouchableOpacity>
+
+//               {/* --- C. TITLE & DESC (હવે બટનની નીચે ફિક્સ જગ્યાએ) --- */}
+//               <View className="mt-4 items-center w-40 z-20">
+//                 <Text className="text-[#00F0FF] font-bold text-sm text-center uppercase tracking-wide shadow-black shadow-md bg-black/40 rounded px-2">
+//                    {item.title}
+//                 </Text>
+//                 <Text className="text-gray-400 text-[10px] text-center mt-1 font-medium bg-black/40 px-1 rounded">
+//                    {item.desc}
+//                 </Text>
+//               </View>
+
+//             </View>
+//           );
+//         })}
+
+//         {/* Bottom Padding */}
+//         <View className="h-24" />
+
+//       </ScrollView>
+//     </SafeAreaView>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React from 'react';
+// import { View, Text, ScrollView, Image, TouchableOpacity} from 'react-native';
+// import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+// import { SafeAreaView } from 'react-native-safe-area-context';
+
+// // કલર પેલેટ મુજબ ડમી ડેટા
+// const RECENT_ITEMS = [
+//   { id: 1, title: 'Simplecoder.co', icon: 'code-tags' },
+//   { id: 2, title: 'Design System', icon: 'palette' },
+// ];
+
+// export default function HomeScreen() {
+//   return (
+//     <SafeAreaView className="flex-1 bg-[#F1F1F1]">
+//       <ScrollView className="flex-1 px-5 pt-2" showsVerticalScrollIndicator={false}>
+        
+//         {/* --- Header --- */}
+//         <View className="flex-row justify-between items-center mb-8 mt-2">
+//           {/* Logo "H" - Serif Font style */}
+//           <Text style={{ fontFamily: "OldEnglish", fontSize: 30 }}>H</Text>
+//           {/* Profile Placeholder */}
+//           <View className="w-10 h-10 bg-[#D9D9D9] rounded-full" />
+//         </View>
+
+//         {/* --- Section 1: Recents --- */}
+//         <View className="flex-row justify-between items-center mb-4">
+//           <View className="flex-row items-center gap-2">
+//             <Ionicons name="time-outline" size={20} color="gray" />
+//             <Text className="text-lg font-semibold text-[#888]">Recents</Text>
+//           </View>
+//           <Text className="text-[#888]">All →</Text>
+//         </View>
+
+//         {/* Horizontal Scroll Cards */}
+//         <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-8">
+//           {RECENT_ITEMS.map((item) => (
+//             <View key={item.id} className="mr-4">
+//               {/* Card Body */}
+//               <View className="w-72 h-48 bg-white rounded-[30px] shadow-sm mb-3" />
+//               {/* Card Footer (Icon + Title) */}
+//               <View className="flex-row items-center gap-2 ml-2">
+//                 <View className="bg-black p-1 rounded-md">
+//                   <MaterialCommunityIcons name={item.icon as any} size={16} color="white" />
+//                 </View>
+//                 <Text className="text-base font-medium">{item.title}</Text>
+//               </View>
+//             </View>
+//           ))}
+//         </ScrollView>
+
+//         {/* --- Section 2: Easels & Notes --- */}
+//         <View className="flex-row items-center gap-2 mb-4">
+//           <MaterialCommunityIcons name="puzzle-outline" size={20} color="gray" />
+//           <Text className="text-lg font-semibold text-[#888]">Easels & Notes</Text>
+//         </View>
+
+//         {/* Grid Layout */}
+//         <View className="flex-row flex-wrap justify-between gap-y-4 pb-32">
+//           {/* Empty Card 1 */}
+//           <View className="w-[30%] aspect-[3/4] bg-white rounded-3xl" />
+          
+//           {/* Empty Card 2 */}
+//           <View className="w-[30%] aspect-[3/4] bg-white rounded-3xl" />
+
+//           {/* Add New Card (Dashed Border) */}
+//           <TouchableOpacity className="w-[30%] aspect-[3/4] border-2 border-dashed border-[#D9D9D9] rounded-3xl justify-center items-center">
+//             <Ionicons name="add" size={30} color="#888" />
+//           </TouchableOpacity>
+//         </View>
+
+//       </ScrollView>
+//     </SafeAreaView>
+//   );
+// }
+
+
+
+// web ->
+
+// import React, { useState } from 'react';
+// import { View, Text, ScrollView, TouchableOpacity, Dimensions, Modal, Image } from 'react-native';
+// import Svg, { Path, Defs, LinearGradient, Stop } from 'react-native-svg';
+// import { SafeAreaView } from 'react-native-safe-area-context';
+// import { MaterialCommunityIcons, Ionicons, FontAwesome5 } from '@expo/vector-icons';
+
+// // --- CONFIGURATION ---
+// const { width } = Dimensions.get('window');
+// const ITEM_HEIGHT = 220; 
+// const X_OFFSET = 80;
+// const NEON_COLOR = "#00F0FF";
+
+// // --- 1. DATA UPDATE (Details & Tools ઉમેર્યા) ---
+// // tools ના નામ આઈકન લાઈબ્રેરી મુજબ રાખ્યા છે
+// const roadmapData = [
+//   { 
+//     id: 1, 
+//     label: "START", 
+//     title: "Welcome to Academy", 
+//     desc: "Rules & Onboarding", 
+//     type: 'flag', 
+//     status: 'completed',
+//     details: "In this session, we will introduce you to the course structure, rules, and how to get the most out of this academy.",
+//     tools: ['school', 'human-greeting'] // MaterialCommunityIcons names
+//   },
+//   { 
+//     id: 2, 
+//     label: "WEEK 1", 
+//     title: "The Human Kit", 
+//     desc: "Doodling & Habits", 
+//     type: 'book', 
+//     status: 'unlocked',
+//     details: "Discover your creative side! We will learn basic doodling techniques and how to build consistent design habits.",
+//     tools: ['pencil', 'notebook', 'draw']
+//   },
+//   { 
+//     id: 3, 
+//     label: "WEEK 2", 
+//     title: "Mindful Meditation", 
+//     desc: "Your Dream Product", 
+//     type: 'brain', 
+//     status: 'locked',
+//     details: "Mental clarity is key to great design. Learn meditation techniques to focus your mind.",
+//     tools: ['meditation', 'brain']
+//   },
+//   { id: 4, label: "WEEK 3", title: "Logo Design", desc: "Figma & AI Tools", type: 'design', status: 'locked', details: "Master Logo Design using Figma.", tools: ['pen', 'laptop'] },
+//   { id: 5, label: "WEEK 4", title: "Web UI/UX", desc: "Brand Assets & Colors", type: 'web', status: 'locked', details: "Learn Web UI principles.", tools: ['web', 'palette'] },
+//   { id: 6, label: "WEEK 5", title: "Mobile App Design", desc: "Prototyping & Framer", type: 'mobile', status: 'locked', details: "Build mobile apps.", tools: ['cellphone', 'gesture-tap'] },
+//   { id: 7, label: "WEEK 6", title: "Publishing", desc: "Spline 3D & Framer AI", type: '3d', status: 'locked', details: "Publish your work.", tools: ['cloud-upload'] },
+//   { id: 8, label: "WEEK 7", title: "Premier Pro", desc: "Video Editing Basics", type: 'video', status: 'locked', details: "Edit videos like a pro.", tools: ['video', 'monitor'] },
+//   { id: 9, label: "WEEK 8", title: "Magic Editing", desc: "After Effects & Audio", type: 'magic', status: 'locked', details: "Add magic to videos.", tools: ['wan', 'speaker'] },
+// ];
+
+// export default function RoadmapScreen() {
+  
+//   // --- 2. STATE FOR MODAL ---
+//   // selectedItem માં જે ડેટા હશે તે મોડલમાં દેખાશે. જો null હોય તો મોડલ બંધ.
+//   const [selectedItem, setSelectedItem] = useState<any>(null);
+
+//   // --- PATH CALCULATION ---
+//   const getPath = () => {
+//     let path = `M ${width / 2} 60`; 
+//     roadmapData.forEach((_, index) => {
+//       const isLeft = index % 2 === 0;
+//       const currentY = (index * ITEM_HEIGHT) + 100; 
+//       const nextY = ((index + 1) * ITEM_HEIGHT) + 100; 
+//       const currentX = width / 2 + (isLeft ? -X_OFFSET : X_OFFSET);
+//       const nextX = width / 2 + (isLeft ? X_OFFSET : -X_OFFSET);
+//       if (index === 0) path += ` L ${currentX} ${currentY}`;
+//       path += ` C ${currentX} ${currentY + ITEM_HEIGHT / 2}, ${nextX} ${nextY - ITEM_HEIGHT / 2}, ${nextX} ${nextY}`;
+//     });
+//     return path;
+//   };
+
+//   const getIcon = (type: string, color: string, size = 30) => {
+//     switch (type) {
+//       case 'flag': return <Ionicons name="flag" size={size} color={color} />;
+//       case 'book': return <FontAwesome5 name="book-open" size={size-4} color={color} />;
+//       case 'brain': return <MaterialCommunityIcons name="brain" size={size} color={color} />;
+//       case 'design': return <MaterialCommunityIcons name="pencil-ruler" size={size} color={color} />;
+//       case 'web': return <MaterialCommunityIcons name="web" size={size} color={color} />;
+//       case 'mobile': return <Ionicons name="phone-portrait" size={size} color={color} />;
+//       case '3d': return <MaterialCommunityIcons name="cube-scan" size={size} color={color} />;
+//       case 'video': return <MaterialCommunityIcons name="video" size={size} color={color} />;
+//       case 'magic': return <FontAwesome5 name="magic" size={size-4} color={color} />;
+//       default: return <Ionicons name="star" size={size} color={color} />;
+//     }
+//   };
+
+//   return (
+//     <SafeAreaView edges={['top']} className="flex-1 bg-black">
+//       <ScrollView contentContainerStyle={{ paddingBottom: 150, paddingTop: 20 }} className="flex-1" showsVerticalScrollIndicator={false}>
+        
+//         {/* --- NEON PATH --- */}
+//         <View className="absolute top-0 left-0 right-0 h-full" pointerEvents="none">
+//           <Svg height={roadmapData.length * ITEM_HEIGHT + 300} width={width}>
+//             <Defs>
+//               <LinearGradient id="pathGradient" x1="0" y1="0" x2="0" y2="1">
+//                 <Stop offset="0" stopColor={NEON_COLOR} stopOpacity="1" />
+//                 <Stop offset="0.8" stopColor={NEON_COLOR} stopOpacity="0.5" />
+//                 <Stop offset="1" stopColor="#000000" stopOpacity="0" />
+//               </LinearGradient>
+//             </Defs>
+//             <Path d={getPath()} stroke={NEON_COLOR} strokeWidth="20" strokeOpacity="0.15" fill="none" strokeLinecap="round" />
+//             <Path d={getPath()} stroke="url(#pathGradient)" strokeWidth="6" fill="none" strokeLinecap="round" />
+//           </Svg>
+//         </View>
+
+//         {/* --- ROADMAP NODES --- */}
+//         {roadmapData.map((item, index) => {
+//           const isLeft = index % 2 === 0;
+//           const translateX = isLeft ? -X_OFFSET : X_OFFSET;
+//           const isLocked = item.status === 'locked';
+
+//           return (
+//             <View key={item.id} style={{ height: ITEM_HEIGHT, transform: [{ translateX }] }} className="items-center justify-start pt-10 relative">
+              
+//               <View className="z-20 items-center -mb-4">
+//                  <View className="bg-white px-3 py-1 rounded-lg shadow-sm border border-gray-300">
+//                     <Text className="text-black font-extrabold text-[10px] tracking-widest">{item.label}</Text>
+//                  </View>
+//                  <View className="w-2 h-2 bg-white rotate-45 -mt-1" />
+//               </View>
+
+//               {/* CLICK EVENT: અહીં આપણે Modal ઓપન કરાવીએ છીએ */}
+//               <TouchableOpacity 
+//                 activeOpacity={0.8}
+//                 onPress={() => {
+//                    // જો લોક હોય તો ન ખુલે (optional)
+//                    // if (!isLocked) setSelectedItem(item); 
+//                    setSelectedItem(item); // અત્યારે બધા ખૂલે તેમ રાખ્યું છે
+//                 }}
+//                 className={`w-20 h-20 rounded-full justify-center items-center z-10 border-4 ${isLocked ? 'bg-[#121212] border-[#333]' : 'bg-[#000] border-[#00F0FF] shadow-[0_0_20px_#00F0FF]'}`}
+//                 style={{ borderBottomWidth: isLocked ? 4 : 8, borderColor: isLocked ? '#333' : '#00F0FF' }}
+//               >
+//                 <View className={`w-16 h-16 rounded-full border border-white/10 justify-center items-center ${isLocked ? 'opacity-30' : 'opacity-100'}`}>
+//                    {getIcon(item.type, isLocked ? '#555' : '#fff')}
+//                 </View>
+//                 {isLocked && (
+//                   <View className="absolute bg-[#222] p-1.5 rounded-full bottom-0 -right-1 border border-black">
+//                      <Ionicons name="lock-closed" size={12} color="#666" />
+//                   </View>
+//                 )}
+//               </TouchableOpacity>
+
+//               <View className="mt-4 items-center w-40 z-20">
+//                 <Text className="text-[#00F0FF] font-bold text-sm text-center uppercase tracking-wide shadow-black shadow-md bg-black/40 rounded px-2">{item.title}</Text>
+//                 <Text className="text-gray-400 text-[10px] text-center mt-1 font-medium bg-black/40 px-1 rounded">{item.desc}</Text>
+//               </View>
+//             </View>
+//           );
+//         })}
+//         <View className="h-24" />
+//       </ScrollView>
+
+//       {/* --- 3. THE INFO MODAL (POPUP) --- */}
+//       <Modal
+//         animationType="slide" // અથવા "fade , none"
+//         transparent={true} // આનાથી પાછળનું ધૂંધળું દેખાશે
+//         visible={!!selectedItem} // જ્યારે selectedItem હોય ત્યારે જ દેખાય
+//         onRequestClose={() => setSelectedItem(null)} // Android Back button માટે
+//       >
+//         {/* Background Blur Overlay */}
+//         <View className="flex-1 bg-black/80 justify-center items-center p-6">
+          
+//           {/* Main Card */}
+//           {selectedItem && (
+//             <View className="bg-[#111] w-full rounded-3xl border border-[#333] shadow-2xl shadow-cyan-500 overflow-hidden">
+               
+//                {/* Header Image or Icon Area */}
+//                <View className="bg-[#1a1a1a] p-6 items-center border-b border-[#333]">
+//                   {/* મોટો આઈકન */}
+//                   <View className="w-20 h-20 rounded-full bg-black border-2 border-[#00F0FF] justify-center items-center shadow-[0_0_15px_#00F0FF]">
+//                      {getIcon(selectedItem.type, '#00F0FF', 40)}
+//                   </View>
+//                   <Text className="text-white text-xl font-bold mt-4 uppercase tracking-widest text-center">
+//                     {selectedItem.title}
+//                   </Text>
+//                   <Text className="text-gray-400 text-xs text-center mt-1 bg-[#222] px-3 py-1 rounded-full">
+//                     {selectedItem.label} • {selectedItem.status.toUpperCase()}
+//                   </Text>
+//                </View>
+
+//                {/* Content Body */}
+//                <View className="p-6">
+//                   <Text className="text-gray-300 text-sm leading-6 text-center">
+//                     {selectedItem.details}
+//                   </Text>
+
+//                   {/* Tools Section */}
+//                   <View className="mt-6">
+//                     <Text className="text-[#00F0FF] text-xs font-bold uppercase mb-3 text-center">
+//                       Tools You Will Use
+//                     </Text>
+//                     <View className="flex-row justify-center space-x-4">
+//                        {/* અહીં ટૂલ્સના આઈકન દેખાશે */}
+//                        {selectedItem.tools?.map((tool: string, idx: number) => (
+//                          <View key={idx} className="items-center">
+//                             <View className="w-10 h-10 bg-[#222] rounded-full justify-center items-center mb-1 border border-[#444]">
+//                                <MaterialCommunityIcons name={tool as any} size={20} color="white" />
+//                             </View>
+//                             <Text className="text-[9px] text-gray-500 capitalize">{tool}</Text>
+//                          </View>
+//                        ))}
+//                     </View>
+//                   </View>
+//                </View>
+
+//                {/* Close Button */}
+//                <TouchableOpacity 
+//                   onPress={() => setSelectedItem(null)}
+//                   className="bg-[#00F0FF] p-4 items-center justify-center active:bg-cyan-600"
+//                >
+//                   <Text className="text-black font-extrabold text-sm uppercase tracking-widest">
+//                     Close Details
+//                   </Text>
+//                </TouchableOpacity>
+
+//             </View>
+//           )}
+//         </View>
+//       </Modal>
+
+//     </SafeAreaView>
+//   );
+// }
+
+
+
+// <svg width="305" height="389" viewBox="0 0 305 389" fill="none" xmlns="http://www.w3.org/2000/svg">
+// <path d="M25 389.418V256.531C25 204.956 67.3573 201.611 80.7849 200.447C94.2125 199.283 116.339 195.886 202.382 195.886C288.425 195.886 290.148 74.8979 266.399 50.2197C242.65 25.5387 171.138 18.7129 105.092 30.8921C41.7231 42.5757 49.091 122.028 107.135 112.808" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// </svg>
+
+// <svg width="303" height="730" viewBox="0 0 303 730" fill="none" xmlns="http://www.w3.org/2000/svg">
+// <path d="M25 -2.80804V130.079C25 181.654 67.3573 179.836 80.7849 181C94.2125 182.164 121.592 181 207.635 181C229.247 179.612 277.635 195.8 277.635 251V465C277.635 502.003 247.638 532 210.635 532H94.0001C55.8924 532 25 562.892 25 601V732.5" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// </svg>
+
+{/* <svg width="303" height="125" viewBox="0 0 303 125" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M25 -0.27832C25 2.02383 25.0028 4.23665 25.0028 6.38033C25.0028 26.5983 28.6508 59.8829 61.2717 76.5223C93.8926 93.1617 109.829 95.0259 158.678 77.3521C207.53 59.6726 277.206 36.1267 277.206 117.909C277.206 120.269 277.204 125.389 277.204 125.389" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+</svg> */}
+
+{/* <svg width="303" height="923" viewBox="0 0 303 923" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M277.635 -2.80804V130.079C277.635 181.654 235.278 179.836 221.85 181C208.423 182.164 181.043 181 95 181C73.3877 179.612 25 195.8 25 251V465C25 502.003 54.9969 532 92 532H151.318H208.635C246.743 532 277.635 562.892 277.635 601V932.5" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+</svg> */}
+
+{/* <svg width="303" height="348" viewBox="0 0 303 348" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M277.635 -2.80804V130.079C277.635 181.654 235.278 179.836 221.85 181C208.423 182.164 181.043 181 95 181C73.3877 179.612 25 195.8 25 251V465C25 502.003 54.9969 532 92 532H151.318H208.635C246.743 532 277.635 562.892 277.635 601V732.5" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+</svg> */}
+
+{/* <svg width="303" height="690" viewBox="0 0 303 690" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M25 6.10352e-05V132.887C25 184.462 67.3573 182.644 80.7849 183.808C94.2125 184.972 121.592 183.808 207.635 183.808C229.247 182.42 277.635 198.608 277.635 253.808V467.808C277.635 504.811 247.638 534.808 210.635 534.808H151.318H94.0001C55.8924 534.808 25 565.7 25 603.808V735.308" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+</svg> */}
+
+{/* <svg width="302" height="861" viewBox="0 0 302 861" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M277 861V712.475C277 674.368 246.108 643.475 208 643.475H151H92C54.9969 643.475 25 613.532 25 576.529C25 515.805 25 425.766 25 358.513V185.862V-1.99998" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+</svg> */}
+
+{/* <svg width="303" height="885" viewBox="0 0 303 885" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M277.635 -2.80798V130.079C277.635 181.654 235.278 179.836 221.85 181C208.423 182.164 181.043 181 95 181C73.3877 179.612 25 195.8 25 251V465C25 502.003 54.9969 532 92 532H151.318H208.635C246.743 532 277.635 562.892 277.635 601V982.5" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+</svg> */}
+
+{/* <svg width="304" height="417" viewBox="0 0 304 417" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M25.0058 0.107056C25.0173 2.79818 25.0231 45.0456 25.0231 46.7398C25.0231 118.772 123.29 84.9398 158.387 76.9789C193.48 69.0179 197.57 35.881 237.373 60.6881C291.18 94.2227 294.769 207.276 232.544 222.965C170.319 238.654 171.048 157.666 121.187 192.389C69.0961 228.661 25 153.451 25 242.417C25 244.073 25.0029 486.185 25.0115 488.617" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+</svg> */}
+
+{/* <svg width="199" height="97" viewBox="0 0 199 97" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M25 -0.489258V8.35917C25 81.5669 114.432 55.3731 136.29 53.4196C158.149 51.4661 173.769 65.9186 173.769 96.8838" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+</svg> */}
+
+
+
+// <svg width="353" height="5580" viewBox="0 0 353 5580" fill="none" xmlns="http://www.w3.org/2000/svg">
+// <g clip-path="url(#clip0_346_4240)">
+// <path d="M35.8652 418.61V285.723C35.8652 234.148 78.2226 230.803 91.6502 229.639C105.078 228.475 127.204 225.078 213.247 225.078C299.29 225.078 300.749 104.178 277 79.5C253.251 54.8189 181.739 47.9932 115.694 60.1724C52.3248 71.856 59.6926 151.308 117.737 142.088" stroke="#848074" stroke-width="55" stroke-miterlimit="10"/>
+// <g filter="url(#filter0_f_346_4240)">
+// <path d="M35.8652 418.61V285.723C35.8652 234.148 78.2226 230.803 91.6502 229.639C105.078 228.475 127.204 225.078 213.247 225.078C299.29 225.078 299.749 105.178 276 80.5C252.251 55.8189 180.739 48.9932 114.694 61.1724C51.3248 72.856 58.6926 152.308 116.737 143.088" stroke="white" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <path d="M35.8652 418.61V285.723C35.8652 234.148 78.2226 230.803 91.6502 229.639C105.078 228.475 127.204 225.078 213.247 225.078C299.29 225.078 301.013 104.09 277.264 79.4118C253.515 54.7307 182.003 47.9049 115.957 60.0841C52.5884 71.7677 59.9563 151.22 118 142" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <g clip-path="url(#clip1_346_4240)">
+// <path d="M35.8652 413.192V546.079C35.8652 597.654 78.2226 595.836 91.6502 597C105.078 598.164 132.457 597 218.5 597C240.113 595.612 288.5 611.8 288.5 667V881C288.5 918.003 258.503 948 221.5 948H104.865C66.7576 948 35.8652 978.892 35.8652 1017V1148.5" stroke="#848074" stroke-width="55" stroke-miterlimit="10"/>
+// <g filter="url(#filter1_f_346_4240)">
+// <path d="M35.8652 414.192V547.079C35.8652 598.654 78.2226 596.836 91.6502 598C105.078 599.164 132.457 598 218.5 598C240.113 596.612 288.5 612.8 288.5 668V882C288.5 919.003 258.503 949 221.5 949H104.865C66.7576 949 35.8652 979.892 35.8652 1018V1149.5" stroke="white" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <path d="M35.8652 413.192V546.079C35.8652 597.654 78.2226 595.836 91.6502 597C105.078 598.164 132.457 597 218.5 597C240.113 595.612 288.5 611.8 288.5 667V881C288.5 918.003 258.503 948 221.5 948H104.865C66.7576 948 35.8652 978.892 35.8652 1017V1148.5" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <g clip-path="url(#clip2_346_4240)">
+// <path d="M35.9283 1145.72C35.9283 1148.02 35.9312 1150.24 35.9312 1152.38C35.9312 1172.6 39.5791 1205.88 72.2 1222.52C104.821 1239.16 120.757 1241.03 169.606 1223.35C218.458 1205.67 288.135 1182.13 288.135 1263.91C288.135 1266.27 288.135 1268.77 288.132 1271.39" stroke="#848074" stroke-width="55" stroke-miterlimit="10"/>
+// <g filter="url(#filter2_f_346_4240)">
+// <path d="M35.9283 1145.72C35.9283 1148.02 35.9312 1150.24 35.9312 1152.38C35.9312 1172.6 39.5791 1205.88 72.2 1222.52C104.821 1239.16 120.757 1241.03 169.606 1223.35C218.458 1205.67 288.135 1182.13 288.135 1263.91C288.135 1266.27 288.135 1268.77 288.132 1271.39" stroke="white" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <path d="M35.9283 1145.72C35.9283 1148.02 35.9312 1150.24 35.9312 1152.38C35.9312 1172.6 39.5791 1205.88 72.2 1222.52C104.821 1239.16 120.757 1241.03 169.606 1223.35C218.458 1205.67 288.135 1182.13 288.135 1263.91C288.135 1266.27 288.132 1271.39 288.132 1271.39" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <g clip-path="url(#clip3_346_4240)">
+// <path d="M288.135 1268.19V1401.08C288.135 1452.65 245.777 1450.84 232.35 1452C218.922 1453.16 191.543 1452 105.5 1452C83.8875 1450.61 35.4998 1466.8 35.4998 1522V1736C35.4998 1773 65.4967 1803 102.5 1803H219.135C257.242 1803 288.135 1833.89 288.135 1872V2193.5" stroke="#848074" stroke-width="55" stroke-miterlimit="10"/>
+// <g filter="url(#filter3_f_346_4240)">
+// <path d="M288.135 1269.19V1402.08C288.135 1453.65 245.777 1451.84 232.35 1453C218.922 1454.16 191.543 1453 105.5 1453C83.8875 1451.61 35.4998 1467.8 35.4998 1523V1737C35.4998 1774 65.4967 1804 102.5 1804H219.135C257.242 1804 288.135 1834.89 288.135 1873V2194.5" stroke="white" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <path d="M288.135 1268.19V1401.08C288.135 1452.65 245.777 1450.84 232.35 1452C218.922 1453.16 191.543 1452 105.5 1452C83.8875 1450.61 35.4998 1466.8 35.4998 1522V1736C35.4998 1773 65.4967 1803 102.5 1803H161.817H219.135C257.242 1803 288.135 1833.89 288.135 1872V2203.5" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <g clip-path="url(#clip4_346_4240)">
+// <path d="M288.135 2190.19V2323.08C288.135 2374.65 245.777 2372.84 232.35 2374C218.922 2375.16 191.543 2374 105.5 2374C83.8875 2372.61 35.4998 2388.8 35.4998 2444V2658C35.4998 2695 65.4967 2725 102.5 2725H219.135C257.242 2725 288.135 2755.89 288.135 2794V2925.5" stroke="#848074" stroke-width="55" stroke-miterlimit="10"/>
+// <g filter="url(#filter4_f_346_4240)">
+// <path d="M288.135 2191.19V2324.08C288.135 2375.65 245.777 2373.84 232.35 2375C218.922 2376.16 191.543 2375 105.5 2375C83.8875 2373.61 35.4998 2389.8 35.4998 2445V2659C35.4998 2696 65.4967 2726 102.5 2726H219.135C257.242 2726 288.135 2756.89 288.135 2795V2926.5" stroke="white" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <path d="M288.135 2190.19V2323.08C288.135 2374.65 245.777 2372.84 232.35 2374C218.922 2375.16 191.543 2374 105.5 2374C83.8875 2372.61 35.4998 2388.8 35.4998 2444V2658C35.4998 2695 65.4967 2725 102.5 2725H161.817H219.135C257.242 2725 288.135 2755.89 288.135 2794V2925.5" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <g clip-path="url(#clip5_346_4240)">
+// <path d="M35.8652 2539.19V2672.08C35.8652 2723.65 78.2226 2721.84 91.6502 2723C105.078 2724.16 132.457 2723 218.5 2723C240.113 2721.61 288.5 2737.8 288.5 2793V3007C288.5 3044 258.503 3074 221.5 3074H104.865C66.7576 3074 35.8652 3104.89 35.8652 3143V3274.5" stroke="#848074" stroke-width="55" stroke-miterlimit="10"/>
+// </g>
+// <g clip-path="url(#clip6_346_4240)">
+// <g filter="url(#filter5_f_346_4240)">
+// <path d="M35.8652 2537.19V2670.08C35.8652 2721.65 78.2226 2719.84 91.6502 2721C105.078 2722.16 132.457 2721 218.5 2721C240.113 2719.61 288.5 2735.8 288.5 2791V3005C288.5 3042 258.503 3072 221.5 3072H104.865C66.7576 3072 35.8652 3102.89 35.8652 3141V3272.5" stroke="white" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// </g>
+// <g clip-path="url(#clip7_346_4240)">
+// <path d="M35.8652 2539.04V2671.93C35.8652 2723.5 78.2226 2721.69 91.6502 2722.85C105.078 2724.01 132.457 2722.85 218.5 2722.85C240.113 2721.46 288.5 2737.65 288.5 2792.85V3006.85C288.5 3043.85 258.503 3073.85 221.5 3073.85H162.183H104.865C66.7576 3073.85 35.8652 3104.74 35.8652 3142.85V3274.35" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <g clip-path="url(#clip8_346_4240)">
+// <path d="M288 4016V3866.84C288 3828.74 257.108 3797.84 219 3797.84H103C65.9969 3797.84 36 3767.85 36 3730.84V3512.72V3152" stroke="#848074" stroke-width="55" stroke-miterlimit="10"/>
+// <g filter="url(#filter6_f_346_4240)">
+// <path d="M288 4010V3867.8C288 3829.7 257.108 3798.8 219 3798.8H103C65.9969 3798.8 36 3768.81 36 3731.8V3513.49V3151" stroke="white" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <path d="M288 4015V3866.48C288 3828.37 257.108 3797.48 219 3797.48H162H103C65.9969 3797.48 36 3767.53 36 3730.53C36 3669.81 36 3579.77 36 3512.51V3339.86V3152" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <g clip-path="url(#clip9_346_4240)">
+// <path d="M288.135 4012.19V4145.08C288.135 4196.65 245.777 4194.84 232.35 4196C218.922 4197.16 191.543 4196 105.5 4196C83.8875 4194.61 35.4998 4210.8 35.4998 4266V4480C35.4998 4517 65.4967 4547 102.5 4547H219.135C257.242 4547 288.135 4577.89 288.135 4616V4997.5" stroke="#848074" stroke-width="55" stroke-miterlimit="10"/>
+// <g filter="url(#filter7_f_346_4240)">
+// <path d="M288.135 4013.19V4146.08C288.135 4197.65 245.777 4195.84 232.35 4197C218.922 4198.16 191.543 4197 105.5 4197C83.8875 4195.61 35.4998 4211.8 35.4998 4267V4481C35.4998 4518 65.4967 4548 102.5 4548H219.135C257.242 4548 288.135 4578.89 288.135 4617V4998.5" stroke="white" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <path d="M288.135 4012.19V4145.08C288.135 4196.65 245.777 4194.84 232.35 4196C218.922 4197.16 191.543 4196 105.5 4196C83.8875 4194.61 35.4998 4210.8 35.4998 4266V4480C35.4998 4517 65.4967 4547 102.5 4547H161.817H219.135C257.242 4547 288.135 4577.89 288.135 4616V4997.5" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <g clip-path="url(#clip10_346_4240)">
+// <path d="M35.8652 5440.51V5449.36C35.8652 5522.57 125.297 5496.37 147.156 5494.42C169.014 5492.47 184.635 5506.92 184.635 5537.88" stroke="#848074" stroke-width="55" stroke-miterlimit="10"/>
+// <g filter="url(#filter8_f_346_4240)">
+// <path d="M35.8652 5440.51V5449.36C35.8652 5522.57 125.297 5496.37 147.156 5494.42C169.014 5492.47 184.635 5506.92 184.635 5537.88" stroke="white" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <path d="M35.8652 5440.51V5449.36C35.8652 5522.57 125.297 5496.37 147.156 5494.42C169.014 5492.47 184.635 5506.92 184.635 5537.88" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <g clip-path="url(#clip11_346_4240)">
+// <path d="M36.0058 5025C36.0173 5027.69 36.0231 5069.94 36.0231 5071.63C36.0231 5143.66 134.29 5109.83 169.387 5101.87C204.48 5093.91 208.57 5060.77 248.373 5085.58C302.18 5119.12 305.769 5232.17 243.544 5247.86C181.319 5263.55 182.048 5182.56 132.187 5217.28C80.0961 5253.55 36 5178.34 36 5267.31C36 5268.97 36.0029 5511.08 36.0115 5513.51" stroke="#848074" stroke-width="55" stroke-miterlimit="10"/>
+// <g filter="url(#filter9_f_346_4240)">
+// <path d="M36.0058 5025C36.0173 5027.69 36.0231 5069.94 36.0231 5071.63C36.0231 5143.66 134.29 5109.83 169.387 5101.87C204.48 5093.91 208.57 5060.77 248.373 5085.58C302.18 5119.12 305.769 5232.17 243.544 5247.86C181.319 5263.55 182.048 5182.56 132.187 5217.28C80.0961 5253.55 36 5178.34 36 5267.31C36 5268.97 36.0029 5511.08 36.0115 5513.51" stroke="white" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <path d="M36.0058 5025C36.0173 5027.69 36.0231 5069.94 36.0231 5071.63C36.0231 5143.66 134.29 5109.83 169.387 5101.87C204.48 5093.91 208.57 5060.77 248.373 5085.58C302.18 5119.12 305.769 5232.17 243.544 5247.86C181.319 5263.55 182.048 5182.56 132.187 5217.28C80.0961 5253.55 36 5178.34 36 5267.31C36 5268.97 36.0029 5511.08 36.0115 5513.51" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <g clip-path="url(#clip12_346_4240)">
+// <path d="M288.072 4899.72C288.072 4902.02 288.069 4904.24 288.069 4906.38C288.069 4926.6 284.421 4959.88 251.8 4976.52C219.179 4993.16 203.243 4995.03 154.394 4977.35C105.542 4959.67 35.8652 4936.13 35.8652 5017.91C35.8652 5020.27 35.8652 5022.77 35.8681 5025.39" stroke="#848074" stroke-width="55" stroke-miterlimit="10"/>
+// <g filter="url(#filter10_f_346_4240)">
+// <path d="M288.072 4899.72C288.072 4902.02 288.069 4904.24 288.069 4906.38C288.069 4926.6 284.421 4959.88 251.8 4976.52C219.179 4993.16 203.243 4995.03 154.394 4977.35C105.542 4959.67 35.8652 4936.13 35.8652 5017.91C35.8652 5020.27 35.8652 5022.77 35.8681 5025.39" stroke="white" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <path d="M288.072 4899.72C288.072 4902.02 288.069 4904.24 288.069 4906.38C288.069 4926.6 284.421 4959.88 251.8 4976.52C219.179 4993.16 203.243 4995.03 154.394 4977.35C105.542 4959.67 35.8652 4936.13 35.8652 5017.91C35.8652 5020.27 35.8681 5025.39 35.8681 5025.39" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// </g>
+// <defs>
+// <filter id="filter0_f_346_4240" x="0.865234" y="20.2803" width="323.552" height="408.33" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+// <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+// <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+// <feGaussianBlur stdDeviation="5" result="effect1_foregroundBlur_346_4240"/>
+// </filter>
+// <filter id="filter1_f_346_4240" x="0.865234" y="404.192" width="322.635" height="755.308" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+// <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+// <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+// <feGaussianBlur stdDeviation="5" result="effect1_foregroundBlur_346_4240"/>
+// </filter>
+// <filter id="filter2_f_346_4240" x="0.928223" y="1135.72" width="322.207" height="145.695" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+// <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+// <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+// <feGaussianBlur stdDeviation="5" result="effect1_foregroundBlur_346_4240"/>
+// </filter>
+// <filter id="filter3_f_346_4240" x="0.5" y="1259.19" width="322.635" height="945.308" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+// <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+// <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+// <feGaussianBlur stdDeviation="5" result="effect1_foregroundBlur_346_4240"/>
+// </filter>
+// <filter id="filter4_f_346_4240" x="0.5" y="2181.19" width="322.635" height="755.308" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+// <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+// <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+// <feGaussianBlur stdDeviation="5" result="effect1_foregroundBlur_346_4240"/>
+// </filter>
+// <filter id="filter5_f_346_4240" x="0.865234" y="2527.19" width="322.635" height="755.308" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+// <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+// <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+// <feGaussianBlur stdDeviation="5" result="effect1_foregroundBlur_346_4240"/>
+// </filter>
+// <filter id="filter6_f_346_4240" x="1" y="3141" width="322" height="879" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+// <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+// <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+// <feGaussianBlur stdDeviation="5" result="effect1_foregroundBlur_346_4240"/>
+// </filter>
+// <filter id="filter7_f_346_4240" x="0.5" y="4003.19" width="322.635" height="1005.31" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+// <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+// <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+// <feGaussianBlur stdDeviation="5" result="effect1_foregroundBlur_346_4240"/>
+// </filter>
+// <filter id="filter8_f_346_4240" x="0.865234" y="5430.51" width="218.77" height="117.373" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+// <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+// <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+// <feGaussianBlur stdDeviation="5" result="effect1_foregroundBlur_346_4240"/>
+// </filter>
+// <filter id="filter9_f_346_4240" x="1" y="5014.89" width="323.472" height="508.706" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+// <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+// <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+// <feGaussianBlur stdDeviation="5" result="effect1_foregroundBlur_346_4240"/>
+// </filter>
+// <filter id="filter10_f_346_4240" x="0.865234" y="4889.72" width="322.207" height="145.695" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+// <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+// <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+// <feGaussianBlur stdDeviation="5" result="effect1_foregroundBlur_346_4240"/>
+// </filter>
+// <clipPath id="clip0_346_4240">
+// <rect width="353" height="418" fill="white"/>
+// </clipPath>
+// <clipPath id="clip1_346_4240">
+// <rect width="324" height="730" fill="white" transform="translate(0 416)"/>
+// </clipPath>
+// <clipPath id="clip2_346_4240">
+// <rect width="324" height="125" fill="white" transform="matrix(-1 0 0 1 324 1146)"/>
+// </clipPath>
+// <clipPath id="clip3_346_4240">
+// <rect width="324" height="923" fill="white" transform="matrix(-1 0 0 1 324 1271)"/>
+// </clipPath>
+// <clipPath id="clip4_346_4240">
+// <rect width="324" height="348" fill="white" transform="matrix(-1 0 0 1 324 2193)"/>
+// </clipPath>
+// <clipPath id="clip5_346_4240">
+// <rect width="308" height="643" fill="white" transform="translate(8 2540)"/>
+// </clipPath>
+// <clipPath id="clip6_346_4240">
+// <rect width="324" height="673" fill="white" transform="translate(0 2540)"/>
+// </clipPath>
+// <clipPath id="clip7_346_4240">
+// <rect width="304" height="690.115" fill="white" transform="translate(10 2538.85)"/>
+// </clipPath>
+// <clipPath id="clip8_346_4240">
+// <rect width="324" height="866" fill="white" transform="matrix(-1 0 0 1 324 3154)"/>
+// </clipPath>
+// <clipPath id="clip9_346_4240">
+// <rect width="324" height="885" fill="white" transform="matrix(-1 0 0 1 324 4015)"/>
+// </clipPath>
+// <clipPath id="clip10_346_4240">
+// <rect width="324" height="139" fill="white" transform="translate(0 5441)"/>
+// </clipPath>
+// <clipPath id="clip11_346_4240">
+// <rect width="324" height="427" fill="white" transform="translate(1 5014)"/>
+// </clipPath>
+// <clipPath id="clip12_346_4240">
+// <rect width="324" height="125" fill="white" transform="translate(0 4900)"/>
+// </clipPath>
+// </defs>
+// </svg>
+
+
+
+// <svg width="353" height="5538" viewBox="0 0 353 5538" fill="none" xmlns="http://www.w3.org/2000/svg">
+// <path d="M35.8652 418.61V285.723C35.8652 234.148 78.2226 230.803 91.6502 229.639C105.078 228.475 127.204 225.078 213.247 225.078C299.29 225.078 301.013 104.09 277.264 79.4118C253.515 54.7307 182.003 47.9049 115.957 60.0841C52.5884 71.7677 59.9563 151.22 118 142" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// <path d="M35.8652 413.192V546.079C35.8652 597.654 78.2226 595.836 91.6502 597C105.078 598.164 132.457 597 218.5 597C240.113 595.612 288.5 611.8 288.5 667V881C288.5 918.003 258.503 948 221.5 948H104.865C66.7576 948 35.8652 978.892 35.8652 1017V1148.5" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// <path d="M35.9283 1145.72C35.9283 1148.02 35.9312 1150.24 35.9312 1152.38C35.9312 1172.6 39.5791 1205.88 72.2 1222.52C104.821 1239.16 120.757 1241.03 169.606 1223.35C218.458 1205.67 288.135 1182.13 288.135 1263.91C288.135 1266.27 288.132 1271.39 288.132 1271.39" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// <path d="M288.135 1268.19V1401.08C288.135 1452.65 245.777 1450.84 232.35 1452C218.922 1453.16 191.543 1452 105.5 1452C83.8875 1450.61 35.4998 1466.8 35.4998 1522V1736C35.4998 1773 65.4967 1803 102.5 1803H161.817H219.135C257.242 1803 288.135 1833.89 288.135 1872V2203.5" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// <path d="M288.135 2190.19V2323.08C288.135 2374.65 245.777 2372.84 232.35 2374C218.922 2375.16 191.543 2374 105.5 2374C83.8875 2372.61 35.4998 2388.8 35.4998 2444V2658C35.4998 2695 65.4967 2725 102.5 2725H161.817H219.135C257.242 2725 288.135 2755.89 288.135 2794V2925.5" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// <path d="M35.8652 2539.04V2671.93C35.8652 2723.5 78.2226 2721.69 91.6502 2722.85C105.078 2724.01 132.457 2722.85 218.5 2722.85C240.113 2721.46 288.5 2737.65 288.5 2792.85V3006.85C288.5 3043.85 258.503 3073.85 221.5 3073.85H162.183H104.865C66.7576 3073.85 35.8652 3104.74 35.8652 3142.85V3274.35" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// <path d="M288 4015V3866.48C288 3828.37 257.108 3797.48 219 3797.48H162H103C65.9969 3797.48 36 3767.53 36 3730.53C36 3669.81 36 3579.77 36 3512.51V3339.86V3152" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// <path d="M288.135 4012.19V4145.08C288.135 4196.65 245.777 4194.84 232.35 4196C218.922 4197.16 191.543 4196 105.5 4196C83.8875 4194.61 35.4998 4210.8 35.4998 4266V4480C35.4998 4517 65.4967 4547 102.5 4547H161.817H219.135C257.242 4547 288.135 4577.89 288.135 4616V4917" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// <path d="M36.0058 5025C36.0173 5027.69 36.0231 5069.94 36.0231 5071.63C36.0231 5143.66 134.29 5109.83 169.387 5101.87C204.48 5093.91 208.57 5060.77 248.373 5085.58C302.18 5119.12 305.769 5232.17 243.544 5247.86C181.319 5263.55 182.048 5182.56 132.187 5217.28C80.0961 5253.55 36 5178.34 36 5267.31C36 5268.97 36.0115 5452.5 36.0202 5454.93" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// <path d="M35.8652 5440.51V5449.36C35.8652 5522.57 125.297 5496.37 147.156 5494.42C169.014 5492.47 184.635 5506.92 184.635 5537.88" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// <path d="M288.072 4899.72C288.072 4902.02 288.069 4904.24 288.069 4906.38C288.069 4926.6 284.421 4959.88 251.8 4976.52C219.179 4993.16 203.243 4995.03 154.394 4977.35C105.542 4959.67 35.8652 4936.13 35.8652 5017.91C35.8652 5020.27 35.8681 5025.39 35.8681 5025.39" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+// </svg>
+
+{/* <svg width="353" height="5538" viewBox="0 0 353 5538" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M35.8655 418.61V285.723C35.8655 234.148 78.2228 230.803 91.6504 229.639C105.078 228.475 127.205 225.078 213.248 225.078C299.291 225.078 301.013 104.09 277.264 79.4118C253.515 54.7307 182.003 47.9049 115.958 60.0841C52.5886 71.7677 59.9565 151.22 118 142M35.8655 413.192V546.079C35.8655 597.654 78.2228 595.836 91.6504 597C105.078 598.164 132.457 597 218.5 597C240.113 595.612 288.5 611.8 288.5 667V881C288.5 918.003 258.504 948 221.5 948H104.866C66.7579 948 35.8655 978.892 35.8655 1017V1148.5M35.9286 1145.72C35.9286 1148.02 35.9314 1150.24 35.9314 1152.38C35.9314 1172.6 39.5794 1205.88 72.2003 1222.52C104.821 1239.16 120.757 1241.03 169.606 1223.35C218.459 1205.67 288.135 1182.13 288.135 1263.91C288.135 1266.27 288.132 1271.39 288.132 1271.39M288.135 1268.19V1401.08C288.135 1452.65 245.778 1450.84 232.35 1452C218.923 1453.16 191.543 1452 105.5 1452C83.8877 1450.61 35.5 1466.8 35.5 1522V1736C35.5 1773 65.4969 1803 102.5 1803H219.135C257.243 1803 288.135 1833.89 288.135 1872V2203.5M288.135 2190.19V2323.08C288.135 2374.65 245.778 2372.84 232.35 2374C218.923 2375.16 191.543 2374 105.5 2374C83.8877 2372.61 35.5 2388.8 35.5 2444V2658C35.5 2695 65.4969 2725 102.5 2725H219.135C257.243 2725 288.135 2755.89 288.135 2794V2925.5M35.8655 2539.04V2671.93C35.8655 2723.5 78.2228 2721.69 91.6504 2722.85C105.078 2724.01 132.457 2722.85 218.5 2722.85C240.113 2721.46 288.5 2737.65 288.5 2792.85V3006.85C288.5 3043.85 258.504 3073.85 221.5 3073.85H104.866C66.7579 3073.85 35.8655 3104.74 35.8655 3142.85V3274.35M288 4015V3866.48C288 3828.37 257.108 3797.48 219 3797.48H103C65.9972 3797.48 36.0002 3767.53 36.0002 3730.53V3152M288.135 4012.19V4145.08C288.135 4196.65 245.778 4194.84 232.35 4196C218.923 4197.16 191.543 4196 105.5 4196C83.8877 4194.61 35.5 4210.8 35.5 4266V4480C35.5 4517 65.4969 4547 102.5 4547H219.135C257.243 4547 288.135 4577.89 288.135 4616V4917M36.006 5025C36.0175 5027.69 36.0233 5069.94 36.0233 5071.63C36.0233 5143.67 134.291 5109.83 169.387 5101.87C204.48 5093.91 208.57 5060.77 248.374 5085.58C302.18 5119.12 305.769 5232.17 243.544 5247.86C181.319 5263.55 182.048 5182.56 132.187 5217.28C80.0964 5253.55 36.0002 5178.34 36.0002 5267.31C36.0002 5268.97 36.0118 5452.5 36.0204 5454.93M35.8655 5440.51V5449.36C35.8655 5522.57 125.297 5496.37 147.156 5494.42C169.015 5492.47 184.635 5506.92 184.635 5537.88M288.072 4899.72C288.072 4902.02 288.069 4904.24 288.069 4906.38C288.069 4926.6 284.421 4959.88 251.8 4976.52C219.179 4993.16 203.243 4995.03 154.394 4977.35C105.542 4959.67 35.8655 4936.13 35.8655 5017.91C35.8655 5020.27 35.8684 5025.39 35.8684 5025.39" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+</svg> */}
+
+
+{/* <svg width="305" height="5509" viewBox="0 0 305 5509" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M25.3655 389.418V256.531C25.3655 204.956 67.7228 201.611 81.1504 200.447C94.578 199.283 116.705 195.886 202.748 195.886C288.791 195.886 290.513 74.8979 266.764 50.2197C243.015 25.5387 171.503 18.7129 105.458 30.8921C42.0886 42.5757 49.4565 122.028 107.5 112.808M25.3655 384V516.887C25.3655 568.462 67.7228 566.644 81.1504 567.808C94.578 568.972 121.957 567.808 208 567.808C229.613 566.42 278 582.608 278 637.808V851.808C278 888.811 248.004 918.808 211 918.808H94.3655C56.2579 918.808 25.3655 949.7 25.3655 987.808V1119.31M25.4286 1116.53C25.4286 1118.83 25.4314 1121.04 25.4314 1123.19C25.4314 1143.41 29.0794 1176.69 61.7003 1193.33C94.3212 1209.97 110.257 1211.83 159.106 1194.16C207.959 1176.48 277.635 1152.93 277.635 1234.72C277.635 1237.08 277.632 1242.2 277.632 1242.2M277.635 1239V1371.89C277.635 1423.46 235.278 1421.64 221.85 1422.81C208.423 1423.97 181.043 1422.81 95 1422.81C73.3877 1421.42 25 1437.61 25 1492.81V1706.81C25 1743.81 54.9969 1773.81 92 1773.81H208.635C246.743 1773.81 277.635 1804.7 277.635 1842.81V2174.31M277.635 2161V2293.89C277.635 2345.46 235.278 2343.64 221.85 2344.81C208.423 2345.97 181.043 2344.81 95 2344.81C73.3877 2343.42 25 2359.61 25 2414.81V2628.81C25 2665.81 54.9969 2695.81 92 2695.81H208.635C246.743 2695.81 277.635 2726.7 277.635 2764.81V2896.31M25.3655 2509.85V2642.74C25.3655 2694.31 67.7228 2692.49 81.1504 2693.66C94.578 2694.82 121.957 2693.66 208 2693.66C229.613 2692.27 278 2708.46 278 2763.66V2977.66C278 3014.66 248.004 3044.66 211 3044.66H94.3655C56.2579 3044.66 25.3655 3075.55 25.3655 3113.66V3245.16M277.5 3985.81V3837.28C277.5 3799.18 246.608 3768.28 208.5 3768.28H92.5002C55.4972 3768.28 25.5002 3738.34 25.5002 3701.34V3122.81M277.635 3983V4115.89C277.635 4167.46 235.278 4165.64 221.85 4166.81C208.423 4167.97 181.043 4166.81 95 4166.81C73.3877 4165.42 25 4181.61 25 4236.81V4450.81C25 4487.81 54.9969 4517.81 92 4517.81H208.635C246.743 4517.81 277.635 4548.7 277.635 4586.81V4887.81M25.506 4995.81C25.5175 4998.5 25.5233 5040.75 25.5233 5042.44C25.5233 5114.47 123.791 5080.64 158.887 5072.68C193.98 5064.72 198.07 5031.58 237.874 5056.39C291.68 5089.92 295.269 5202.98 233.044 5218.67C170.819 5234.35 171.548 5153.37 121.687 5188.09C69.5964 5224.36 25.5002 5149.15 25.5002 5238.12C25.5002 5239.77 25.5118 5423.31 25.5204 5425.74M25.3655 5411.32V5420.17C25.3655 5493.37 114.797 5467.18 136.656 5465.23C158.515 5463.27 174.135 5477.73 174.135 5508.69M277.572 4870.53C277.572 4872.83 277.569 4875.04 277.569 4877.19C277.569 4897.41 273.921 4930.69 241.3 4947.33C208.679 4963.97 192.743 4965.83 143.894 4948.16C95.0419 4930.48 25.3655 4906.93 25.3655 4988.72C25.3655 4991.08 25.3684 4996.2 25.3684 4996.2" stroke="black" stroke-width="50" stroke-miterlimit="10"/>
+</svg> */}
+
+
+// import React, { useMemo } from "react";
+// import { View, Dimensions, ScrollView } from "react-native";
+// import { 
+//   Canvas, 
+//   Path, 
+//   BlurMask, 
+//   Skia, 
+//   Group 
+// } from "@shopify/react-native-skia";
+
+// // સ્ક્રીનની પહોળાઈ મેળવો
+// const { width: screenWidth } = Dimensions.get("window");
+
+// // --- Configuration ---
+// // તમે આપેલો નવો SVG Path Data
+// const PATH_DATA = "M25.3655 389.418V256.531C25.3655 204.956 67.7228 201.611 81.1504 200.447C94.578 199.283 116.705 195.886 202.748 195.886C288.791 195.886 290.513 74.8979 266.764 50.2197C243.015 25.5387 171.503 18.7129 105.458 30.8921C42.0886 42.5757 49.4565 122.028 107.5 112.808M25.3655 384V516.887C25.3655 568.462 67.7228 566.644 81.1504 567.808C94.578 568.972 121.957 567.808 208 567.808C229.613 566.42 278 582.608 278 637.808V851.808C278 888.811 248.004 918.808 211 918.808H94.3655C56.2579 918.808 25.3655 949.7 25.3655 987.808V1119.31M25.4286 1116.53C25.4286 1118.83 25.4314 1121.04 25.4314 1123.19C25.4314 1143.41 29.0794 1176.69 61.7003 1193.33C94.3212 1209.97 110.257 1211.83 159.106 1194.16C207.959 1176.48 277.635 1152.93 277.635 1234.72C277.635 1237.08 277.632 1242.2 277.632 1242.2M277.635 1239V1371.89C277.635 1423.46 235.278 1421.64 221.85 1422.81C208.423 1423.97 181.043 1422.81 95 1422.81C73.3877 1421.42 25 1437.61 25 1492.81V1706.81C25 1743.81 54.9969 1773.81 92 1773.81H208.635C246.743 1773.81 277.635 1804.7 277.635 1842.81V2174.31M277.635 2161V2293.89C277.635 2345.46 235.278 2343.64 221.85 2344.81C208.423 2345.97 181.043 2344.81 95 2344.81C73.3877 2343.42 25 2359.61 25 2414.81V2628.81C25 2665.81 54.9969 2695.81 92 2695.81H208.635C246.743 2695.81 277.635 2726.7 277.635 2764.81V2896.31M25.3655 2509.85V2642.74C25.3655 2694.31 67.7228 2692.49 81.1504 2693.66C94.578 2694.82 121.957 2693.66 208 2693.66C229.613 2692.27 278 2708.46 278 2763.66V2977.66C278 3014.66 248.004 3044.66 211 3044.66H94.3655C56.2579 3044.66 25.3655 3075.55 25.3655 3113.66V3245.16M277.5 3985.81V3837.28C277.5 3799.18 246.608 3768.28 208.5 3768.28H92.5002C55.4972 3768.28 25.5002 3738.34 25.5002 3701.34V3122.81M277.635 3983V4115.89C277.635 4167.46 235.278 4165.64 221.85 4166.81C208.423 4167.97 181.043 4166.81 95 4166.81C73.3877 4165.42 25 4181.61 25 4236.81V4450.81C25 4487.81 54.9969 4517.81 92 4517.81H208.635C246.743 4517.81 277.635 4548.7 277.635 4586.81V4887.81M25.506 4995.81C25.5175 4998.5 25.5233 5040.75 25.5233 5042.44C25.5233 5114.47 123.791 5080.64 158.887 5072.68C193.98 5064.72 198.07 5031.58 237.874 5056.39C291.68 5089.92 295.269 5202.98 233.044 5218.67C170.819 5234.35 171.548 5153.37 121.687 5188.09C69.5964 5224.36 25.5002 5149.15 25.5002 5238.12C25.5002 5239.77 25.5118 5423.31 25.5204 5425.74M25.3655 5411.32V5420.17C25.3655 5493.37 114.797 5467.18 136.656 5465.23C158.515 5463.27 174.135 5477.73 174.135 5508.69M277.572 4870.53C277.572 4872.83 277.569 4875.04 277.569 4877.19C277.569 4897.41 273.921 4930.69 241.3 4947.33C208.679 4963.97 192.743 4965.83 143.894 4948.16C95.0419 4930.48 25.3655 4906.93 25.3655 4988.72C25.3655 4991.08 25.3684 4996.2 25.3684 4996.2";
+
+// // SVG ની ઓરીજીનલ સાઈઝ (તમારા કોડ મુજબ)
+// const SVG_WIDTH = 305;
+// const SVG_HEIGHT = 5509;
+
+// // રસ્તાની જાડાઈનું સેટિંગ
+// const GLOW_WIDTH = 80;   // સૌથી પહોળો ગ્લો
+// const BORDER_WIDTH = 60; // સફેદ કિનારી
+// const ROAD_WIDTH = 50;   // વચ્ચેનો કાળો રસ્તો
+
+// export default function RoadmapScreen() {
+//   // Skia Path બનાવો (useMemo થી પરફોર્મન્સ સુધરે)
+//   const skiaPath = useMemo(() => Skia.Path.MakeFromSVGString(PATH_DATA), []);
+
+//   // --- ગણતરી: રસ્તાને સેન્ટરમાં લાવવા માટે ---
+//   // સ્ક્રીનની પહોળાઈમાંથી SVG ની પહોળાઈ બાદ કરી, તેને 2 વડે ભાગો.
+//   // આનાથી ડાબી અને જમણી બાજુ સરખી જગ્યા છૂટશે.
+//   const xOffset = (screenWidth - SVG_WIDTH) / 2;
+  
+//   // ઉપરથી થોડી જગ્યા છોડવા માટે
+//   const yOffset = 50;
+
+//   if (!skiaPath) {
+//     return <View />;
+//   }
+
+//   return (
+//     <View style={{ flex: 1, backgroundColor: "black" }}>
+//       <ScrollView 
+//         // સ્ક્રોલ કરવા માટે પૂરતી હાઈટ આપવી પડે
+//         contentContainerStyle={{ height: SVG_HEIGHT + yOffset + 200, paddingBottom: 50 }}
+//         showsVerticalScrollIndicator={false}
+//       >
+//         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
+//         <View style={{ height: SVG_HEIGHT + yOffset, width: screenWidth, alignItems: 'center' }}>
+          
+//           {/* Canvas ની સાઈઝ સ્ક્રીન જેટલી જ રાખો */}
+//           <Canvas style={{ width: screenWidth, height: SVG_HEIGHT + yOffset }}>
+            
+//             {/* Group: આખા રસ્તાને X અને Y દિશામાં ખસેડવા માટે */}
+//             <Group transform={[{ translateX: xOffset }, { translateY: yOffset }]}>
+              
+//               {/* Layer 1: The Glow (સૌથી પાછળનો સફેદ પ્રકાશ) */}
+//               <Path
+//                 path={skiaPath}
+//                 color="rgba(255, 255, 255, 0.7)" // થોડો પારદર્શક સફેદ
+//                 style="stroke"
+//                 strokeWidth={GLOW_WIDTH}
+//                 strokeCap="round"
+//                 strokeJoin="round"
+//               >
+//                 <BlurMask blur={25} style="normal" />
+//               </Path>
+
+//               {/* Layer 2: White Border (સફેદ કિનારી) */}
+//               <Path
+//                 path={skiaPath}
+//                 color="white"
+//                 style="stroke"
+//                 strokeWidth={BORDER_WIDTH}
+//                 strokeCap="round"
+//                 strokeJoin="round"
+//               />
+
+//               {/* Layer 3: Black Hollow Road (વચ્ચેનો કાળો રસ્તો) */}
+//               <Path
+//                 path={skiaPath}
+//                 color="black" // બેકગ્રાઉન્ડ જેવો જ કલર
+//                 style="stroke"
+//                 strokeWidth={ROAD_WIDTH} // બોર્ડર કરતા પાતળો, એટલે કિનારી દેખાશે
+//                 strokeCap="round"
+//                 strokeJoin="round"
+//               />
+//             </Group>
+//           </Canvas>
+
+//         </View>
+//         </ScrollView>
+//       </ScrollView>
+//     </View>
+//   );
+// }
+
+
+// import React, { useMemo } from "react";
+// import { View, Dimensions, ScrollView } from "react-native";
+// import { 
+//   Canvas, 
+//   Path, 
+//   BlurMask, 
+//   Skia, 
+//   Group 
+// } from "@shopify/react-native-skia";
+
+// // સ્ક્રીનની પહોળાઈ મેળવો
+// const { width: screenWidth } = Dimensions.get("window");
+
+// // --- Configuration ---
+// // તમે આપેલો નવો SVG Path Data
+// const PATH_DATA = "M25.3655 389.418V256.531C25.3655 204.956 67.7228 201.611 81.1504 200.447C94.578 199.283 116.705 195.886 202.748 195.886C288.791 195.886 290.513 74.8979 266.764 50.2197C243.015 25.5387 171.503 18.7129 105.458 30.8921C42.0886 42.5757 49.4565 122.028 107.5 112.808M25.3655 384V516.887C25.3655 568.462 67.7228 566.644 81.1504 567.808C94.578 568.972 121.957 567.808 208 567.808C229.613 566.42 278 582.608 278 637.808V851.808C278 888.811 248.004 918.808 211 918.808H94.3655C56.2579 918.808 25.3655 949.7 25.3655 987.808V1119.31M25.4286 1116.53C25.4286 1118.83 25.4314 1121.04 25.4314 1123.19C25.4314 1143.41 29.0794 1176.69 61.7003 1193.33C94.3212 1209.97 110.257 1211.83 159.106 1194.16C207.959 1176.48 277.635 1152.93 277.635 1234.72C277.635 1237.08 277.632 1242.2 277.632 1242.2M277.635 1239V1371.89C277.635 1423.46 235.278 1421.64 221.85 1422.81C208.423 1423.97 181.043 1422.81 95 1422.81C73.3877 1421.42 25 1437.61 25 1492.81V1706.81C25 1743.81 54.9969 1773.81 92 1773.81H208.635C246.743 1773.81 277.635 1804.7 277.635 1842.81V2174.31M277.635 2161V2293.89C277.635 2345.46 235.278 2343.64 221.85 2344.81C208.423 2345.97 181.043 2344.81 95 2344.81C73.3877 2343.42 25 2359.61 25 2414.81V2628.81C25 2665.81 54.9969 2695.81 92 2695.81H208.635C246.743 2695.81 277.635 2726.7 277.635 2764.81V2896.31M25.3655 2509.85V2642.74C25.3655 2694.31 67.7228 2692.49 81.1504 2693.66C94.578 2694.82 121.957 2693.66 208 2693.66C229.613 2692.27 278 2708.46 278 2763.66V2977.66C278 3014.66 248.004 3044.66 211 3044.66H94.3655C56.2579 3044.66 25.3655 3075.55 25.3655 3113.66V3245.16M277.5 3985.81V3837.28C277.5 3799.18 246.608 3768.28 208.5 3768.28H92.5002C55.4972 3768.28 25.5002 3738.34 25.5002 3701.34V3122.81M277.635 3983V4115.89C277.635 4167.46 235.278 4165.64 221.85 4166.81C208.423 4167.97 181.043 4166.81 95 4166.81C73.3877 4165.42 25 4181.61 25 4236.81V4450.81C25 4487.81 54.9969 4517.81 92 4517.81H208.635C246.743 4517.81 277.635 4548.7 277.635 4586.81V4887.81M25.506 4995.81C25.5175 4998.5 25.5233 5040.75 25.5233 5042.44C25.5233 5114.47 123.791 5080.64 158.887 5072.68C193.98 5064.72 198.07 5031.58 237.874 5056.39C291.68 5089.92 295.269 5202.98 233.044 5218.67C170.819 5234.35 171.548 5153.37 121.687 5188.09C69.5964 5224.36 25.5002 5149.15 25.5002 5238.12C25.5002 5239.77 25.5118 5423.31 25.5204 5425.74M25.3655 5411.32V5420.17C25.3655 5493.37 114.797 5467.18 136.656 5465.23C158.515 5463.27 174.135 5477.73 174.135 5508.69M277.572 4870.53C277.572 4872.83 277.569 4875.04 277.569 4877.19C277.569 4897.41 273.921 4930.69 241.3 4947.33C208.679 4963.97 192.743 4965.83 143.894 4948.16C95.0419 4930.48 25.3655 4906.93 25.3655 4988.72C25.3655 4991.08 25.3684 4996.2 25.3684 4996.2";
+
+// // SVG ની ઓરીજીનલ સાઈઝ (તમારા કોડ મુજબ)
+// const SVG_WIDTH = 305;
+// const SVG_HEIGHT = 5509;
+
+// // રસ્તાની જાડાઈનું સેટિંગ
+// const GLOW_WIDTH = 80;   // સૌથી પહોળો ગ્લો
+// const BORDER_WIDTH = 60; // સફેદ કિનારી
+// const ROAD_WIDTH = 50;   // વચ્ચેનો કાળો રસ્તો
+
+// export default function RoadmapScreen() {
+//   // Skia Path બનાવો (useMemo થી પરફોર્મન્સ સુધરે)
+//   const skiaPath = useMemo(() => Skia.Path.MakeFromSVGString(PATH_DATA), []);
+
+//   // --- ગણતરી: રસ્તાને સેન્ટરમાં લાવવા માટે ---
+//   // સ્ક્રીનની પહોળાઈમાંથી SVG ની પહોળાઈ બાદ કરી, તેને 2 વડે ભાગો.
+//   // આનાથી ડાબી અને જમણી બાજુ સરખી જગ્યા છૂટશે.
+//   const xOffset = (screenWidth - SVG_WIDTH) / 2;
+  
+//   // ઉપરથી થોડી જગ્યા છોડવા માટે
+//   const yOffset = 50;
+
+//   if (!skiaPath) {
+//     return <View />;
+//   }
+
+//   return (
+//     <View style={{ flex: 1, backgroundColor: "black" }}>
+//       <ScrollView 
+//         // સ્ક્રોલ કરવા માટે પૂરતી હાઈટ આપવી પડે
+//         contentContainerStyle={{ height: SVG_HEIGHT + yOffset + 200, paddingBottom: 50 }}
+//         showsVerticalScrollIndicator={false}
+//       >
+//         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
+//         <View style={{ height: SVG_HEIGHT + yOffset, width: screenWidth, alignItems: 'center' }}>
+          
+//           {/* Canvas ની સાઈઝ સ્ક્રીન જેટલી જ રાખો */}
+//           <Canvas style={{ width: screenWidth, height: SVG_HEIGHT + yOffset }}>
+            
+//             {/* Group: આખા રસ્તાને X અને Y દિશામાં ખસેડવા માટે */}
+//             <Group transform={[{ translateX: xOffset }, { translateY: yOffset }]}>
+              
+//               {/* Layer 1: The Glow (સૌથી પાછળનો સફેદ પ્રકાશ) */}
+//               <Path
+//                 path={skiaPath}
+//                 color="rgba(255, 255, 255, 0.7)" // થોડો પારદર્શક સફેદ
+//                 style="stroke"
+//                 strokeWidth={GLOW_WIDTH}
+//                 strokeCap="round"
+//                 strokeJoin="round"
+//               >
+//                 <BlurMask blur={25} style="normal" />
+//               </Path>
+
+//               {/* Layer 2: White Border (સફેદ કિનારી) */}
+//               <Path
+//                 path={skiaPath}
+//                 color="white"
+//                 style="stroke"
+//                 strokeWidth={BORDER_WIDTH}
+//                 strokeCap="round"
+//                 strokeJoin="round"
+//               />
+
+//               {/* Layer 3: Black Hollow Road (વચ્ચેનો કાળો રસ્તો) */}
+//               <Path
+//                 path={skiaPath}
+//                 color="black" // બેકગ્રાઉન્ડ જેવો જ કલર
+//                 style="stroke"
+//                 strokeWidth={ROAD_WIDTH} // બોર્ડર કરતા પાતળો, એટલે કિનારી દેખાશે
+//                 strokeCap="round"
+//                 strokeJoin="round"
+//               />
+//             </Group>
+//           </Canvas>
+
+//         </View>
+//         </ScrollView>
+//       </ScrollView>
+//     </View>
+//   );
+// }
+
+//  <Modal
+//         animationType="slide"
+//         transparent={true}
+//         visible={modalVisible}
+//         onRequestClose={() => setModalVisible(false)} // Android back button handle
+//       >
+//         <View style={styles.modalOverlay}>
+//           <View style={styles.modalContent}>
+
+//             {/* Close Button (X) */}
+//             <TouchableOpacity
+//               style={styles.closeButton}
+//               onPress={() => setModalVisible(false)}
+//             >
+//               <Text style={styles.closeButtonText}>✕</Text>
+//             </TouchableOpacity>
+
+//             {/* Modal Content */}
+//             {selectedData && (
+//               <View style={{ alignItems: 'center' }}>
+
+//                 {/* Image inside Modal */}
+//                 {selectedData.image && (
+//                   <Image source={selectedData.image} style={styles.modalImage} />
+//                 )}
+
+//                 {/* Title */}
+//                 <Text style={styles.modalTitle}>{selectedData.title}</Text>
+
+//                 {/* Description */}
+//                 <Text style={styles.modalDesc}>{selectedData.description}</Text>
+
+//                 {/* Link Button */}
+//                 {selectedData.link && (
+//                   <TouchableOpacity
+//                     style={styles.linkButton}
+//                     onPress={() => Linking.openURL(selectedData.link!)}
+//                   >
+//                     <Text style={styles.linkText}>View Details</Text>
+//                   </TouchableOpacity>
+//                 )}
+//               </View>
+//             )}
+//           </View>
+//         </View>
+//       </Modal>
+
+//     </View>
+//   );
+// }
+
+// // ✅ 7. STYLES (Modal ને સારો દેખાવ આપવા માટે)
+// const styles = StyleSheet.create({
+//   modalOverlay: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: 'rgba(0,0,0,0.8)', // પાછળનું બેકગ્રાઉન્ડ ડાર્ક અને બ્લર જેવું લાગશે
+//   },
+//   modalContent: {
+//     width: '80%',
+//     backgroundColor: '#1E1E1E', // કાર્ડનો કલર ડાર્ક ગ્રે
+//     borderRadius: 20,
+//     padding: 25,
+//     alignItems: 'center',
+//     shadowColor: "#000",
+//     shadowOffset: { width: 0, height: 5 },
+//     shadowOpacity: 0.35,
+//     shadowRadius: 10,
+//     elevation: 10,
+//     borderWidth: 1,
+//     borderColor: '#333'
+//   },
+//   closeButton: {
+//     position: 'absolute',
+//     top: 10,
+//     right: 15,
+//     padding: 5
+//   },
+//   closeButtonText: {
+//     color: '#888',
+//     fontSize: 20,
+//     fontWeight: 'bold'
+//   },
+//   modalImage: {
+//     width: 80,
+//     height: 80,
+//     resizeMode: 'contain',
+//     marginBottom: 15,
+//     borderRadius: 40,
+//     backgroundColor: 'white', // ઈમેજ પાછળ વ્હાઈટ સર્કલ
+//   },
+//   modalTitle: {
+//     fontSize: 20,
+//     fontWeight: 'bold',
+//     color: 'white',
+//     marginBottom: 10,
+//     textAlign: 'center'
+//   },
+//   modalDesc: {
+//     fontSize: 14,
+//     color: '#ccc',
+//     textAlign: 'center',
+//     marginBottom: 20,
+//     lineHeight: 20
+//   },
+//   linkButton: {
+//     backgroundColor: '#0BA95B', // ગ્રીન કલરનું બટન
+//     paddingVertical: 10,
+//     paddingHorizontal: 30,
+//     borderRadius: 25,
+//   },
+//   linkText: {
+//     color: 'white',
+//     fontWeight: 'bold',
+//     fontSize: 14
+//   }
+// });
+
+// profile ...
+
+// import React, { useState } from 'react';
+// import { View, Text, ScrollView, Image, TouchableOpacity, Switch } from 'react-native';
+// import { SafeAreaView } from 'react-native-safe-area-context';
+// import { MaterialCommunityIcons, Ionicons, FontAwesome5 } from '@expo/vector-icons';
+
+// // --- THEME COLORS ---
+// const NEON_COLOR = "#00F0FF";
+
+// export default function Profile() {
+  
+//   // આ ડેટા ડમી છે
+//   const user = {
+//     name: "Human Designer",
+//     email: "student@academy.com",
+//     level: 5,
+//     xp: 4500,
+//     streak: 12, 
+//     progress: 0.65, 
+//   };
+
+//   const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(true);
+
+//   return (
+//     <SafeAreaView edges={['top']} className="flex-1 bg-black">
+//       <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
+        
+//         {/* --- 1. HEADER SECTION (Profile Pic with Neon Animation) --- */}
+//         <View className="items-center mt-10 mb-4">
+           
+//            {/* Profile Container */}
+//            <View className="relative justify-center items-center">
+//               {/* User Photo Box */}
+//               <View 
+//                 className="w-28 h-28 rounded-full border-4 border-black justify-center items-center z-10"
+//                 // અહીં શેડો કાઢી નાખ્યો કારણ કે હવે Skia નો ગ્લો છે
+//               >
+//                  <Image 
+//                    source={{ uri: 'https://i.pravatar.cc/300' }} 
+//                    className="w-24 h-24 rounded-full"
+//                  />
+//               </View>
+              
+//               {/* Edit Icon Badge */}
+//               <TouchableOpacity className="absolute -bottom-2 -right-2 bg-[#222] p-2 rounded-full border border-gray-600 z-20">
+//                  <MaterialCommunityIcons name="pencil" size={16} color="white" />
+//               </TouchableOpacity>
+//            </View>
+
+//            {/* Name & Badge */}
+//            <Text className="text-white text-2xl font-bold mt-6 tracking-wider">
+//              {user.name}
+//            </Text>
+//            <Text className="text-gray-400 text-sm">{user.email}</Text>
+
+//            {/* Level Badge */}
+//            <View className="mt-3 bg-[#1a1a1a] px-4 py-1 rounded-full border border-[#333] flex-row items-center">
+//               <FontAwesome5 name="crown" size={12} color="#FFD700" />
+//               <Text className="text-white ml-2 text-xs font-bold uppercase tracking-widest">
+//                 Level {user.level} • Pro Member
+//               </Text>
+//            </View>
+//         </View>
+
+
+//         {/* --- 2. STATS HUD --- */}
+//         <View className="flex-row justify-between px-6 mt-6">
+//            {/* Streak */}
+//            <View className="bg-[#111] w-[30%] p-3 rounded-2xl border border-[#333] items-center">
+//               <Ionicons name="flame" size={24} color="#FF5733" />
+//               <Text className="text-white font-bold text-lg mt-1">{user.streak}</Text>
+//               <Text className="text-gray-500 text-[10px] uppercase">Day Streak</Text>
+//            </View>
+
+//            {/* XP */}
+//            <View className="bg-[#111] w-[30%] p-3 rounded-2xl border border-[#333] items-center">
+//               <Ionicons name="flash" size={24} color={NEON_COLOR} />
+//               <Text className="text-white font-bold text-lg mt-1">{user.xp}</Text>
+//               <Text className="text-gray-500 text-[10px] uppercase">Total XP</Text>
+//            </View>
+
+//            {/* Rank */}
+//            <View className="bg-[#111] w-[30%] p-3 rounded-2xl border border-[#333] items-center">
+//               <Ionicons name="trophy" size={24} color="#FFD700" />
+//               <Text className="text-white font-bold text-lg mt-1">#42</Text>
+//               <Text className="text-gray-500 text-[10px] uppercase">Global Rank</Text>
+//            </View>
+//         </View>
+
+
+//         {/* --- 3. COURSE PROGRESS --- */}
+//         <View className="px-6 mt-8">
+//            <Text className="text-white text-lg font-bold mb-3">Course Progress</Text>
+           
+//            <View className="bg-[#111] p-5 rounded-2xl border border-[#333]">
+//               <View className="flex-row justify-between mb-2">
+//                  <Text className="text-gray-400 text-xs">Full Stack Design</Text>
+//                  <Text className="text-[#00F0FF] text-xs font-bold">65% Completed</Text>
+//               </View>
+              
+//               <View className="h-3 bg-[#222] rounded-full overflow-hidden">
+//                  <View 
+//                    style={{ width: '65%', backgroundColor: NEON_COLOR }} 
+//                    className="h-full rounded-full shadow-[0_0_10px_#00F0FF]"
+//                  />
+//               </View>
+              
+//               <Text className="text-gray-500 text-[10px] mt-3">
+//                  Next up: <Text className="text-white">Week 7 - Premier Pro Basics</Text>
+//               </Text>
+//            </View>
+//         </View>
+
+
+//         {/* --- 4. SETTINGS MENU --- */}
+//         <View className="px-6 mt-8">
+//            <Text className="text-white text-lg font-bold mb-3">Settings</Text>
+           
+//            <View className="bg-[#111] rounded-2xl border border-[#333] overflow-hidden">
+              
+//               <MenuItem icon="account-circle-outline" title="Account Details" />
+              
+//               {/* Switch Example */}
+//               <TouchableOpacity className="flex-row items-center p-4 border-b border-[#222] active:bg-[#1a1a1a]">
+//                 <View className="w-8 h-8 rounded-full bg-[#222] justify-center items-center mr-4">
+//                   <MaterialCommunityIcons name="bell-outline" size={18} color="white" />
+//                 </View>
+//                 <Text className="text-gray-200 font-medium text-base flex-1">Notifications</Text>
+//                 <Switch 
+//                    trackColor={{ false: "#333", true: "#00F0FF" }}
+//                    thumbColor={"#fff"}
+//                    value={isNotificationsEnabled}
+//                    onValueChange={setIsNotificationsEnabled}
+//                 />
+//               </TouchableOpacity>
+
+//               <MenuItem icon="shield-check-outline" title="Privacy & Security" />
+//               <MenuItem icon="help-circle-outline" title="Help & Support" />
+              
+//               <TouchableOpacity className="flex-row items-center p-4 active:bg-[#222]">
+//                  <View className="w-8 h-8 rounded-full bg-red-900/30 justify-center items-center mr-4">
+//                     <MaterialCommunityIcons name="logout" size={18} color="#FF4444" />
+//                  </View>
+//                  <Text className="text-[#FF4444] font-medium text-base flex-1">Logout</Text>
+//               </TouchableOpacity>
+
+//            </View>
+//         </View>
+
+//       </ScrollView>
+//     </SafeAreaView>
+//   );
+// }
+
+// // --- HELPER COMPONENT ---
+// const MenuItem = ({ icon, title }: { icon: any, title: string }) => (
+//   <TouchableOpacity className="flex-row items-center p-4 border-b border-[#222] active:bg-[#1a1a1a]">
+//      <View className="w-8 h-8 rounded-full bg-[#222] justify-center items-center mr-4">
+//         <MaterialCommunityIcons name={icon} size={18} color="white" />
+//      </View>
+//      <Text className="text-gray-200 font-medium text-base flex-1">{title}</Text>
+//      <MaterialCommunityIcons name="chevron-right" size={24} color="#555" />
+//   </TouchableOpacity>
+// );
+
+//two line dot .....
+
+// import React, { useEffect } from 'react';
+// import { View, Text, Dimensions } from 'react-native';
+// import { 
+//   Canvas, 
+//   Circle, 
+//   RadialGradient, 
+//   vec, 
+//   DashPathEffect 
+// } from '@shopify/react-native-skia';
+// import { useSharedValue, withRepeat, withTiming, useDerivedValue } from 'react-native-reanimated';
+
+// const { width } = Dimensions.get('window');
+// const SIZE = width * 0.8;
+// const CENTER = SIZE / 2;
+// const INNER_CIRCLE_RADIUS = SIZE * 0.28;
+
+// const DOT_COLORS = ['#A32CC4', '#8DB600', '#D4AF37', '#1FB1C1'];
+// const DOT_COUNT = 60;
+
+// interface ScoreChartProps {
+//   score?: number;
+// }
+
+// export default function ScoreChart({ score = 71 }: ScoreChartProps) {
+//   // એનિમેશન માટે Reanimated Value
+//   const rotation = useSharedValue(0);
+
+//   useEffect(() => {
+//     rotation.value = withRepeat(
+//       withTiming(2 * Math.PI, { duration: 20000 }), 
+//       -1, 
+//       false
+//     );
+//   }, []);
+
+//   // ટપકાંઓ રેન્ડર કરવાનું ફંક્શન
+//   const renderDots = () => {
+//     let dots = [];
+//     for (let i = 0; i < DOT_COUNT; i++) {
+//       const baseAngle = (i * 360) / DOT_COUNT;
+//       const radians = (baseAngle * Math.PI) / 180;
+      
+//       const distance = i % 2 === 0 ? SIZE * 0.35 : SIZE * 0.42;
+//       const dotRadius = Math.random() * 3 + 2; 
+      
+//       const x = CENTER + distance * Math.cos(radians);
+//       const y = CENTER + distance * Math.sin(radians);
+//       const color = DOT_COLORS[i % DOT_COLORS.length];
+
+//       dots.push(
+//         <Circle key={i} cx={x} cy={y} r={dotRadius} color={color} opacity={0.8} />
+//       );
+//     }
+//     return dots;
+//   };
+
+//   return (
+//     <View className="items-center justify-center bg-transparent">
+//       <Canvas style={{ width: SIZE, height: SIZE }}>
+//         {/* સેન્ટર ગ્લો */}
+//         <Circle cx={CENTER} cy={CENTER} r={INNER_CIRCLE_RADIUS * 1.5}>
+//           <RadialGradient 
+//             c={vec(CENTER, CENTER)} 
+//             r={INNER_CIRCLE_RADIUS * 1.5} 
+//             colors={['#f5fce8', 'rgba(255,255,255,0)']} 
+//           />
+//         </Circle>
+        
+//         {/* Dashed Circle Fix */}
+//         <Circle 
+//           cx={CENTER} cy={CENTER} r={INNER_CIRCLE_RADIUS * 1.1} 
+//           style="stroke" 
+//           strokeWidth={1} 
+//           color="#E5E5E5"
+//         >
+//           <DashPathEffect intervals={[5, 5]} />
+//         </Circle>
+
+//         {renderDots()}
+//       </Canvas>
+
+//       {/* સેન્ટર ટેક્સ્ટ Overlay */}
+//       <View style={{ position: 'absolute', alignItems: 'center' }}>
+//         <View className="flex-row items-baseline">
+//           <Text style={{ fontSize: 58, fontWeight: '800', color: '#000' }}>{score}</Text>
+//           <Text style={{ fontSize: 24, fontWeight: '700', color: '#000' }}>%</Text>
+//         </View>
+//         <Text style={{ color: '#666', fontSize: 16, fontWeight: '500' }}>Out of 100</Text>
+        
+//         {/* લોગો આઈકન */}
+//         <View className="mt-5 bg-black w-12 h-12 rounded-full items-center justify-center shadow-lg">
+//              <Text style={{color: 'white', fontWeight: 'bold', fontSize: 18}}>H</Text>
+//         </View>
+//       </View>
+//     </View>
+//   );
+// }
+
+//  3 line dot ....
+// import React from 'react';
+// import { View, Text, Dimensions } from 'react-native';
+// import { 
+//   Canvas, 
+//   Circle, 
+//   RadialGradient, 
+//   vec, 
+//   DashPathEffect 
+// } from '@shopify/react-native-skia';
+
+// const { width } = Dimensions.get('window');
+// const SIZE = width * 0.8;
+// const CENTER = SIZE / 2;
+// const INNER_CIRCLE_RADIUS = SIZE * 0.28;
+
+// // તમારી ઈમેજ મુજબના ચોક્કસ કલર્સ
+// const DOT_COLORS = ['#A32CC4', '#8DB600', '#D4AF37', '#1FB1C1'];
+
+// export default function ScoreChart({ score = 71 }) {
+  
+//   const renderPatternedDots = () => {
+//     let dots = [];
+//     const totalDots = 54; // ટપકાંની કુલ સંખ્યા
+    
+//     for (let i = 0; i < totalDots; i++) {
+//       const angle = (i * 360) / totalDots;
+//       const radians = (angle * Math.PI) / 180;
+      
+//       // પેટર્ન સેટ કરવા માટે: i % 3 નો ઉપયોગ કરી 3 અલગ અલગ લેયર (Rings) બનાવીશું
+//       // આનાથી ટપકાંઓ 'random' દેખાવાને બદલે પ્રોપર 'scattered' પેટર્નમાં આવશે
+//       let distance;
+//       let dotSize;
+      
+//       if (i % 3 === 0) {
+//         distance = SIZE * 0.44; // Outer ring
+//         dotSize = 5;
+//       } else if (i % 3 === 1) {
+//         distance = SIZE * 0.38; // Middle ring
+//         dotSize = 3;
+//       } else {
+//         distance = SIZE * 0.34; // Inner ring
+//         dotSize = 4;
+//       }
+
+//       const x = CENTER + distance * Math.cos(radians);
+//       const y = CENTER + distance * Math.sin(radians);
+//       const color = DOT_COLORS[i % DOT_COLORS.length];
+
+//       dots.push(
+//         <Circle key={i} cx={x} cy={y} r={dotSize} color={color} opacity={0.9} />
+//       );
+//     }
+//     return dots;
+//   };
+
+//   return (
+//     <View className="items-center justify-center">
+//       <Canvas style={{ width: SIZE, height: SIZE }}>
+//         {/* સોફ્ટ ગ્લો બેકગ્રાઉન્ડ */}
+//         <Circle cx={CENTER} cy={CENTER} r={INNER_CIRCLE_RADIUS * 1.5}>
+//           <RadialGradient 
+//             c={vec(CENTER, CENTER)} 
+//             r={INNER_CIRCLE_RADIUS * 1.5} 
+//             colors={['#f9fdf2', 'rgba(255,255,255,0)']} 
+//           />
+//         </Circle>
+        
+//         {/* તૂટક તૂટક લાઈન (Dashed Circle) */}
+//         <Circle 
+//           cx={CENTER} cy={CENTER} r={INNER_CIRCLE_RADIUS * 1.25} 
+//           style="stroke" 
+//           strokeWidth={0.5} 
+//           color="#ECECEC"
+//         >
+//           <DashPathEffect intervals={[4, 4]} />
+//         </Circle>
+
+//         {/* પેટર્ન મુજબના ટપકાંઓ */}
+//         {renderPatternedDots()}
+//       </Canvas>
+
+//       {/* સેન્ટર સ્કોર અને ટેક્સ્ટ */}
+//       <View style={{ position: 'absolute', alignItems: 'center' }}>
+//         <View className="flex-row items-baseline">
+//           <Text style={{ fontSize: 60, fontWeight: 'bold', letterSpacing: -2 }}>{score}</Text>
+//           <Text style={{ fontSize: 26, fontWeight: '600', marginLeft: 2 }}>%</Text>
+//         </View>
+//         <Text style={{ color: '#888', fontSize: 15, marginTop: -5 }}>Out of 100</Text>
+        
+//         {/* બ્લેક લોગો સર્કલ */}
+//         <View className="mt-6 bg-[#222] w-12 h-12 rounded-full items-center justify-center border-[3px] border-white shadow-md">
+//              <Text style={{color: 'white', fontWeight: 'bold', fontSize: 18, fontFamily: 'serif'}}>H</Text>
+//         </View>
+//       </View>
+//     </View>
+//   );
+// }
+
+//home ..
+// import React from 'react';
+// import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+// import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+// import { SafeAreaView } from 'react-native-safe-area-context';
+
+// import I5 from '../../assets/photo/home/i5.svg'
+// // --- DATA ---
+// const RECENT_ITEMS = [
+//   { id: 1, title: 'Simplecoder.co', icon: 'code-tags' },
+//   { id: 2, title: 'Design System', icon: 'palette' },
+//   { id: 3, title: 'Marketing Plan', icon: 'chart-line' },
+//   { id: 4, title: 'Project Roadmap', icon: 'road-variant' },
+//   { id: 5, title: 'User Research', icon: 'account-group' },
+// ];
+
+// export default function HomeScreen() {
+//   return (
+//     <SafeAreaView className="flex-1 bg-[#F1F1F1]">
+//       <ScrollView className="flex-1 px-5 pt-2" showsVerticalScrollIndicator={false}>
+
+//         {/* --- 1. Header with Lottie Animation --- */}
+//         <View className="flex-row justify-between items-center mb-6 mt-2">
+//           {/* Logo "H" - Serif Font style */}
+//           <I5 width={30} height={30}></I5>
+//           {/* Profile Placeholder */}
+//           <View className="w-10 h-10 bg-[#D9D9D9] rounded-full" />
+//         </View>
+
+//         {/* --- 2. Recents Section --- */}
+//         <View className="flex-row justify-between items-center mb-4">
+//           <View className="flex-row items-center gap-2">
+//             <Ionicons name="time-outline" size={20} color="gray" />
+//             <Text className="text-lg font-semibold text-[#888]">Recents</Text>
+//           </View>
+//           <Text className="text-[#888]">All →</Text>
+//         </View>
+
+//         {/* Recents Scroll */}
+//         <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-6">
+//           {RECENT_ITEMS.map((item) => (
+//             <View key={item.id} className="mr-4">
+//               <View className="w-72 h-48 bg-white rounded-[30px] shadow-sm mb-3" />
+//               <View className="flex-row items-center gap-2 ml-2">
+//                 <View className="bg-black p-1 rounded-md">
+//                   <MaterialCommunityIcons name={item.icon as any} size={16} color="white" />
+//                 </View>
+//                 <Text className="text-base font-medium">{item.title}</Text>
+//               </View>
+//             </View>
+//           ))}
+//         </ScrollView>
+
+//         {/* --- 4. Easels & Notes Section --- */}
+//         <View className="flex-row items-center gap-2 mb-4">
+//           <MaterialCommunityIcons name="puzzle-outline" size={20} color="gray" />
+//           <Text className="text-lg font-semibold text-[#888]">Easels & Notes</Text>
+//         </View>
+
+//         {/* Grid Layout */}
+//         <View className="flex-row flex-wrap justify-between gap-y-4 pb-32">
+//           <View className="w-[30%] h-11 aspect-[3/4] bg-white rounded-3xl" />
+//           <View className="w-[30%] h-11 aspect-[3/4] bg-white rounded-3xl" />
+//           <TouchableOpacity className="w-[30%] h-11 aspect-[3/4] border-2 border-dashed border-[#D9D9D9] rounded-3xl justify-center items-center">
+//             <Ionicons name="add" size={30} color="#888" />
+//           </TouchableOpacity>
+//         </View>
+
+//       </ScrollView>
+//     </SafeAreaView>
+//   );
+// }
+//todo card.. after
+    // <TouchableOpacity className=" p-4 rounded-3xl mt-[-10px] mb-4 h-52 overflow-hidden justify-between items-center border-separate border-8 border-[white]">
+    //                  <Image source={p7} className='absolute w-[130%] h-52' resizeMode="cover"/>
+    //                  <View className="items-center mt-2">
+    //                     <Text className="text-[#333] text-center font-medium text-[10px] leading-3 mb-2">
+    //                        Write a small to-do list{"\n"} for Superhuman Work.
+    //                     </Text>
+    //                     <Text className="text-[#333] text-3xl font-black">03</Text>
+    //                  </View>
+    //                  <View className="mb-6">
+    //                     <I15 width={50} height={50} />
+    //                  </View>
+    //               </TouchableOpacity>
+
+    // import React from 'react';
+    // import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+    // import { Ionicons, Feather } from '@expo/vector-icons';
+    // import { SafeAreaView } from 'react-native-safe-area-context';
+    // import { MotiView } from 'moti';
+    
+    // // ✅ 1. આ લાઈબ્રેરી ઈમ્પોર્ટ કરો (Navigation માટે)
+    // import { useIsFocused } from '@react-navigation/native';
+    
+    // const privateItems = [
+    //   { id: '1', title: 'Getting Started on Mobile', icon: 'file-text', isChecked: false },
+    //   { id: '2', title: 'Habit Tracker', icon: 'check-square', isChecked: true },
+    //   { id: '3', title: 'To-do List', icon: 'list', isChecked: false },
+    //   { id: '4', title: 'Personal Website', icon: 'globe', isChecked: false },
+    // ];
+    
+    // export default function Explore() {
+    //   // ✅ 2. ફોકસ સ્ટેટ મેળવો
+    //   // (જ્યારે તમે આ સ્ક્રીન પર આવશો ત્યારે આ true થશે, અને જશો ત્યારે false)
+    //   const isFocused = useIsFocused();
+    
+    //   return (
+    //     <SafeAreaView className="flex-1 bg-[#f2f2f2]">
+    //       <ScrollView className="flex-1 px-4 pt-2" showsVerticalScrollIndicator={false}>
+    
+    //         {/* --- Header Animation --- */}
+    //         <MotiView
+    //           // ✅ 3. અહીં જાદુ છે! 'key' બદલાશે એટલે એનિમેશન ફરીથી ચાલશે.
+    //           key={isFocused ? 'header-focused' : 'header-unfocused'}
+    
+    //           from={{ opacity: 0, translateY: -20 }}
+    //           animate={{ opacity: 1, translateY: 0 }}
+    //           transition={{ type: 'timing', duration: 500 }}
+    //           className="flex-row justify-between items-center mb-6"
+    //         >
+    //           <View className="flex-row items-center gap-3">
+    //             <View className="w-10 h-10 bg-[#EAEAEA] rounded-lg items-center justify-center">
+    //               <Text className="text-lg font-semibold text-[#666]">A</Text>
+    //             </View>
+    //             <View>
+    //               <TouchableOpacity className="flex-row items-center gap-1">
+    //                 <Text className="text-base font-bold text-[#333]">Alex's Notion</Text>
+    //                 <Feather name="chevron-down" size={16} color="#666" />
+    //               </TouchableOpacity>
+    //               <Text className="text-sm text-[#888]">alexsmith.mobbin@gmail.com</Text>
+    //             </View>
+    //           </View>
+    //           <TouchableOpacity>
+    //             <Ionicons name="ellipsis-horizontal" size={24} color="#666" />
+    //           </TouchableOpacity>
+    //         </MotiView>
+    
+    //         {/* --- "Jump back in" Section --- */}
+    //         <MotiView
+    //           key={isFocused ? 'jump-focused' : 'jump-unfocused'}
+    //           from={{ opacity: 0, scale: 0.9 }}
+    //           animate={{ opacity: 1, scale: 1 }}
+    //           transition={{ type: 'timing', duration: 500, delay: 200 }}
+    //         >
+    //           <Text className="text-base font-semibold text-[#666] mb-3">Jump back in</Text>
+    //           <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-8">
+    //             <TouchableOpacity className="bg-white w-48 p-4 rounded-xl shadow-sm mr-4">
+    //               <Ionicons name="document-text-outline" size={32} color="#888" className="mb-8" />
+    //               <Text className="text-base font-medium text-[#333]">Getting started</Text>
+    //               <Text className="text-base font-medium text-[#333]">On Mobile</Text>
+    //             </TouchableOpacity>
+    //             <View className="w-4" />
+    //           </ScrollView>
+    //         </MotiView>
+    
+    //         {/* --- "Private" Section Header --- */}
+    //         <MotiView
+    //           key={isFocused ? 'title-focused' : 'title-unfocused'}
+    //           from={{ opacity: 0 }}
+    //           animate={{ opacity: 1 }}
+    //           transition={{ delay: 400 }}
+    //           className="flex-row justify-between items-center mb-3"
+    //         >
+    //           <Text className="text-base font-semibold text-[#666]">Private</Text>
+    //           <View className="flex-row gap-4">
+    //             <TouchableOpacity>
+    //               <Ionicons name="ellipsis-horizontal" size={20} color="#666" />
+    //             </TouchableOpacity>
+    //             <TouchableOpacity>
+    //               <Ionicons name="add" size={22} color="#666" />
+    //             </TouchableOpacity>
+    //           </View>
+    //         </MotiView>
+    
+    //         {/* --- List Items Animation --- */}
+    //         <View className="bg-white rounded-xl overflow-hidden mb-24">
+    //           {privateItems.map((item, index) => (
+    //             <MotiView
+    //               // ✅ દરેક આઈટમ માટે યુનિક કી + ફોકસ કી
+    //               key={`${item.id}-${isFocused ? 'focus' : 'blur'}`}
+    
+    //               from={{ opacity: 0, translateX: -20 }}
+    //               animate={{ opacity: 1, translateX: 0 }}
+    //               transition={{
+    //                 type: 'timing',
+    //                 duration: 500,
+    //                 delay: 500 + (index * 100)
+    //               }}
+    //             >
+    //               <TouchableOpacity className="flex-row items-center justify-between p-4 bg-white">
+    //                 <View className="flex-row items-center gap-3">
+    //                   {item.isChecked ? (
+    //                     <Feather name="check" size={18} color="#666" />
+    //                   ) : (
+    //                     <Feather name="chevron-right" size={18} color="#666" />
+    //                   )}
+    
+    //                   <Feather name={item.icon as any} size={18} color="#666" />
+    //                   <Text className="text-base text-[#333]">{item.title}</Text>
+    //                 </View>
+    //                 <Ionicons name="add" size={20} color="#888" />
+    //               </TouchableOpacity>
+    //               {index < privateItems.length - 1 && (
+    //                 <View className="h-[1px] bg-[#F1F1F1] ml-12" />
+    //               )}
+    //             </MotiView>
+    //           ))}
+    //         </View>
+    
+    //       </ScrollView>
+    //     </SafeAreaView>
+    //   );
+    // }
+
+    //ruler ...
+
+    // import React, { useState } from 'react';
+    // import { View, Text, TouchableOpacity, Modal } from 'react-native';
+    // import { RulerPicker } from 'react-native-ruler-picker';
+    
+    
+    // const StepPickerModal = ({ isVisible, onClose }: { isVisible: boolean, onClose: () => void }) => {
+    //   const [value, setValue] = useState('200');
+    
+    //   return (
+    //     <Modal
+    //       animationType="slide"
+    //       transparent={true}
+    //       visible={isVisible}
+    //       onRequestClose={onClose}
+    //     >
+    //       <View className="flex-1 justify-end bg-black/50">
+    //         <View className="bg-white rounded-t-[40px] p-6 items-center h-[70%]">
+    
+    //           {/* Header */}
+    //           <Text className="text-gray-500 font-bold text-lg mt-4">Insights</Text>
+    //           <Text className="text-gray-200 text-6xl font-black absolute top-16">Steps</Text>
+    
+    //           {/* Icon Placeholder (Shoes) */}
+    //           <View className="h-40 w-40 justify-center items-center mt-10">
+    //             {/* અહિયાં તમારી ઇમેજ આવશે */}
+    //             <Text className="text-4xl">👟</Text>
+    //           </View>
+    
+    //           {/* Ruler Section */}
+    //           <View className="w-full items-center my-10">
+    //             {/* <Text className="text-4xl font-bold text-black">{value}</Text>
+    //             <Text className="text-gray-400 mb-4">Steps</Text> */}
+    
+    //             <RulerPicker
+    //               width={500}
+    //               height={100}
+    //               min={100}
+    //               max={10000}
+    //               step={10}
+    //               stepWidth={2}
+    //               initialValue={200}
+    //               onValueChange={(val) => setValue(val)}
+    //               unit=""
+    //               fractionDigits={0}
+    //               indicatorColor="black"
+    //               shortStepColor="#AEAEB2"
+    //               longStepColor="#AEAEB2"
+    //               indicatorHeight={40}
+    //               longStepHeight={50} 
+    //               shortStepHeight={20}   
+    //             />
+    //           </View>
+    
+    //           {/* Save Button */}
+    //           <TouchableOpacity
+    //             onPress={onClose}
+    //             className="bg-black w-full py-4 rounded-2xl items-center absolute bottom-10 mx-6"
+    //           >
+    //             <Text className="text-white font-bold text-lg">Save</Text>
+    //           </TouchableOpacity>
+    
+    //         </View>
+    //       </View>
+    //     </Modal>
+    //   );
+    // };
+    
+    // export default StepPickerModal;

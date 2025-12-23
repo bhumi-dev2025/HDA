@@ -5,7 +5,7 @@ import * as Haptics from 'expo-haptics';
 import M2 from '../../assets/photo/modal/M2.svg'
 
 
-const StepPickerModal = ({ isVisible, onClose }: { isVisible: boolean, onClose: () => void }) => {
+const StepPickerModal = ({ isVisible, onClose,onSave }: { isVisible: boolean, onClose: () => void,onSave: () => void}) => {
   const [value, setValue] = useState('200');
 
   const handleValueChange = (val: string) => {
@@ -67,7 +67,7 @@ const StepPickerModal = ({ isVisible, onClose }: { isVisible: boolean, onClose: 
 
           {/* Save Button */}
           <TouchableOpacity
-            onPress={onClose}
+            onPress={onSave}
             className="bg-black w-full py-4 rounded-2xl items-center absolute bottom-10 mx-6"
           >
             <Text className="text-white font-bold text-lg">Save</Text>

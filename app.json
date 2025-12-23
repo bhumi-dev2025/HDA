@@ -20,7 +20,8 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.app.app"
+      "package": "com.app.app",
+      "softwareKeyboardLayoutMode": "resize"
     },
     "web": {
       "output": "static",

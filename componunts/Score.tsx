@@ -1,3 +1,4 @@
+import '../global.css'
 import React, { useEffect } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { 
@@ -69,7 +70,7 @@ export default function ScoreChart({ score = 71 }: ScoreChartProps) {
         
         {/* Dashed Circle Fix */}
         <Circle 
-          cx={CENTER} cy={CENTER} r={INNER_CIRCLE_RADIUS * 0.9} 
+          cx={CENTER} cy={CENTER} r={INNER_CIRCLE_RADIUS * 0.8} 
           style="stroke" 
           strokeWidth={1} 
           color="#E5E6E5"
@@ -81,15 +82,14 @@ export default function ScoreChart({ score = 71 }: ScoreChartProps) {
       </Canvas>
 
       {/* સેન્ટર ટેક્સ્ટ Overlay */}
-      <View style={{ position: 'absolute', alignItems: 'center' }}>
-        <View className="flex-row items-baseline">
-          <Text style={{ fontSize: 45, fontWeight: '800', color: '#000' }}>{score}</Text>
-          <Text style={{ fontSize: 20, fontWeight: '700', color: '#000' }}>%</Text>
+      <View className='absolute justify-center items-center'>
+        <View className="flex-row items-center">
+          <Text className='text-5xl font-extrabold'>{score}<Text className='text-2xl font-bold'>%</Text></Text>
         </View>
         <Text style={{ color: '#666', fontSize: 10, fontWeight: '800' }}>Out of 100</Text>
         
         {/* લોગો આઈકન */}
-        <View className="mt-5">
+        <View className="absolute mt-36">
              <I5 width={30} height={30}></I5>
         </View>     
       </View>

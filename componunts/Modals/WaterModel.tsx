@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { Plus, Minus } from 'lucide-react-native'; 
 import M3 from '../../assets/photo/modal/M3.svg';
 
-const WaterTrackerModal = ({ visible, onClose }: { visible: boolean; onClose: () => void }) => {
+const WaterTrackerModal = ({ visible, onClose,onSave }: { visible: boolean; onClose: () => void,onSave:()=>void }) => {
   const [liters, setLiters] = useState(1.5);
 
   // બટન પ્રેસ છે કે નહીં તે જાણવા માટેની State
@@ -72,7 +72,7 @@ const WaterTrackerModal = ({ visible, onClose }: { visible: boolean; onClose: ()
           </View>
 
           <TouchableOpacity 
-            onPress={onClose}
+            onPress={onSave}
             className="bg-black w-full py-5 rounded-2xl items-center absolute bottom-10 mx-6"
           >
             <Text className="text-white text-lg font-bold">Save</Text>

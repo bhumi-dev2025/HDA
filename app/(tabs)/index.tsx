@@ -1,7 +1,13 @@
 import React,{useState} from 'react';
 import { View, Text, ScrollView,TouchableOpacity,Image} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+//model import
+import MeditationModal from '../../componunts/Modals/MeditationModel';
+import StepPickerModal from '../../componunts/Modals/StepModel';
+import SleepModal from '../../componunts/Modals/SleepModel';
+import TaskModal from '../../componunts/Modals/TodoModel';
+import WaterTrackerModal from '../../componunts/Modals/WaterModel';
+//icons..
 import I5 from '../../assets/photo/home/I5.svg'
 import I6 from '../../assets/photo/home/I6.svg'
 import I7 from '../../assets/photo/home/I7.svg'
@@ -11,27 +17,43 @@ import I10 from '../../assets/photo/home/I10.svg'
 import I11 from '../../assets/photo/home/I11.svg'
 import I12 from '../../assets/photo/home/I12.svg'
 import I13 from '../../assets/photo/home/I13.svg'
+import I14 from '../../assets/photo/home/I14.svg'
+import C1 from '../../assets/photo/home/C1.svg'
+import C2 from '../../assets/photo/home/C2.svg'
 import ScoreChart from '../../componunts/Score';
+//types
+type ModalType = 'meditation' | 'water' | 'todo' | 'step' | 'sleep' | null;
+//data
+const task = [
+    { id: 1, task: 'ui design for app', done: true },
+    { id: 2, task: 'create ux for fittech app', done: true },
+    { id: 3, task: 'colse tikit forui and\n meeting with team', done: false }
+];
 
 export default function HomeScreen() {
+    const [activeModal, setActiveModal] = useState<ModalType>(null);
+  //images
   const p1 = require('../../assets/photo/home/p1.png');
   const p2 = require('../../assets/photo/home/p2.png');
   const p3 = require('../../assets/photo/home/p3.png');
   const p4 = require('../../assets/photo/home/p4.png');
   const p5 = require('../../assets/photo/home/p5.png');
-
+  const p6 = require('../../assets/photo/home/p6.png');
+  const p7 = require('../../assets/photo/home/p7.png');
+  //states for data enter in modals
   const [isMeditationDone, setIsMeditationDone] = useState(false);
   const [isWaterDone, setIsWaterDone] = useState(false);
   const [isTodoDone, setIsTodoDone] = useState(false);
   const [isStepDone, setIsStepDone] = useState(false);
   const [isSleepDone, setIsSleepDone] = useState(false);
 
-  const handleSaveData = (type: string) => {
+  const handleSave = (type: ModalType) => {
     if (type === 'meditation') setIsMeditationDone(true);
     if (type === 'water') setIsWaterDone(true);
     if (type === 'todo') setIsTodoDone(true);
     if (type === 'step') setIsStepDone(true);
     if (type === 'sleep') setIsSleepDone(true);
+    setActiveModal(null);
   };
 
   return (
@@ -76,48 +98,124 @@ export default function HomeScreen() {
           </TouchableOpacity>
 
           {/* 2. Mindful Steps (Top Right) */}
-          <TouchableOpacity className="w-[49%] p-5 rounded-3xl mb-4 h-24 overflow-hidden justify-center flex-row items-center border-separate border-8 border-[white] gap-4">
+          <TouchableOpacity onPress={() => setActiveModal('step')} className="w-[49%] p-2 rounded-3xl mb-4 h-24 overflow-hidden justify-center flex-row items-center border-separate border-8 border-[white] gap-4">
+            {!isStepDone ? 
+            (<>
             <Image source={p2} className='absolute w-[130%] h-24' resizeMode="cover"/>
             <I9></I9>
             <Text className="flex-1 text-[#333] font-medium text-sm">Mindful steps, peaceful path.</Text>
+            </>):(<>
+            <Image source={p2} className='absolute w-[130%] h-24' resizeMode="cover"/>
+             <I9></I9>
+                  <View className="w-[2px] h-10 bg-gray-200 mr-3" />
+                  <View>
+                     <View className="bg-[#FFF5D6] px-2 py-0.5 rounded-full self-start mb-1">
+                        <Text className="text-[#CEA021] text-[10px] font-bold">Steps</Text>
+                     </View>
+                     <Text className="text-[#333] text-2xl font-black">2796</Text>
+                  </View>
+            </>)}
           </TouchableOpacity>
 
           {/* 3. Mind Clear Card (Top Left) */}
-          <TouchableOpacity className="w-[49%] p-2 rounded-3xl h-28 mt-[-15px] overflow-hidden justify-center flex-row items-center border-separate border-8 border-[white] gap-4">
-             <Image source={p1} className='absolute w-[130%] h-28' resizeMode="cover"/>
+          <TouchableOpacity onPress={() => setActiveModal('meditation')} className="w-[49%] p-4 rounded-3xl h-28 mt-[-15px] overflow-hidden justify-center flex-row items-center border-separate border-8 border-[white] gap-2">
+            {!isMeditationDone ? 
+            (<>
+            <Image source={p1} className='absolute w-[130%] h-28' resizeMode="cover"/>
               <I8></I8>
             <Text className="text-[#333] font-medium text-sm">Mind clear. Soul{"\n"}light.</Text>
+            </>):(<>
+            <Image source={p1} className='absolute w-[130%] h-28' resizeMode="cover"/>
+            <I8></I8>
+                  <View className="w-[2px] h-10 bg-gray-200 mr-3" />
+                  <View>
+                     <View className="bg-[#E6F4D7] px-2 py-0.5 rounded-full self-start mb-1">
+                        <Text className="text-[#6B8E23] text-[10px] font-bold">Meditation</Text>
+                     </View>
+                     <Text className="text-[#333] text-2xl font-black">10m</Text>
+                  </View>
+            </>)}
+             
           </TouchableOpacity>
 
           {/* Column for Right side items (To-Do and Sleep) */}
           <View className="w-[49%]">
             
             {/* 4. To-Do List Card */}
-            <TouchableOpacity className="p-4 rounded-3xl mt-[-5px] mb-4 h-56 overflow-hidden justify-between items-center border-separate border-8 border-[white]">
-                <Image source={p4} className='absolute w-[130%] h-52' resizeMode="cover"/>
+            <TouchableOpacity onPress={() => setActiveModal('todo')} className="p-4 rounded-3xl mt-[-5px] mb-4 h-56 overflow-hidden justify-between items-center border-separate border-8 border-[white]">
+              {!isTodoDone ? (<>
+              <Image source={p4} className='absolute w-[130%] h-52' resizeMode="cover"/>
                 <I11 height={50} width={50}></I11>
                 <Text className="text-[#333] text-center font-medium text-sm mb-3">
                   Write a small to-do list{"\n"} for Superhuman Work.
                 </Text>
+              </>):(<>
+              <Image source={p7} className='absolute w-[130%] h-52' resizeMode="cover"/>
+                     <View className="items-start mt-4">
+                        <Text className='text-[#333] text-1xl font-black'>Things to do today</Text>
+                     </View>
+                     <View className='items-start mb-4'>
+                        {task.map((item, index) =>(
+                           <View key={index} className='flex-row items-start gap-2 mt-2'>
+                              {item.done ? (<C2></C2>) : (<C1></C1>)}
+                              {item.done ? (<Text className='text-[#bbb9b9] text-[10px] font-medium'>{item.task}</Text>) : (
+                              <Text className='text-[#333] text-[10px] font-medium'>{item.task}</Text>)}
+                           </View>
+                        ))}
+                     </View>
+              </>)}
             </TouchableOpacity>
 
             {/* 5. Quiet Mind / Sleep Card */}
-            <TouchableOpacity className="p-5 rounded-3xl h-28 overflow-hidden flex-row items-center border-separate border-8 border-[white] gap-4">
+            <TouchableOpacity onPress={() => setActiveModal('sleep')} className="p-2 rounded-3xl h-28 overflow-hidden flex-row items-center justify-center border-separate border-8 border-[white] gap-4">
+              {!isSleepDone ?(<>
               <Image source={p5} className='absolute w-[130%] h-28' resizeMode="cover"/>
               <I13></I13>
               <Text className="text-[#333] font-medium text-sm">Quit mind. Deep{"\n"}Sleep.</Text>
+              </>):(<>
+              <Image source={p5} className='absolute w-[130%] h-28' resizeMode="cover"/>
+              <I13></I13>
+                     <View className="w-[2px] h-10 bg-gray-200" mr-3 />
+                     <View>
+                        <View className="bg-[#F2F2F7] px-2 py-0.5 rounded-full self-start mb-1">
+                           <Text className="text-[#333] text-[10px] font-bold">Sleep</Text>
+                        </View>
+                        <Text className="text-[#333] text-2xl font-black">8:20</Text>
+                     </View>
+              </>)}
           </TouchableOpacity>
           </View>
 
           {/* 6. Water Card (Large Left) */}
-          <TouchableOpacity className="w-[49%] p-6 rounded-3xl h-60 mt-[-210px] overflow-hidden justify-between items-center border-separate border-8 border-[white]">
+          <TouchableOpacity onPress={() => setActiveModal('water')} className="w-[49%] p-6 rounded-3xl h-60 mt-[-210px] overflow-hidden justify-between items-center border-separate border-8 border-[white]">
+            {!isWaterDone ? (<>
             <Image source={p3} className='absolute w-[130%] h-60' resizeMode="cover"/>
             <I10 height={50} width={50}></I10>
             <Text className="text-[#333] text-center font-medium text-sm mb-2">Water brings life,{"\n"}health, and happiness.
             </Text>
+            </>):(<>
+            <Image source={p6} className='absolute w-[130%] h-60' resizeMode="cover"/>
+                  <View className="items-center mt-2">
+                     <Text className="text-[#333] text-center font-medium text-[10px] leading-3 mb-2">
+                        Water brings life, health,{"\n"}and happiness.
+                     </Text>
+                     <Text className="text-[#333] text-3xl font-black">1.5ltr</Text>
+                  </View>
+                  <View className="mb-6">
+                     <I14 width={60} height={60} />
+                  </View>
+            </>)}
+            
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* --- Modals --- */}
+            <MeditationModal isVisible={activeModal === 'meditation'} onClose={() => setActiveModal(null)} onSave={() => handleSave('meditation')} />
+            <WaterTrackerModal visible={activeModal === 'water'} onClose={() => setActiveModal(null)} onSave={() => handleSave('water')} />
+            <TaskModal visible={activeModal === 'todo'} onClose={() => setActiveModal(null)} onSave={() => handleSave('todo')} />
+            <StepPickerModal isVisible={activeModal === 'step'} onClose={() => setActiveModal(null)} onSave={() => handleSave('step')} />
+            <SleepModal isVisible={activeModal === 'sleep'} onClose={() => setActiveModal(null)} onSave={() => handleSave('sleep')} />
     </SafeAreaView>
   );
 }

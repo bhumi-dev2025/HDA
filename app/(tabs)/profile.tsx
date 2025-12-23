@@ -66,21 +66,15 @@ export default function HomeScreen() {
             {/* Main Container */}
             <View className="flex-row flex-wrap justify-between">
 
-               {/* 1. Mind Clear Card (Top Left) */}
 
-               <TouchableOpacity className="w-[49%] bg-[#F9FCF0] p-4 rounded-3xl h-32 overflow-hidden justify-center border-separate border-8 border-[white] flex-row items-center gap-2">
-                  <I8></I8>
-                  <View className="w-[2px] h-10 bg-gray-200 mr-3" />
-                  <View>
-                     <View className="bg-[#E6F4D7] px-2 py-0.5 rounded-full self-start mb-1">
-                        <Text className="text-[#6B8E23] text-[10px] font-bold">Meditation</Text>
-                     </View>
-                     <Text className="text-[#333] text-2xl font-black">10m</Text>
-                  </View>
+            {/* 1. Good Morning Card (Bottom Left - spans width or stays small) */}
+               <TouchableOpacity className="w-[49%] bg-white p-4 rounded-2xl h-20 overflow-hidden flex-row items-center border-3 border-[white] gap-2 ">
+                  <I12></I12>
+                  <Text className="text-[#333] font-bold text-lg">Good Morning</Text>
                </TouchableOpacity>
 
                {/* 2. Mindful Steps (Top Right) */}
-               <TouchableOpacity className="w-[49%] bg-[#FFFBF0] p-2 rounded-3xl h-24 overflow-hidden justify-center flex-row items-center border-separate border-8 border-[white] gap-4">
+               <TouchableOpacity className="w-[49%] p-2 rounded-3xl mb-4 h-24 overflow-hidden justify-center flex-row items-center border-separate border-8 border-[white] gap-4">
                   <I9></I9>
                   <View className="w-[2px] h-10 bg-gray-200 mr-3" />
                   <View>
@@ -91,25 +85,25 @@ export default function HomeScreen() {
                   </View>
                </TouchableOpacity>
 
-               {/* 3. Water Card (Large Left) */}
-               <TouchableOpacity className="w-[49%] p-6 rounded-3xl mt-4 mb-4 h-56 overflow-hidden justify-between items-center border-separate border-8 border-[white]">
-                  <Image source={p6} className='absolute w-[130%] h-56' resizeMode="cover"/>
-                  <View className="items-center mt-2">
-                     <Text className="text-[#333] text-center font-medium text-[10px] leading-3 mb-2">
-                        Water brings life, health,{"\n"}and happiness.
-                     </Text>
-                     <Text className="text-[#333] text-3xl font-black">1.5ltr</Text>
-                  </View>
-                  <View className="mb-6">
-                     <I14 width={60} height={60} />
+               {/* 3. Mind Clear Card (Top Left) */}
+               <TouchableOpacity className="w-[49%] p-4 rounded-3xl h-28 mt-[-15px]  overflow-hidden justify-center border-separate border-8 border-[white] flex-row items-center gap-2">
+                  <I8></I8>
+                  <View className="w-[2px] h-10 bg-gray-200 mr-3" />
+                  <View>
+                     <View className="bg-[#E6F4D7] px-2 py-0.5 rounded-full self-start mb-1">
+                        <Text className="text-[#6B8E23] text-[10px] font-bold">Meditation</Text>
+                     </View>
+                     <Text className="text-[#333] text-2xl font-black">10m</Text>
                   </View>
                </TouchableOpacity>
+
+               
 
                {/* Column for Right side items (To-Do and Sleep) */}
                <View className="w-[49%]">
 
                   {/* 4. To-Do List Card */}
-                  <TouchableOpacity className=" p-4 rounded-3xl mt-[-10px] mb-4 h-52 overflow-hidden justify-between items-center border-separate border-8 border-[white]">
+                  <TouchableOpacity className=" p-4 rounded-3xl mt-[-5px] mb-4 h-56 overflow-hidden justify-between items-center border-separate border-8 border-[white]">
                      <Image source={p7} className='absolute w-[130%] h-52' resizeMode="cover"/>
                      <View className="items-start mt-4">
                         <Text className='text-[#333] text-1xl font-black'>Things to do today</Text>
@@ -126,9 +120,9 @@ export default function HomeScreen() {
                   </TouchableOpacity>
 
                   {/* 5. Quiet Mind / Sleep Card */}
-                  <TouchableOpacity className="bg-[#F8F8F8] p-4 rounded-3xl h-28 overflow-hidden flex-row items-center border-separate border-8 border-[white] gap-2">
+                  <TouchableOpacity className="p-2 rounded-3xl h-28 overflow-hidden flex-row items-center justify-center border-separate border-8 border-[white] gap-4">
                      <I13></I13>
-                     <View className="w-[2px] h-10 bg-gray-200 mr-3" />
+                     <View className="w-[2px] h-10 bg-gray-200" mr-3 />
                      <View>
                         <View className="bg-[#F2F2F7] px-2 py-0.5 rounded-full self-start mb-1">
                            <Text className="text-[#333] text-[10px] font-bold">Sleep</Text>
@@ -137,14 +131,24 @@ export default function HomeScreen() {
                      </View>
                   </TouchableOpacity>
                </View>
-
-               {/* 6. Good Morning Card (Bottom Left - spans width or stays small) */}
-               <TouchableOpacity className="w-[49%] bg-white p-4 rounded-3xl mt-[-60px] h-16 flex-row items-center border-separate border-3 border-[white] gap-2 ">
-                  <I12></I12>
-                  <Text className="text-[#333] font-bold text-lg">Good Morning</Text>
+            
+               {/* 6. Water Card (Large Left) */}
+               <TouchableOpacity className="w-[49%] p-6 rounded-3xl mt-[-210px] h-60 overflow-hidden justify-between items-center border-separate border-8 border-[white]">
+                  <Image source={p6} className='absolute w-[130%] h-60' resizeMode="cover"/>
+                  <View className="items-center mt-2">
+                     <Text className="text-[#333] text-center font-medium text-[10px] leading-3 mb-2">
+                        Water brings life, health,{"\n"}and happiness.
+                     </Text>
+                     <Text className="text-[#333] text-3xl font-black">1.5ltr</Text>
+                  </View>
+                  <View className="mb-6">
+                     <I14 width={60} height={60} />
+                  </View>
                </TouchableOpacity>
+               
             </View>
          </ScrollView>
+         
       </SafeAreaView>
    );
 }

@@ -5,9 +5,10 @@ import M1 from '../../assets/photo/modal/M1.svg'
 interface MeditationModalProps {
   isVisible: boolean;
   onClose: () => void;
+  onSave: () => void;
 }
 
-const MeditationModal: React.FC<MeditationModalProps> = ({ isVisible, onClose }) => {
+const MeditationModal: React.FC<MeditationModalProps> = ({ isVisible, onClose, onSave }) => {
   const [selectedTime, setSelectedTime] = useState<string>('10m');
   const timeSlots = ['10m', '20m', '30m', '40m', '50m', '60m'];
 
@@ -57,7 +58,7 @@ const MeditationModal: React.FC<MeditationModalProps> = ({ isVisible, onClose })
           {/* Save Button */}
           <TouchableOpacity 
             className="bg-black w-full py-5 rounded-2xl items-center"
-            onPress={onClose}
+            onPress={onSave}
           >
             <Text className="text-white font-bold text-lg">Save</Text>
           </TouchableOpacity>

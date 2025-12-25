@@ -4,8 +4,14 @@ import { RulerPicker } from 'react-native-ruler-picker';
 import * as Haptics from 'expo-haptics';
 import M2 from '../../assets/photo/modal/M2.svg'
 
+// 1. Props માં ફેરફાર: onSave હવે string વેલ્યુ (steps) લેશે
+interface StepPickerModalProps {
+  isVisible: boolean;
+  onClose: () => void;
+  onSave: (value: string) => void;
+}
 
-const StepPickerModal = ({ isVisible, onClose,onSave }: { isVisible: boolean, onClose: () => void,onSave: () => void}) => {
+const StepPickerModal: React.FC<StepPickerModalProps> = ({ isVisible, onClose, onSave }) => {
   const [value, setValue] = useState('200');
 
   const handleValueChange = (val: string) => {
@@ -32,13 +38,11 @@ const StepPickerModal = ({ isVisible, onClose,onSave }: { isVisible: boolean, on
 
           {/* Icon Placeholder (Shoes) */}
           <View className="h-40 w-40 justify-center items-center mt-28">
-            {/* અહિયાં તમારી ઇમેજ આવશે */}
-            <M2></M2>
+            <M2 />
           </View>
 
           {/* Ruler Section */}
           <View className="w-full items-center mt-32">
-            {/* <Text className="text-4xl font-bold text-black">{value}</Text> */}
             <Text className="absolute text-gray-400">Steps</Text>
 
             <RulerPicker
@@ -65,9 +69,9 @@ const StepPickerModal = ({ isVisible, onClose,onSave }: { isVisible: boolean, on
             />
           </View>
 
-          {/* Save Button */}
+          {/* 2. Save Button માં ફેરફાર: વર્તમાન value પાસ કરવી */}
           <TouchableOpacity
-            onPress={onSave}
+            onPress={() => onSave(value)} // અહીં value (steps) મોકલી
             className="bg-black w-full py-4 rounded-2xl items-center absolute bottom-10 mx-6"
           >
             <Text className="text-white font-bold text-lg">Save</Text>

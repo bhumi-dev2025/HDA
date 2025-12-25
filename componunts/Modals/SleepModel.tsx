@@ -3,8 +3,13 @@ import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import CustomTimePicker from '../TimePicker'
 import M4 from '../../assets/photo/modal/M4.svg'
 
+interface SleepModalProps {
+  isVisible: boolean;
+  onClose: () => void;
+  onSave: (time: { hour: string; minute: string }) => void;
+}
 
-const SleepModal = ({ isVisible, onClose, onSave }: { isVisible: boolean, onClose: () => void ,onSave:()=>void}) => {
+const SleepModal:React.FC<SleepModalProps> = ({ isVisible, onClose, onSave }) => {
   const [selectedTime, setSelectedTime] = useState({ hour: '08', minute: '24' });
 
 
@@ -42,7 +47,7 @@ const SleepModal = ({ isVisible, onClose, onSave }: { isVisible: boolean, onClos
 
           {/* Save Button */}
           <TouchableOpacity
-            onPress={onSave}
+            onPress={()=>onSave(selectedTime)}
             className="bg-black w-full py-4 rounded-2xl items-center absolute bottom-10 mx-6"
           >
             <Text className="text-white font-bold text-lg">Save</Text>

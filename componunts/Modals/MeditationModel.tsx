@@ -5,7 +5,7 @@ import M1 from '../../assets/photo/modal/M1.svg'
 interface MeditationModalProps {
   isVisible: boolean;
   onClose: () => void;
-  onSave: () => void;
+  onSave: (time: string) => void;
 }
 
 const MeditationModal: React.FC<MeditationModalProps> = ({ isVisible, onClose, onSave }) => {
@@ -58,7 +58,7 @@ const MeditationModal: React.FC<MeditationModalProps> = ({ isVisible, onClose, o
           {/* Save Button */}
           <TouchableOpacity 
             className="bg-black w-full py-5 rounded-2xl items-center"
-            onPress={onSave}
+            onPress={()=>onSave(selectedTime)}
           >
             <Text className="text-white font-bold text-lg">Save</Text>
           </TouchableOpacity>

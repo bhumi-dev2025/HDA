@@ -31,7 +31,7 @@ export default function TabLayout() {
     >
       {/* Tab 1: Home (Active State Customization) */}
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
           tabBarItemStyle: { marginRight: 'auto' },
           tabBarIcon: ({ focused }) => (

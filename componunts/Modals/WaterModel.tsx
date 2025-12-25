@@ -3,7 +3,14 @@ import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { Plus, Minus } from 'lucide-react-native'; 
 import M3 from '../../assets/photo/modal/M3.svg';
 
-const WaterTrackerModal = ({ visible, onClose,onSave }: { visible: boolean; onClose: () => void,onSave:()=>void }) => {
+// 1. Props માં ફેરફાર: onSave હવે number વેલ્યુ (liters) લેશે
+interface WaterTrackerModalProps {
+  visible: boolean;
+  onClose: () => void;
+  onSave: (liters: number) => void;
+}
+
+const WaterTrackerModal: React.FC<WaterTrackerModalProps> = ({ visible, onClose, onSave }) => {
   const [liters, setLiters] = useState(1.5);
 
   // બટન પ્રેસ છે કે નહીં તે જાણવા માટેની State
@@ -39,11 +46,10 @@ const WaterTrackerModal = ({ visible, onClose,onSave }: { visible: boolean; onCl
             
             {/* PLUS BUTTON */}
             <TouchableOpacity 
-              activeOpacity={1} // Default opacity change બંધ કરવા માટે
+              activeOpacity={1}
               onPressIn={() => setIsPlusPressed(true)}
               onPressOut={() => setIsPlusPressed(false)}
               onPress={increment}
-              // Conditional Styling: જો પ્રેસ હોય તો કલર બદલાશે
               className={`w-20 h-20 rounded-2xl items-center justify-center border ${
                 isPlusPressed ? 'bg-black border-black' : 'bg-white border-gray-200'
               }`}
@@ -71,8 +77,9 @@ const WaterTrackerModal = ({ visible, onClose,onSave }: { visible: boolean; onCl
 
           </View>
 
+          {/* 2. Save Button માં ફેરફાર: liters વેલ્યુ પાસ કરવી */}
           <TouchableOpacity 
-            onPress={onSave}
+            onPress={() => onSave(liters)} // અહીં liters વેલ્યુ મોકલી
             className="bg-black w-full py-5 rounded-2xl items-center absolute bottom-10 mx-6"
           >
             <Text className="text-white text-lg font-bold">Save</Text>

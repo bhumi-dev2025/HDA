@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StatusBar} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import CustomTimePicker from '../../componunts/TimePicker'
+import CustomTimePicker from '../../../componunts/TimePicker'
 
 
 // આ સ્ક્રીન માટેનું મુખ્ય કમ્પોનન્ટ

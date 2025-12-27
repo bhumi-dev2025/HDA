@@ -17,11 +17,11 @@ export default function TabLayout() {
         // --- Floating Tab Bar Styling ---
         tabBarStyle: {
           position: "absolute",
-          bottom: 25,         // નીચેથી ઉપર
+          bottom:0,         // નીચેથી ઉપર
           left: 20,           // ડાબી બાજુ માર્જિન
           right: 20,          // જમણી બાજુ માર્જિન
-          height: 70,         // ટેબ બારની ઊંચાઈ
-          borderRadius: 40,   // ગોળ ખૂણા
+          height: 90,         // ટેબ બારની ઊંચાઈ
+          borderRadius:0,   // ગોળ ખૂણા
           backgroundColor: "#F1F1F1", // બેકગ્રાઉન્ડ કલર (પેજ જેવો જ)
           // Shadow/Elevation (Figma જેવો લુક આપવા)
           elevation: 0,       // એન્ડ્રોઈડ પર શેડો કાઢવા માટે (જો જોઈએ તો નંબર વધારો)
@@ -42,7 +42,20 @@ export default function TabLayout() {
         }}
       />
 
-      {/* Tab 2: Rocket (Placeholder) */}
+      {/* Tab 2: Ghost (Placeholder) */}
+      <Tabs.Screen
+        name="web" // તમારી ફાઈલનું નામ
+        options={{
+          tabBarItemStyle: { marginHorizontal: -30 },
+          tabBarIcon: ({ focused }) => (
+            <View className={`items-center justify-center w-16 h-12 rounded-full ${focused ? 'bg-white shadow-sm' : ''}`}>
+              <I2 width={24} height={24} fill={focused ? 'black' : 'grey'} />
+            </View>
+          ),
+        }}
+      />
+
+      {/* Tab 3: Rocket (Placeholder) */}
       <Tabs.Screen
         name="explore" // તમારી ફાઈલનું નામ
         options={{
@@ -51,19 +64,6 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <View className={`items-center justify-center w-16 h-12 rounded-full ${focused ? 'bg-white shadow-sm' : ''}`}>
               <I3 width={24} height={24} fill={focused ? 'black' : 'grey'} />
-            </View>
-          ),
-        }}
-      />
-
-      {/* Tab 3: Ghost (Placeholder) */}
-      <Tabs.Screen
-        name="web" // તમારી ફાઈલનું નામ
-        options={{
-          tabBarItemStyle: { marginHorizontal: -30 },
-          tabBarIcon: ({ focused }) => (
-            <View className={`items-center justify-center w-16 h-12 rounded-full ${focused ? 'bg-white shadow-sm' : ''}`}>
-              <I2 width={24} height={24} fill={focused ? 'black' : 'grey'} />
             </View>
           ),
         }}

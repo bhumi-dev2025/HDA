@@ -1,4 +1,4 @@
-import { View, Text,Image, TouchableOpacity ,Alert} from 'react-native'
+import { View, Text,Image, TouchableOpacity ,Alert,StatusBar} from 'react-native'
 import React ,{useEffect}from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context' 
 import  B1  from '../assets/photo/login/B1.svg'
@@ -6,7 +6,7 @@ import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-si
 import { supabase } from '../lib/supabase';
 import { useRouter } from 'expo-router';
 
-const explore = () => {
+const login = () => {
   const router = useRouter();
   const back = require('../assets/photo/login/back.png')
   const logo = require('../assets/photo/login/b2.png')
@@ -39,7 +39,7 @@ const explore = () => {
           Alert.alert("Supabase Error", error.message);
         } else {
           // 4. લોગિન સફળ થાય એટલે Home સ્ક્રીન પર મોકલો
-          console.log("Login Success:", data);
+          console.log("Login Success:", data.user.email);
           router.replace("/(tabs)/home"); // અથવા જે તમારું હોમ પેજ હોય ત્યાં
         }
       } else {
@@ -61,6 +61,7 @@ const explore = () => {
   };
   return (
    <SafeAreaView>
+    <StatusBar barStyle="dark-content" />
     <View className='h-[100%] w-[100%] justify-center items-center'>
       <Image source={back} className='absolute h-[100%] w-[100%]' resizeMode='cover'></Image>
 
@@ -81,4 +82,4 @@ const explore = () => {
   )
 }
 
-export default explore
+export default login

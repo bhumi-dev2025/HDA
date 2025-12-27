@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+// Aa import tamari file ma upar add karo
+import { updateDailyLog, getTodayLog,getUserProfile } from '../../lib/TrackerService';
 
 // model import
 import MeditationModal from '../../componunts/Modals/MeditationModel';
@@ -10,7 +12,6 @@ import TaskModal from '../../componunts/Modals/TodoModel';
 import WaterTrackerModal from '../../componunts/Modals/WaterModel';
 
 // icons & components
-import I5 from '../../assets/photo/home/I5.svg'
 import I6 from '../../assets/photo/home/I6.svg'
 import I7 from '../../assets/photo/home/I7.svg'
 import I8 from '../../assets/photo/home/I8.svg'
@@ -23,10 +24,15 @@ import I14 from '../../assets/photo/home/I14.svg'
 import ScoreChart from '../../componunts/Score';
 import C2 from '../../assets/photo/home/C2.svg'
 import C1 from '../../assets/photo/home/C1.svg'
+import L1 from '../../assets/photo/home/L1.svg'
 
 type ModalType = 'meditation' | 'water' | 'todo' | 'step' | 'sleep' | null;
-
+// Type define karo jethi error na aave
+type ModalData = string | number | { hour: string; minute: string } | { text: string; isDone: boolean }[];
 export default function HomeScreen() {
+  // બીજા States ની સાથે આ પણ લખો
+const [userPhoto, setUserPhoto] = useState<string | null>(null); //photo
+  const [currentScore, setCurrentScore] = useState(0); // Score mate navu state
   const [activeModal, setActiveModal] = useState<ModalType>(null);
 
   // States to store actual values from modals
@@ -44,29 +50,30 @@ export default function HomeScreen() {
   const [isSleepDone, setIsSleepDone] = useState(false);
 
   // Updated handleSave to accept value
-  const handleSave = (type: ModalType, value?: any) => {
-    if (type === 'meditation') {
-      setMeditationData(value);
-      setIsMeditationDone(true);
+  // Updated handleSave function
+  const handleSave = async (type: ModalType, value: ModalData) => {
+    // A. Local UI update (Jem che tem j rakhvu)
+    if (type === 'meditation'&& typeof value === 'string') { setMeditationData(value); setIsMeditationDone(true); }
+    if (type === 'water'&& typeof value === 'number') { setWaterData(value); setIsWaterDone(true); }
+    if (type === 'todo'&& Array.isArray(value)) { setTodoTasks(value); setIsTodoDone(true); }
+    if (type === 'step'&& typeof value === 'string') { setStepData(value); setIsStepDone(true); }
+    if (type === 'sleep'&& typeof value === 'object'&&'hour'in value) { setSleepData(value as {hour:string; minute: string}); setIsSleepDone(true); }
+
+    setActiveModal(null); // Modal bandh thay che
+
+    // --- SUDHARO AHIYA CHE (FIX) ---
+    // Check karo ke 'type' null nathi, pachi j backend call karo
+    if (type) {
+        console.log("Saving to Supabase:", type);
+        const result = await updateDailyLog(type, value);
+
+        if (result.success && result.newScore !== undefined) {
+             // Score update logic
+             // Note: Tamare 'setCurrentScore' state banavyu hase to ahi set karo
+             setCurrentScore(result.newScore); 
+        }
     }
-    if (type === 'water') {
-      setWaterData(value);
-      setIsWaterDone(true);
-    }
-    if (type === 'todo') {
-      setTodoTasks(value);
-      setIsTodoDone(true);
-    }
-    if (type === 'step') {
-      setStepData(value);
-      setIsStepDone(true);
-    }
-    if (type === 'sleep') {
-      setSleepData(value);
-      setIsSleepDone(true);
-    }
-    setActiveModal(null);
-  };
+};
 
   const p1 = require('../../assets/photo/home/p1.png');
   const p2 = require('../../assets/photo/home/p2.png');
@@ -75,24 +82,54 @@ export default function HomeScreen() {
   const p6 = require('../../assets/photo/home/p6.png');
   const p7 = require('../../assets/photo/home/p7.png');
 
+  // Aa useEffect add karo - App khule etle data lavse
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    const data = await getTodayLog();
+    if (data) {
+        if(data.score) setCurrentScore(data.score);
+        
+        // UI states update kariye jethi user ne dekhay
+        if(data.meditation_time) { setMeditationData(data.meditation_time); setIsMeditationDone(true); }
+        if(data.water_intake) { setWaterData(data.water_intake); setIsWaterDone(true); }
+        if(data.step_count) { setStepData(data.step_count.toString()); setIsStepDone(true); }
+        if(data.sleep_data) { setSleepData(data.sleep_data); setIsSleepDone(true); }
+        if(data.todo_list) { setTodoTasks(data.todo_list); setIsTodoDone(true); }
+    }
+    //photo
+    const photoUrl = await getUserProfile();
+    if (photoUrl) {
+        setUserPhoto(photoUrl);
+    }
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-[#F1F1F1]">
       <ScrollView className="flex-1" contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 110 }} showsVerticalScrollIndicator={false}>
 
         <View className="flex-row justify-between items-center mb-6 mt-2">
-          <I5 width={30} height={30} />
-          <View className="w-10 h-10 bg-[#D9D9D9] rounded-full" />
+          <L1 width={30} height={30} />
+          {userPhoto ? (
+    <Image 
+      source={{ uri: userPhoto }} 
+      className="w-12 h-12 rounded-full border-2 border-gray-500"
+    />
+  ) : (
+    <View className="w-12 h-12 bg-[#D9D9D9] rounded-full" />
+  )}
         </View>
 
         <View className="flex-row justify-between items-center mb-4">
           <View className="flex-row items-center gap-2">
             <I6 />
-            <Text className="text-lg font-semibold text-[#888]">Overview</Text>
+            <Text className="text-lg font-semibold text-[#888]">Superhuman Score</Text>
           </View>
-          <Text className="text-[#888]">All →</Text>
         </View>
 
-        <ScoreChart />
+        <ScoreChart score={currentScore} />
 
         <View className="flex-row items-center gap-2 mb-4 mt-4">
           <I7 />

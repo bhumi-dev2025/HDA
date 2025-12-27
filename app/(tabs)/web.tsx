@@ -242,7 +242,7 @@ export default function RoadmapScreen() {
                 <Path path={skiaPath} color="rgba(0, 0, 0, 0.08)" style="stroke" strokeWidth={80} strokeCap="round" strokeJoin="round">
                   <BlurMask blur={25} style="normal" />
                 </Path>
-                <Path path={skiaPath} color="white" style="stroke" strokeWidth={60} strokeCap="round" strokeJoin="round" />
+                <Path path={skiaPath} color="#848074" style="stroke" strokeWidth={60} strokeCap="round" strokeJoin="round" />
                 <Path path={skiaPath} color="black" style="stroke" strokeWidth={50} strokeCap="round" strokeJoin="round" />
               </Group>
             </Canvas>

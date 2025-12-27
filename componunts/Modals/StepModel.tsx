@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, Modal,Dimensions } from 'react-native';
 import { RulerPicker } from 'react-native-ruler-picker';
 import * as Haptics from 'expo-haptics';
 import M2 from '../../assets/photo/modal/M2.svg'
 
+const { width } = Dimensions.get('window'); // Screen width lai lo
 // 1. Props માં ફેરફાર: onSave હવે string વેલ્યુ (steps) લેશે
 interface StepPickerModalProps {
   isVisible: boolean;
@@ -46,7 +47,7 @@ const StepPickerModal: React.FC<StepPickerModalProps> = ({ isVisible, onClose, o
             <Text className="absolute text-gray-400">Steps</Text>
 
             <RulerPicker
-              width={500}
+              width={width - 40}
               height={100}
               min={100}
               max={10000}

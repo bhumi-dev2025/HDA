@@ -1,154 +1,170 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import React,{useState,useEffect} from 'react';
+import { View, Text, ScrollView, TouchableOpacity,ActivityIndicator,Alert,Image} from 'react-native';
+import { ChevronRight, Heart,User as UserIcon } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import L1 from '../../assets/photo/home/L1.svg'
+import { useRouter } from 'expo-router';
+import { supabase } from '../../lib/supabase'; // ખાતરી કરજો કે આ પાથ સાચો છે
+import { Session } from '@supabase/supabase-js';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 
-import I5 from '../../assets/photo/home/I5.svg'
-import I6 from '../../assets/photo/home/I6.svg'
-import I7 from '../../assets/photo/home/I7.svg'
-import I8 from '../../assets/photo/home/I8.svg'
-import I9 from '../../assets/photo/home/I9.svg'
-import I12 from '../../assets/photo/home/I12.svg'
-import I13 from '../../assets/photo/home/I13.svg'
-import I14 from '../../assets/photo/home/I14.svg'
-import C1 from '../../assets/photo/home/C1.svg'
-import C2 from '../../assets/photo/home/C2.svg'
-import ScoreChart from '../../componunts/Score';
 
-const task = [
-   {id:1,task:'ui design for app',done:true},
-   {id:2,task:'create ux for fittech app',done:true},
-   {id:3,task:'colse tikit forui and\n meeting with team',done:false}
-]
+const Profile = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+    const [session, setSession] = useState<Session | null>(null);
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+    const [username, setUsername] = useState<string>('User');
+
+    useEffect(() => {
+        getProfile();
+      }, []);
+    
+      async function getProfile() {
+        try {
+          setLoading(true);
+          // વર્તમાન સેશન મેળવો
+          const { data: { session }, error } = await supabase.auth.getSession();
+    
+          if (error) throw error;
+    
+          if (session) {
+            setSession(session);
+            // Google લૉગિન મેટાડેટામાંથી ડેટા સેટ કરો
+            setAvatarUrl(session.user.user_metadata?.avatar_url || null);
+            setUsername(session.user.user_metadata?.full_name || 'Human Design User');
+          }
+        } catch (error: any) {
+          Alert.alert('Error', error.message);
+        } finally {
+          setLoading(false);
+        }
+      }
+    
+      const handleLogout = async () => {
+        try {
+          // 1. પહેલા Google માંથી સાઇન આઉટ કરો (આનાથી એકાઉન્ટ સિલેક્શન ફરી આવશે)
+          await GoogleSignin.signOut();
+    
+          // 2. પછી Supabase માંથી સાઇન આઉટ કરો
+          const { error } = await supabase.auth.signOut();
+          console.log("user log out..");
+          if (error) throw error;
+          
+          // 3. લોગિન સ્ક્રીન પર રીડાયરેક્ટ કરો
+          router.replace('/'); 
+        } catch (error: any) {
+          console.log("Logout Error:", error);
+          // જો ગૂગલ સાઇન આઉટમાં કોઈ એરર આવે તો પણ Supabase logout તો થવું જ જોઈએ
+          await supabase.auth.signOut();
+          router.replace('/');
+        }
+      };
+    
+      if (loading) {
+        return (
+          <View className="flex-1 justify-center items-center bg-[#F1F1F1]">
+            <ActivityIndicator size="large" color="#333" />
+          </View>
+        );
+      }
+    
+  return (
+    <SafeAreaView className="flex-1 bg-[#F2F2F2] p-4">
+      {/* --- Header --- */}
+      <View className="flex-row items-center justify-between px-6 pt-4 pb-2">
+        {/* Logo Placeholder (Black H) */}
+        <L1></L1>
+        
+        <Text className="text-xl font-bold text-black absolute left-0 right-0 text-center -z-10">
+          Account
+        </Text>
+        
+        {/* Right side spacer to keep title centered */}
+        <View className="w-8" />
+      </View>
+
+      <ScrollView className="flex-1 px-4 mt-8" showsVerticalScrollIndicator={false}>
+        
+        {/* --- Profile Card --- */}
+        <View className="bg-white rounded-md p-5 mb-8 flex-row items-center shadow-sm">
+          <View className="h-12 w-12 bg-[#E5E0D8] rounded-2xl items-center justify-center mr-4">
+            {avatarUrl ? (
+              <Image 
+                source={{ uri: avatarUrl }} 
+                className="w-12 h-12 rounded-2xl"
+                resizeMode="cover"
+              />
+            ) : (
+              <View className="w-12 h-12 rounded-2xl bg-[#E5E0D8] items-center justify-center">
+                <UserIcon size={24} color="#999" />
+              </View>
+            )}
+          </View>
+          <View className="flex-1">
+            <Text className="text-base font-semibold text-black">{username}</Text>
+            <Text className="text-sm text-gray-400">{session?.user.email}</Text>
+          </View>
+          <ChevronRight size={20} color="#D1D1D1" />
+        </View>
+
+        {/* --- Menu Items Group --- */}
+        <View className="bg-white rounded-md overflow-hidden mb-6 shadow-sm">
+          <TouchableOpacity onPress={()=>router.push('/profile_Screens/notifications')} className='flex-row items-center justify-between p-5'>
+            <Text className="text-base font-semibold text-black">Notifications</Text>
+            <ChevronRight size={20} color="#D1D1D1" />
+          </TouchableOpacity>
+        </View>
+
+        {/* --- Help & Support --- */}
+        <View className="bg-white rounded-md overflow-hidden mb-1 shadow-sm">
+          <TouchableOpacity onPress={()=>router.push('/profile_Screens/health')} className='flex-row items-center justify-between p-5'>
+            <Text className="text-base font-semibold text-black">Health Details</Text>
+            <ChevronRight size={20} color="#D1D1D1" />
+          </TouchableOpacity>
+        </View>
+        <View className="bg-white rounded-md overflow-hidden mb-1 shadow-sm">
+          <TouchableOpacity onPress={()=>router.push('/profile_Screens/change')} className='flex-row items-center justify-between p-5'>
+            <Text className="text-base font-semibold text-black">Change Goals</Text>
+            <ChevronRight size={20} color="#D1D1D1" />
+          </TouchableOpacity>
+        </View>
+        <View className="bg-white rounded-md overflow-hidden mb-1 shadow-sm">
+          <TouchableOpacity onPress={()=>router.push('/profile_Screens/unit')} className='flex-row items-center justify-between p-5'>
+            <Text className="text-base font-semibold text-black">Unit of Measure</Text>
+            <ChevronRight size={20} color="#D1D1D1" />
+          </TouchableOpacity>
+        </View>
+        <View className="bg-white rounded-md overflow-hidden mb-6 shadow-sm">
+          <TouchableOpacity className='flex-row items-center justify-between p-5'>
+            <Text className="text-base font-semibold text-black">Privacy</Text>
+            <ChevronRight size={20} color="#D1D1D1" />
+          </TouchableOpacity>
+        </View>
+
+        <View className="bg-white rounded-md overflow-hidden mb-1 shadow-sm">
+          <TouchableOpacity className='flex-row items-center justify-between p-5'>
+            <Text className="text-base font-semibold text-black">Heelp & Support</Text>
+            <ChevronRight size={20} color="#D1D1D1" />
+          </TouchableOpacity>
+        </View>
+        {/* --- Sign Out --- */}
+        <TouchableOpacity className="bg-white rounded-md p-5 mb-20 shadow-sm" onPress={handleLogout}>
+          <Text className="text-base font-medium text-red-600">Sign Out</Text>
+        </TouchableOpacity>
+
+        {/* --- Footer Branding --- */}
+        <View className="items-center">
+          <Heart size={20} color="#FF4D4D" fill="#FF4D4D" className="mb-2" />
+          <Text className="text-xs font-semibold text-gray-400">Human Design Academy</Text>
+          <Text className="text-[10px] text-gray-300 mt-1">Designed by Simple Studio</Text>
+        </View>
+
+      </ScrollView>
 
 
-export default function HomeScreen() {
-   const p6 = require('../../assets/photo/home/p6.png');
-   const p7 = require('../../assets/photo/home/p7.png');
-
-   const [isMeditationDone, setIsMeditationDone] = useState(false);
-   const [isWaterDone, setIsWaterDone] = useState(false);
-   const [isTodoDone, setIsTodoDone] = useState(false);
-   const [isStepDone, setIsStepDone] = useState(false);
-   const [isSleepDone, setIsSleepDone] = useState(false);
-   return (
-      <SafeAreaView className="flex-1 bg-[#F1F1F1]">
-         <ScrollView className="flex-1" contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 110 }} showsVerticalScrollIndicator={false}>
-
-            {/* --- 1. Header with Lottie Animation --- */}
-            <View className="flex-row justify-between items-center mb-6 mt-2">
-               {/* Logo "H" - Serif Font style */}
-               <I5 width={30} height={30}></I5>
-               {/* Profile Placeholder */}
-               <View className="w-10 h-10 bg-[#D9D9D9] rounded-full" />
-            </View>
-
-            {/* --- 2. Recents Section --- */}
-            <View className="flex-row justify-between items-center mb-4">
-               <View className="flex-row items-center gap-2">
-                  <I6></I6>
-                  <Text className="text-lg font-semibold text-[#888]">Overview</Text>
-               </View>
-               <Text className="text-[#888]">All →</Text>
-            </View>
-
-            {/* Recents Scroll */}
-            <View>
-               <ScoreChart></ScoreChart>
-            </View>
-
-            {/* --- 4. Easels & Notes Section --- */}
-            <View className="flex-row items-center gap-2 mb-4">
-               <I7></I7>
-               <Text className="text-lg font-semibold text-[#888]">Superhuman Elements</Text>
-            </View>
-
-            {/* Main Container */}
-            <View className="flex-row flex-wrap justify-between">
-
-
-            {/* 1. Good Morning Card (Bottom Left - spans width or stays small) */}
-               <TouchableOpacity className="w-[49%] bg-white p-4 rounded-2xl h-20 overflow-hidden flex-row items-center border-3 border-[white] gap-2 ">
-                  <I12></I12>
-                  <Text className="text-[#333] font-bold text-lg">Good Morning</Text>
-               </TouchableOpacity>
-
-               {/* 2. Mindful Steps (Top Right) */}
-               <TouchableOpacity className="w-[49%] p-2 rounded-3xl mb-4 h-24 overflow-hidden justify-center flex-row items-center border-separate border-8 border-[white] gap-4">
-                  <I9></I9>
-                  <View className="w-[2px] h-10 bg-gray-200 mr-3" />
-                  <View>
-                     <View className="bg-[#FFF5D6] px-2 py-0.5 rounded-full self-start mb-1">
-                        <Text className="text-[#CEA021] text-[10px] font-bold">Steps</Text>
-                     </View>
-                     <Text className="text-[#333] text-2xl font-black">2796</Text>
-                  </View>
-               </TouchableOpacity>
-
-               {/* 3. Mind Clear Card (Top Left) */}
-               <TouchableOpacity className="w-[49%] p-4 rounded-3xl h-28 mt-[-15px]  overflow-hidden justify-center border-separate border-8 border-[white] flex-row items-center gap-2">
-                  <I8></I8>
-                  <View className="w-[2px] h-10 bg-gray-200 mr-3" />
-                  <View>
-                     <View className="bg-[#E6F4D7] px-2 py-0.5 rounded-full self-start mb-1">
-                        <Text className="text-[#6B8E23] text-[10px] font-bold">Meditation</Text>
-                     </View>
-                     <Text className="text-[#333] text-2xl font-black">10m</Text>
-                  </View>
-               </TouchableOpacity>
-
-               
-
-               {/* Column for Right side items (To-Do and Sleep) */}
-               <View className="w-[49%]">
-
-                  {/* 4. To-Do List Card */}
-                  <TouchableOpacity className=" p-4 rounded-3xl mt-[-5px] mb-4 h-56 overflow-hidden justify-between items-center border-separate border-8 border-[white]">
-                     <Image source={p7} className='absolute w-[130%] h-52' resizeMode="cover"/>
-                     <View className="items-start mt-4">
-                        <Text className='text-[#333] text-1xl font-black'>Things to do today</Text>
-                     </View>
-                     <View className='items-start mb-4'>
-                        {task.map((item, index) =>(
-                           <View key={index} className='flex-row items-start gap-2 mt-2'>
-                              {item.done ? (<C2></C2>) : (<C1></C1>)}
-                              {item.done ? (<Text className='text-[#bbb9b9] text-[10px] font-medium'>{item.task}</Text>) : (
-                              <Text className='text-[#333] text-[10px] font-medium'>{item.task}</Text>)}
-                           </View>
-                        ))}
-                     </View>
-                  </TouchableOpacity>
-
-                  {/* 5. Quiet Mind / Sleep Card */}
-                  <TouchableOpacity className="p-2 rounded-3xl h-28 overflow-hidden flex-row items-center justify-center border-separate border-8 border-[white] gap-4">
-                     <I13></I13>
-                     <View className="w-[2px] h-10 bg-gray-200" mr-3 />
-                     <View>
-                        <View className="bg-[#F2F2F7] px-2 py-0.5 rounded-full self-start mb-1">
-                           <Text className="text-[#333] text-[10px] font-bold">Sleep</Text>
-                        </View>
-                        <Text className="text-[#333] text-2xl font-black">8:20</Text>
-                     </View>
-                  </TouchableOpacity>
-               </View>
-            
-               {/* 6. Water Card (Large Left) */}
-               <TouchableOpacity className="w-[49%] p-6 rounded-3xl mt-[-210px] h-60 overflow-hidden justify-between items-center border-separate border-8 border-[white]">
-                  <Image source={p6} className='absolute w-[130%] h-60' resizeMode="cover"/>
-                  <View className="items-center mt-2">
-                     <Text className="text-[#333] text-center font-medium text-[10px] leading-3 mb-2">
-                        Water brings life, health,{"\n"}and happiness.
-                     </Text>
-                     <Text className="text-[#333] text-3xl font-black">1.5ltr</Text>
-                  </View>
-                  <View className="mb-6">
-                     <I14 width={60} height={60} />
-                  </View>
-               </TouchableOpacity>
-               
-            </View>
-         </ScrollView>
-         
-      </SafeAreaView>
-   );
+    </SafeAreaView>
+  );
 }
+export default Profile;

@@ -153,6 +153,7 @@ const [userPhoto, setUserPhoto] = useState<string | null>(null); //photo
               </>
             ) : (
               <>
+                <Image source={p2} className='absolute w-[130%] h-24' resizeMode="cover" />
                 <I9 />
                 <View className="w-[2px] h-10 bg-gray-200" />
                 <View>
@@ -175,6 +176,7 @@ const [userPhoto, setUserPhoto] = useState<string | null>(null); //photo
               </>
             ) : (
               <>
+                <Image source={p1} className='absolute w-[130%] h-28' resizeMode="cover" />
                 <I8 />
                 <View className="w-[2px] h-10 bg-gray-200" />
                 <View>
@@ -190,24 +192,27 @@ const [userPhoto, setUserPhoto] = useState<string | null>(null); //photo
           <View className="w-[49%]">
             {/* 4. Todo Card */}
             <TouchableOpacity 
-            onPress={() => setActiveModal('todo')} className="p-4 rounded-3xl mt-[-5px] mb-4 h-56 overflow-hidden justify-start items-center border-8 border-white">
+            onPress={() => setActiveModal('todo')} className="p-4 rounded-3xl mt-[-5px] mb-4 h-56 overflow-hidden items-center border-8 border-white">
               {!isTodoDone ? (<>
                 <Image source={require('../../assets/photo/home/p4.png')} className='absolute w-[130%] h-52' resizeMode="cover" />
-                <I11 height={50} width={50} />
+                {/* </View> */}
+                <I11 height={50} width={50} className='items-center' />
                 <Text className="text-[#333] text-center font-medium text-sm mb-3 mt-16">Write a small to-do list for{'\n'}Superhuman Work.</Text></>
+                
               ) : (
                 <>
                   <Image source={p7} className='absolute w-[130%] h-52' resizeMode="cover" />
-                  <View className="mt-4">
-                    <Text className='text-[#333] text-1xl font-black'>Things to do today</Text>
-                  </View>
-                  <View className='items-start p-4 mb-4'>
+                  <View className="items-start">
+                    <Text className='text-[#333] text-1xl font-black mt-4'>Things to do today</Text>
+                  
+                  <View className='items-center justify-start mb-4 gap-1 mt-4'>
                     {todoTasks.filter(t => t.text !== '').map((item ,index) => (  
                       <View key={index} className='flex-row items-center gap-2 mt-2'>
                         {item.isDone ? <C2 width={18} height={18} /> : <C1 height={18} width={18}></C1>}
                         <Text numberOfLines={1} className={`text-[14px] font-semibold flex-1 ${item.isDone ? 'text-[#bbb9b9]' : 'text-[#333]'}`}>{item.text}</Text>
                       </View>
                     ))}
+                  </View>
                   </View>
                 </>
               )}
@@ -223,6 +228,7 @@ const [userPhoto, setUserPhoto] = useState<string | null>(null); //photo
                 </>
               ) : (
                 <>
+                  <Image source={p5} className='absolute w-[130%] h-28' resizeMode="cover" />
                   <I13 />
                   <View className="w-[2px] h-10 bg-gray-200" />
                   <View>

@@ -29,9 +29,9 @@ const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave }) => {
     { text: '', isDone: false },
     { text: '', isDone: false },
     { text: '', isDone: false },
-    ]);
+  ]);
 
-    const toggleTask = (index: number) => {
+  const toggleTask = (index: number) => {
     const newTasks = [...tasks];
     newTasks[index].isDone = !newTasks[index].isDone;
     setTasks(newTasks);
@@ -61,28 +61,27 @@ const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave }) => {
   }, []);
 
   return (
-    <Modal 
+    <Modal
       visible={visible}
-      animationType="slide" 
+      animationType="slide"
       transparent={true}
       onRequestClose={onClose}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className="flex-1 bg-black/40 justify-end">
           <View
-            style={{ paddingBottom: keyboardHeight > 0 ? keyboardHeight : 20 }}
+            style={{ paddingBottom: keyboardHeight > 0 ? keyboardHeight + 20 : 40 }}
             className="bg-white rounded-t-[40px] p-6"
           >
             <View className="w-10 h-1 bg-gray-300 rounded-full self-center mb-6" />
 
             <Text className="text-center text-xl font-bold mb-6 text-black">Enter Notes</Text>
 
-            <View className="space-y-2 mb-36">
+            <View className="space-y-4 mb-6">
               {tasks.map((task, index) => (
                 <View key={index} className="flex-row items-center bg-[#18181B05] p-2 rounded-2xl border border-gray-100 mb-3">
                   <TouchableOpacity onPress={() => toggleTask(index)}>
-                    {task.isDone ? <C2 height={24} width={24} /> : <C1 height={24} width={24}></C1>} 
-                    {/* જો C1 આઈકોન હોય તો એ વાપરો */}
+                    {task.isDone ? <C2 height={24} width={24} /> : <C1 height={24} width={24}></C1>}
                   </TouchableOpacity>
                   <TextInput
                     placeholder={`${index + 1}st Task`}
@@ -95,11 +94,11 @@ const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave }) => {
               ))}
             </View>
 
-            <View className="flex-row items-center justify-center mt-4">
+            <View className="flex-row items-center justify-center mb-5">
               {/* 2. Save Button માં ફેરફાર: tasks array પાસ કરવો */}
               <TouchableOpacity
-                onPress={() => onSave(tasks)} // અહીં ટાસ્કનું લિસ્ટ મોકલી
-                className="bg-black w-full py-4 rounded-2xl items-center absolute bottom-10 mx-6"
+                onPress={() => onSave(tasks)}
+                className="bg-black w-full py-5 rounded-2xl items-center mt-auto"
               >
                 <Text className="text-white font-bold text-lg">Save</Text>
               </TouchableOpacity>

@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
 import { View } from "react-native";
 
+
 import I1 from '../../assets/photo/home/I1.svg'
 import I2 from '../../assets/photo/home/I2.svg'
 import I3 from '../../assets/photo/home/I3.svg'
@@ -25,11 +26,11 @@ export default function TabLayout() {
           right: 20,          // જમણી બાજુ માર્જિન
           height: 90,         // ટેબ બારની ઊંચાઈ
           borderRadius: 0,   // ગોળ ખૂણા
-          backgroundColor: "#F1F1F1", // બેકગ્રાઉન્ડ કલર (પેજ જેવો જ)
+          backgroundColor: "transparent", // બેકગ્રાઉન્ડ કલર (પેજ જેવો જ)
           // Shadow/Elevation (Figma જેવો લુક આપવા)
           elevation: 0,       // એન્ડ્રોઈડ પર શેડો કાઢવા માટે (જો જોઈએ તો નંબર વધારો)
           borderTopWidth: 0,  // ઉપરની લાઈન કાઢવા
-        },
+        }
       }}
     >
       {/* Tab 1: Home (Active State Customization) */}

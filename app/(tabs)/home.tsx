@@ -3,6 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, Image, StatusBar } from 'reac
 import { SafeAreaView } from 'react-native-safe-area-context';
 //back end functions call....
 import { updateDailyLog, getTodayLog} from '../../lib/TrackerService';
+import { useRouter } from 'expo-router';
 
 // model import
 import MeditationModal from '../../componunts/Modals/MeditationModel';
@@ -38,6 +39,7 @@ interface CardProps {
 }
 
 export default function HomeScreen() {
+  const router = useRouter();
   const [userPhoto, setUserPhoto] = useState<string | null>(null); //photo
   const [currentScore, setCurrentScore] = useState(0); // Score mate navu state
   const [activeModal, setActiveModal] = useState<ModalType>(null); //modal active...
@@ -129,7 +131,7 @@ export default function HomeScreen() {
         <View className="flex-row justify-between items-center mb-6 mt-2">
           <L1 width={30} height={30} />
          
-            <TouchableOpacity className="w-12 h-12 items-center justify-center bg-[#D9D9D9] rounded-full">
+            <TouchableOpacity className="w-12 h-12 items-center justify-center bg-[#D9D9D9] rounded-full" onPress={()=>router.push('/settings')}>
               <A1></A1>
             </TouchableOpacity>
         </View>

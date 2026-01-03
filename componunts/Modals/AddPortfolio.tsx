@@ -91,7 +91,7 @@ export const AddPortfolioModal = ({ isVisible, onClose }: PortfolioModalProps) =
                         autoCapitalize="none"
                     />
                     <Pressable onPress={() => setLink('https://dribbble.com')} className="ml-2">
-                        <Text className="text-xs font-bold text-gray-900 tracking-wider">PEST</Text>
+                        <Text className="text-xs font-bold text-gray-900 tracking-wider">PASTE</Text>
                     </Pressable>
                 </View>
 

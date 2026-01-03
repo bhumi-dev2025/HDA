@@ -6,6 +6,9 @@ import { ROADMAP_PATH_STRING, ROADMAP_ITEMS } from "../../constants/roadmapData"
 import { getIconComponent } from "../../componunts/RoadmapIcons";
 import { ModalDataType } from "../../constants/roadmapData";
 import { SvgProps } from "react-native-svg";
+import L1 from '../../assets/photo/home/L1.svg'
+import A1 from '../../assets/photo/home/A1.svg'
+import { useRouter } from "expo-router";
 
 const { width: screenWidth } = Dimensions.get("window");
 const SVG_HEIGHT = 5509;
@@ -40,6 +43,7 @@ const ListIcon = ({ name }: { name: string }) => {
 };
 
 export default function RoadmapScreen() {
+  const router = useRouter();
   const skiaPath = useMemo(() => Skia.Path.MakeFromSVGString(ROADMAP_PATH_STRING), []);
   const xOffset = (screenWidth - 305) / 2;
   const yOffset = 50;
@@ -230,9 +234,14 @@ export default function RoadmapScreen() {
     return null;
   };
 
-  // ... બાકીનું return (...) કોડ જેમ હતું તેમ જ રાખો
   return (
     <View style={{ flex: 1, backgroundColor: "#F1F1F1", paddingTop: 50 }}>
+       <View className="flex-row justify-between items-center px-5 py-2">
+          <L1 width={30} height={30} />
+            <TouchableOpacity className="w-12 h-12 items-center justify-center bg-[#D9D9D9] rounded-full" onPress={()=>router.push('/settings')}>
+              <A1></A1>
+            </TouchableOpacity>
+        </View>
       <ScrollView contentContainerStyle={{ height: SVG_HEIGHT + yOffset + 200 }}>
         <ScrollView horizontal contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
           <View style={{ width: screenWidth, height: SVG_HEIGHT + yOffset }}>

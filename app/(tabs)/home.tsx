@@ -125,16 +125,17 @@ export default function HomeScreen() {
   return (
     <SafeAreaView className="flex-1 bg-[#F1F1F1]">
       <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
-      <ScrollView className="flex-1" contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 110 }} showsVerticalScrollIndicator={false}>
+      
 
         {/* Header Section */}
-        <View className="flex-row justify-between items-center mb-6 mt-2">
+        <View className="flex-row justify-between items-center px-5 py-4">
           <L1 width={30} height={30} />
          
             <TouchableOpacity className="w-12 h-12 items-center justify-center bg-[#D9D9D9] rounded-full" onPress={()=>router.push('/settings')}>
               <A1></A1>
             </TouchableOpacity>
         </View>
+        <ScrollView className="flex-1" contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 110 }} showsVerticalScrollIndicator={false}>
 
         {/* Score Section */}
         <View className="flex-row items-center gap-2 mb-4">

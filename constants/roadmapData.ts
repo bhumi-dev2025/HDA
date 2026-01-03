@@ -1380,7 +1380,7 @@ export const ROADMAP_ITEMS = [
     {
         id: 93,
         type: 'label',
-        x: 260,
+        x: 240,
         y: 10,
         label: 'doodling\n     X     \nHABIT TRACKING 📝',
         rotation: 0,

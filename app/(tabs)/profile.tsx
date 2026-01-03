@@ -98,7 +98,7 @@ const ProfileScreen = () => {
         <View className="bg-white rounded-t-[40px] -mt-16 p-5 pt-16 relative flex-1">
 
           {/* Profile Picture */}
-          <View className="absolute -top-14 left-0 right-0 items-center">
+          <View className="absolute -top-16 left-0 right-0 items-center">
             <View className="p-1 rounded-full border-2 border-dashed border-red-300">
               <View className="p-1 bg-white rounded-full">
                 <Image
@@ -112,8 +112,14 @@ const ProfileScreen = () => {
             </TouchableOpacity>
           </View>
 
+          <ScrollView
+        showsVerticalScrollIndicator={false}
+        className="flex-1"
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
+        >
+
           {/* User Info */}
-          <View className="items-center mt-6 space-y-2">
+          <View className="items-center mt-8 space-y-2">
             <View className="flex-row items-center space-x-2 mb-5">
               <Text className="text-2xl font-bold">{username}</Text>
               <View className="rounded-full p-1">
@@ -130,11 +136,6 @@ const ProfileScreen = () => {
               <Text className="text-blue-500 font-medium text-base underline">Portfolio link</Text>
             </TouchableOpacity>
           </View>
-        <ScrollView
-        showsVerticalScrollIndicator={false}
-        className="flex-1"
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
-        >
           {/* ================= SECTIONS: EXPERTISE ================= */}
           <View className="mt-10 space-y-4 p-4">
             <View className="flex-row items-center space-x-2 gap-2 mb-2">
@@ -153,7 +154,7 @@ const ProfileScreen = () => {
                 
                 const IconComponent = skill.icon;
                 return (
-                  <View key={id} className="flex-row items-center bg-[#f1f1f1] h-[44px] px-3 rounded-[8px] border-4 border-white" style={styles.customShadow}>
+                  <View key={id} className="flex-row items-center bg-[#F4F4F4] h-[44px] px-3 rounded-[8px] border-4 border-white" style={styles.customShadow}>
                      {skill.type === 'svg' ? (
                        // @ts-ignore
                       <IconComponent height={18} width={18} />
@@ -168,7 +169,7 @@ const ProfileScreen = () => {
               {/* 2. Add Skill Button (Always at the end) */}
               <TouchableOpacity
                 onPress={() => setShowExpertise(true)}
-                className="flex-row items-center bg-[#f1f1f1] h-[44px] px-3 rounded-[8px] border-4 border-white"
+                className="flex-row items-center bg-[##F4F4F4] h-[44px] px-3 rounded-[8px] border-4 border-white"
                 style={styles.customShadow}
               >
                 <View className="border border-gray-400 rounded-full p-0.5 mr-2">
@@ -182,7 +183,7 @@ const ProfileScreen = () => {
 
           {/* ================= SECTIONS: PORTFOLIO ================= */}
           <View className="mt-10 space-y-4 p-4">
-            <View className="flex-row items-center space-x-2 gap-2 mb-5">
+            <View className="flex-row items-center space-x-2 gap-2 mb-2">
               <P4></P4>
               <Text className="text-lg font-bold text-gray-400">Portfolio</Text>
             </View>
@@ -196,7 +197,7 @@ const ProfileScreen = () => {
               {/* Add Portfolio Button (Always at the end) */}
               <TouchableOpacity
                 onPress={() => setShowPortfolio(true)}
-                className="flex-row items-center bg-[#f1f1f1] h-[44px] px-3 rounded-[8px] border-4 border-white"
+                className="flex-row items-center bg-[#F4F4F4] h-[44px] px-3 rounded-[8px] border-4 border-white"
                 style={styles.customShadow}
               >
                 <View className="border border-gray-400 rounded-full p-0.5 mr-2">
@@ -238,10 +239,10 @@ export default ProfileScreen;
 
 const styles = StyleSheet.create({
   customShadow: {
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 12,
+    shadowColor: '#9ca3af',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
     elevation: 3,
   },
 });

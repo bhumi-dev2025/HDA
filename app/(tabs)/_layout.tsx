@@ -26,10 +26,11 @@ export default function TabLayout() {
           right: 20,          // જમણી બાજુ માર્જિન
           height: 90,         // ટેબ બારની ઊંચાઈ
           borderRadius: 0,   // ગોળ ખૂણા
-          backgroundColor: "transparent", // બેકગ્રાઉન્ડ કલર (પેજ જેવો જ)
+          backgroundColor: "#f1f1f1", // બેકગ્રાઉન્ડ કલર (પેજ જેવો જ)
           // Shadow/Elevation (Figma જેવો લુક આપવા)
           elevation: 0,       // એન્ડ્રોઈડ પર શેડો કાઢવા માટે (જો જોઈએ તો નંબર વધારો)
           borderTopWidth: 0,  // ઉપરની લાઈન કાઢવા
+          paddingTop: 18,
         }
       }}
     >
@@ -37,7 +38,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="home"
         options={{
-          tabBarItemStyle: { marginRight: 'auto' },
+          tabBarItemStyle: { flex:1 },
           tabBarIcon: ({ focused }) => (
             <View className={`items-center justify-center w-14 h-10 rounded-3xl ${focused ? 'bg-white shadow-sm' : ''}`}>
               {focused ? <I01 width={24} height={24} /> : <I1 width={24} height={24} />}
@@ -50,7 +51,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="web" // તમારી ફાઈલનું નામ
         options={{
-          tabBarItemStyle: { marginHorizontal: -30 },
+          tabBarItemStyle: { width:60 , flex:0},
           tabBarIcon: ({ focused }) => (
             <View className={`items-center justify-center w-14 h-10 rounded-3xl ${focused ? 'bg-white shadow-sm' : ''}`}>
               {focused ? <I02 width={24} height={24} /> : <I2 width={24} height={24} />}
@@ -64,7 +65,7 @@ export default function TabLayout() {
         name="explore" // તમારી ફાઈલનું નામ
         options={{
           headerShown: false,
-          tabBarItemStyle: { marginHorizontal: -30 },
+          tabBarItemStyle: { width: 60, flex: 0},
           tabBarIcon: ({ focused }) => (
             <View className={`items-center justify-center w-14 h-10 rounded-3xl ${focused ? 'bg-white shadow-sm' : ''}`}>
               {focused ? <I03 width={24} height={24} /> : <I3 width={24} height={24} />}
@@ -78,7 +79,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile" // તમારી ફાઈલનું નામ
         options={{
-          tabBarItemStyle: { marginLeft: 'auto' },
+          tabBarItemStyle: { flex:1 },
           tabBarIcon: ({ focused }) => (
             <View className={`items-center justify-center w-14 h-10 rounded-3xl ${focused ? 'bg-white shadow-sm' : ''}`}>
               {focused ? <I04 width={24} height={24} /> : <I4 width={24} height={24} />}

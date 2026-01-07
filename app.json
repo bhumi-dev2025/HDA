@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "app",
-    "slug": "app",
+    "name": "Human Design Academy",
+    "slug": "HumanDesignAcademy",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -20,7 +20,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.app.app",
+      "package": "com.simple.humandesignacademy",
       "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
@@ -51,7 +51,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "8607f46c-b857-40cf-84a2-04e406ab1242"
+        "projectId": "2434c038-7701-4b2f-a67f-78b633519fb1"
       }
     }
   }

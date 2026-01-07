@@ -1,204 +1,186 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
-import { Plus, Heart } from 'lucide-react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { Plus, Heart, Trash2 } from 'lucide-react-native';
 import { StatusBar } from 'expo-status-bar';
 import { supabase } from '../../lib/supabase';
-// import { SafeAreaView } from 'react-native-safe-area-context';
+
+// Assets Imports
 import I5 from '../../assets/photo/home/I5.svg'
 import P1 from '../../assets/photo/profile/P1.svg'
 import P2 from '../../assets/photo/profile/P2.svg'
 import P4 from '../../assets/photo/profile/P4.svg'
 
+// Modal Imports
 import { AddExpertiseModal } from '@/componunts/Modals/AddSkils';
 import { AddPortfolioModal } from '@/componunts/Modals/AddPortfolio';
-import { MASTER_SKILLS } from '../../constants/skillData'; // <--- ડેટા ફાઈલ ઈમ્પોર્ટ કરી
-import { getUserSkills, saveUserSkills } from '../../lib/SkillService';
 
-const { width } = Dimensions.get('window');
+// Data & Services
+import { MASTER_SKILLS } from '../../constants/skillData';
+import { getUserSkills, saveUserSkills } from '../../lib/SkillService';
+import { getUserPortfolios, saveUserPortfolio, deleteUserPortfolio, PortfolioItem } from '../../lib/PortfolioService';
 
 const ProfileScreen = () => {
   const p1 = require('../../assets/photo/profile/p1.png');
+  const defaultImage = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1000&auto=format&fit=crop';
 
-  // 2. User Data State
   const [username, setUsername] = useState('Loading...');
   const [avatarUrl, setAvatarUrl] = useState(null);
+  const [selectedSkillIds, setSelectedSkillIds] = useState<string[]>([]);
+  const [portfolios, setPortfolios] = useState<PortfolioItem[]>([]);
 
-  // --- New State for Skills ---
-  const [selectedSkillIds, setSelectedSkillIds] = useState<string[]>([]); // <--- સિલેક્ટ કરેલી સ્કિલ્સ અહીં સ્ટોર થશે
-  // 1. User Profile & SKILLS બંને લોડ કરો
+  const [showExpertise, setShowExpertise] = useState(false);
+  const [showPortfolio, setShowPortfolio] = useState(false);
+
   useEffect(() => {
     const loadData = async () => {
-      // User Profile Logic
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         setUsername(user.user_metadata?.full_name || 'User');
         setAvatarUrl(user.user_metadata?.avatar_url);
-        
-        // --- NEW: Skills Load Logic ---
+
         const savedIds = await getUserSkills();
-        setSelectedSkillIds(savedIds); // ડેટાબેઝમાંથી આવેલા IDs સેટ કરો
+        setSelectedSkillIds(savedIds);
+
+        const loadedPortfolios = await getUserPortfolios();
+        setPortfolios(loadedPortfolios);
       }
     };
     loadData();
   }, []);
 
-  // 3. Fetch User Data from Supabase
-  useEffect(() => {
-    const getUserProfile = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          const googleName = user.user_metadata?.full_name || user.user_metadata?.name || 'User';
-          const googlePhoto = user.user_metadata?.avatar_url;
-          setUsername(googleName);
-          setAvatarUrl(googlePhoto);
-        }
-      } catch (error) {
-        console.log('Error fetching user:', error);
-      }
-    };
-    getUserProfile();
-  }, []);
-
-  const defaultImage = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1000&auto=format&fit=crop';
-
-  // State Management for Modals
-  const [showExpertise, setShowExpertise] = useState(false);
-  const [showPortfolio, setShowPortfolio] = useState(false);
-
-  // --- Function to Handle Save from Modal ---
-  const handleSaveSkills = async (ids:string[]) => {
+  const handleSaveSkills = async (ids: string[]) => {
     setSelectedSkillIds(ids);
-
-    console.log("Saving to Supabase:", ids);
     await saveUserSkills(ids);
   };
+
+  const handleSavePortfolio = async (link: string, title: string, image: string) => {
+    try {
+      const newItem = await saveUserPortfolio(link, title, image);
+      setPortfolios([...portfolios, newItem]);
+      setShowPortfolio(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleDeletePortfolio = async (id: string) => {
+    try {
+      await deleteUserPortfolio(id);
+      setPortfolios(portfolios.filter(item => item.id !== id));
+    } catch (e) {
+      console.log("Delete error", e);
+    }
+  }
 
   return (
     <View className="flex-1 bg-white">
       <StatusBar style="dark" />
 
-      {/* Main ScrollView */}
-      {/* <ScrollView
-        showsVerticalScrollIndicator={false}
-        className="flex-1"
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
-      > */}
+      {/* Header Image */}
+      <View className="relative w-full h-64">
+        <Image source={p1} className="w-full h-full object-cover" />
+        <View className="absolute top-12 right-5 bg-white h-8 w-14 p-1 rounded-full flex-row items-center justify-between">
+          <I5 height={20} width={20}></I5>
+          <Text className="font-bold text-sm text-center">1.2</Text>
+        </View>
+      </View>
 
-        {/* Top Header Background */}
-        <View className="relative w-full h-64">
-          <Image source={p1} className="w-full h-full object-cover" />
-          <View className="absolute top-12 right-5 bg-white h-8 w-14 p-1 rounded-full flex-row items-center justify-between">
-            <I5 height={20} width={20}></I5>
-            <Text className="font-bold text-sm text-center">1.2</Text>
+      {/* Profile Content Container */}
+      <View className="bg-white rounded-t-[40px] -mt-16 p-4 pt-16 relative flex-1">
+
+        {/* Avatar - થોડું ઉપર ખેંચ્યું */}
+        <View className="absolute -top-16 left-0 right-0 items-center z-10">
+          <View className="p-1 rounded-full border-2 border-dashed border-red-300">
+            <View className="p-1 bg-white rounded-full">
+              <Image
+                source={{ uri: avatarUrl || defaultImage }}
+                className="w-24 h-24 rounded-full"
+              />
+            </View>
           </View>
+          <TouchableOpacity className="absolute bottom-[-10px] bg-red-400 p-1 rounded-full border-4 border-white">
+            <Plus height={10} width={25} color="white" strokeWidth={4} />
+          </TouchableOpacity>
         </View>
 
-        {/* Profile Content Container */}
-        <View className="bg-white rounded-t-[40px] -mt-16 p-5 pt-16 relative flex-1">
+        <ScrollView showsVerticalScrollIndicator={false}
+          className="flex-1" contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
 
-          {/* Profile Picture */}
-          <View className="absolute -top-16 left-0 right-0 items-center">
-            <View className="p-1 rounded-full border-2 border-dashed border-red-300">
-              <View className="p-1 bg-white rounded-full">
-                <Image
-                  source={{ uri: avatarUrl || defaultImage }}
-                  className="w-24 h-24 rounded-full"
-                />
-              </View>
-            </View>
-            <TouchableOpacity className="absolute bottom-[-10px] bg-red-400 p-1 rounded-full border-4 border-white">
-              <Plus height={10} width={25} color="white" strokeWidth={4} />
-            </TouchableOpacity>
-          </View>
-
-          <ScrollView
-        showsVerticalScrollIndicator={false}
-        className="flex-1"
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
-        >
-
-          {/* User Info */}
-          <View className="items-center mt-8 space-y-2">
+          {/* User Details */}
+          <View className="items-center mt-4 space-y-2">
             <View className="flex-row items-center space-x-2 mb-5">
               <Text className="text-2xl font-bold">{username}</Text>
-              <View className="rounded-full p-1">
-                <P1 height={20} width={20}></P1>
-              </View>
+              <View className="rounded-full p-1"><P1 height={20} width={20} /></View>
             </View>
-
-            <Text className="text-lg font-semibold text-center">
-              Will work for humans not for machin
-            </Text>
-
+            <Text className="text-lg font-semibold text-center">Will work for humans not for machin</Text>
             <TouchableOpacity className="flex-row items-center space-x-1 mt-1 gap-2">
-              <P2></P2>
-              <Text className="text-blue-500 font-medium text-base underline">Portfolio link</Text>
+              <P2 /><Text className="text-blue-500 font-medium text-base underline">Portfolio link</Text>
             </TouchableOpacity>
           </View>
-          {/* ================= SECTIONS: EXPERTISE ================= */}
-          <View className="mt-10 space-y-4 p-4">
-            <View className="flex-row items-center space-x-2 gap-2 mb-2">
-              <P4></P4>
-              <Text className="text-lg font-bold text-gray-400">My Expertise</Text>
-            </View>
 
-            {/* Container for Skills + Add Button */}
-            {/* flex-wrap: જેથી skills બાજુમાં ગોઠવાય અને જગ્યા ન હોય તો નીચે જાય */}
+          {/* --- EXPERTISE SECTION --- */}
+          <View className="mt-8 space-y-4 p-4 mb-2">
+            <View className="flex-row items-center space-x-2 gap-2 mb-2">
+              <P4 /><Text className="text-lg font-bold text-gray-400">My Expertise</Text>
+            </View>
             <View className="flex-row flex-wrap gap-3 items-center">
-              
-              {/* 1. Map through Selected Skills */}
               {selectedSkillIds.map((id) => {
                 const skill = MASTER_SKILLS.find(s => s.id === id);
                 if (!skill) return null;
-                
                 const IconComponent = skill.icon;
                 return (
                   <View key={id} className="flex-row items-center bg-[#F4F4F4] h-[44px] px-3 rounded-[8px] border-4 border-white" style={styles.customShadow}>
-                     {skill.type === 'svg' ? (
-                       // @ts-ignore
-                      <IconComponent height={18} width={18} />
-                    ) : (
-                      <IconComponent size={16} color="#6b7280" />
-                    )}
+                    {skill.type === 'svg' ? <IconComponent height={18} width={18} /> : <IconComponent size={16} color="#6b7280" />}
                     <Text className="ml-2 text-gray-700 font-medium">{skill.name}</Text>
                   </View>
                 );
               })}
-
-              {/* 2. Add Skill Button (Always at the end) */}
-              <TouchableOpacity
-                onPress={() => setShowExpertise(true)}
-                className="flex-row items-center bg-[##F4F4F4] h-[44px] px-3 rounded-[8px] border-4 border-white"
-                style={styles.customShadow}
-              >
-                <View className="border border-gray-400 rounded-full p-0.5 mr-2">
-                  <Plus size={10} color="#6b7280" />
-                </View>
+              <TouchableOpacity onPress={() => setShowExpertise(true)} className="flex-row items-center bg-[#F4F4F4] h-[44px] px-3 rounded-[8px] border-4 border-white" style={styles.customShadow}>
+                <View className="border border-gray-400 rounded-full p-0.5 mr-2"><Plus size={10} color="#6b7280" /></View>
                 <Text className="text-gray-600 font-medium">Add Skill</Text>
               </TouchableOpacity>
-              
             </View>
           </View>
 
-          {/* ================= SECTIONS: PORTFOLIO ================= */}
-          <View className="mt-10 space-y-4 p-4">
+          {/* --- PORTFOLIO SECTION (Fixed UI) --- */}
+          <View className="space-y-4 p-4">
             <View className="flex-row items-center space-x-2 gap-2 mb-2">
-              <P4></P4>
-              <Text className="text-lg font-bold text-gray-400">Portfolio</Text>
+              <P4 /><Text className="text-lg font-bold text-gray-400">Portfolio</Text>
             </View>
 
-            {/* Container for Portfolio + Add Button */}
-            <View className="flex-row flex-wrap gap-3 items-center">
-              
-              {/* Future: Map through Portfolio Items Here */}
-              {/* {myPortfolios.map(...)} */}
+            <View className="flex-col gap-4">
+              {/* Portfolio Items - Card Style Restored */}
+              {portfolios.map((item) => (
+                <View key={item.id} className="w-full bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden relative">
+                  {/* Delete Button */}
+                  <TouchableOpacity
+                    onPress={() => handleDeletePortfolio(item.id)}
+                    className="absolute top-2 right-2 z-10 bg-white/90 p-2 rounded-full shadow-sm"
+                  >
+                    <Trash2 size={16} color="#ef4444" />
+                  </TouchableOpacity>
 
-              {/* Add Portfolio Button (Always at the end) */}
+                  {/* Image height adjusted to match design */}
+                  <Image
+                    source={{ uri: item.image_url || 'https://via.placeholder.com/300' }}
+                    className="w-full h-36 bg-gray-100"
+                    resizeMode="cover"
+                  />
+                  <View className="p-4 bg-[#FAFAFA]">
+                    <Text className="text-gray-900 font-bold text-base" numberOfLines={1}>
+                      {item.title || 'Portfolio Link'}
+                    </Text>
+                    <Text className="text-gray-400 text-xs mt-1" numberOfLines={1}>
+                      {item.link}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+
+              {/* Add Portfolio Button */}
               <TouchableOpacity
                 onPress={() => setShowPortfolio(true)}
-                className="flex-row items-center bg-[#F4F4F4] h-[44px] px-3 rounded-[8px] border-4 border-white"
-                style={styles.customShadow}
+                className="flex-row items-center justify-center bg-[#F4F4F4] h-[50px] rounded-[12px] border-4 border-white mt-2" style={styles.customShadow}
               >
                 <View className="border border-gray-400 rounded-full p-0.5 mr-2">
                   <Plus size={10} color="#6b7280" />
@@ -208,28 +190,27 @@ const ProfileScreen = () => {
             </View>
           </View>
 
-          {/* Bottom Footer Branding */}
-          <View className="mt-auto pt-20 pb-10 items-center justify-center space-y-1">
+          {/* Footer */}
+          <View className="mt-10 pt-5 pb-10 items-center justify-center space-y-1">
             <Heart size={20} color="#ef4444" fill="#ef4444" />
             <Text className="text-gray-400 text-xs font-semibold mt-2">Human Design Academy</Text>
             <Text className="text-gray-300 text-[10px]">Designed by Simple Studio</Text>
           </View>
-          </ScrollView>
 
-        </View>
-      {/* </ScrollView> */}
+        </ScrollView>
+      </View>
 
-      {/* ----------------- MODALS ----------------- */}
+      {/* Modals */}
       <AddExpertiseModal
         isVisible={showExpertise}
         onClose={() => setShowExpertise(false)}
-        onSave={handleSaveSkills}          // <--- Function connected
-        initialSelectedSkills={selectedSkillIds} // <--- Pass current state
+        onSave={handleSaveSkills}
+        initialSelectedSkills={selectedSkillIds}
       />
-
       <AddPortfolioModal
         isVisible={showPortfolio}
         onClose={() => setShowPortfolio(false)}
+        onSave={handleSavePortfolio}
       />
     </View>
   );
@@ -245,4 +226,11 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 3,
   },
+  cardShadow: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 2,
+  }
 });

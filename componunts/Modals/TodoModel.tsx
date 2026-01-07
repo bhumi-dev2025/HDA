@@ -7,7 +7,8 @@ import {
   Modal,
   Keyboard,
   Platform,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Pressable
 } from 'react-native';
 import C2 from '../../assets/photo/home/C2.svg';
 import C1 from '../../assets/photo/home/C1.svg';
@@ -22,14 +23,27 @@ interface TaskModalProps {
   visible: boolean;
   onClose: () => void;
   onSave: (tasks: TaskItem[]) => void;
+  initialTasks?: any[];
 }
 
-const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave }) => {
-  const [tasks, setTasks] = useState([
+const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave,initialTasks }) => {
+  const defaultTasks = [
     { text: '', isDone: false },
     { text: '', isDone: false },
     { text: '', isDone: false },
-  ]);
+  ];
+  const [tasks, setTasks] = useState(defaultTasks);
+
+  // 2. New useEffect
+  useEffect(() => {
+    if (visible) {
+        if (initialTasks && initialTasks.length > 0) {
+            setTasks(initialTasks);
+        } else {
+            setTasks(defaultTasks);
+        }
+    }
+  }, [visible, initialTasks]);
 
   const toggleTask = (index: number) => {
     const newTasks = [...tasks];
@@ -67,8 +81,13 @@ const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave }) => {
       transparent={true}
       onRequestClose={onClose}
     >
+      <Pressable 
+        className="absolute top-0 bottom-0 left-0 right-0 bg-black/40" 
+        onPress={onClose} 
+      />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className="flex-1 bg-black/40 justify-end">
+
+        <View className="flex-1 bg-black/40 justify-end" pointerEvents="box-none">
           <View
             style={{ paddingBottom: keyboardHeight > 0 ? keyboardHeight + 20 : 40 }}
             className="bg-white rounded-t-[40px] p-6"

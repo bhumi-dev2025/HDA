@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { RulerPicker } from 'react-native-ruler-picker';
 import * as Haptics from 'expo-haptics';
@@ -12,10 +12,17 @@ interface StepPickerModalProps {
   isVisible: boolean;
   onClose: () => void;
   onSave: (value: string) => void;
+  initialValue?: string;
 }
 
-const StepPickerModal: React.FC<StepPickerModalProps> = ({ isVisible, onClose, onSave }) => {
+const StepPickerModal: React.FC<StepPickerModalProps> = ({ isVisible, onClose, onSave,initialValue }) => {
   const [value, setValue] = useState('200');
+
+  useEffect(() => {
+    if (isVisible && initialValue) {
+      setValue(initialValue);
+    }
+  }, [isVisible, initialValue]);
 
   const handleValueChange = (val: string) => {
     // Haptics will work if available on device
@@ -53,7 +60,7 @@ const StepPickerModal: React.FC<StepPickerModalProps> = ({ isVisible, onClose, o
           min={100}
           max={10000}
           step={10}
-          initialValue={200}
+          initialValue={100}
           onValueChange={handleValueChange}
           unit=""
           fractionDigits={0}

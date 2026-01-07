@@ -9,10 +9,15 @@ const MINUTES = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0
 
 interface CustomTimePickerProps {
     onTimeChange: (hour: string, minute: string) => void;
+    initialHour?: string;   
+    initialMinute?: string; 
 }
-const CustomTimePicker = ({ onTimeChange }: CustomTimePickerProps) => {
-    const [hour, setHour] = useState('08');
-    const [minute, setMinute] = useState('24');
+const CustomTimePicker = ({ onTimeChange,initialHour = '08',initialMinute = '24' }: CustomTimePickerProps) => {
+    const [hour, setHour] = useState(initialHour);
+    const [minute, setMinute] = useState(initialMinute);
+
+    const startHourIndex = HOURS.indexOf(initialHour);
+    const startMinuteIndex = MINUTES.indexOf(initialMinute);
     // જ્યારે કલાક બદલાય
     const handleHourChange = (selectedHour: string) => {
         // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -45,7 +50,7 @@ const CustomTimePicker = ({ onTimeChange }: CustomTimePickerProps) => {
             {/* Hours Wheel */}
             <View className="flex-row items-center">
                 <WheelPicker
-                    initialSelectedIndex={8}
+                    initialSelectedIndex={startHourIndex !== -1 ? startHourIndex : 0}
                     items={HOURS.map(h => ({ label: h, value: h }))}
                     onChange={({ item }) => handleHourChange(item.value)}
                     height={250}
@@ -63,7 +68,7 @@ const CustomTimePicker = ({ onTimeChange }: CustomTimePickerProps) => {
             {/* Minutes Wheel */}
             <View className="flex-row items-center">
                 <WheelPicker
-                    initialSelectedIndex={24}
+                    initialSelectedIndex={startMinuteIndex !== -1 ? startMinuteIndex : 0}
                     items={MINUTES.map(m => ({ label: m, value: m }))}
                     onChange={({ item }) => handleMinuteChange(item.value)}
                     height={250}

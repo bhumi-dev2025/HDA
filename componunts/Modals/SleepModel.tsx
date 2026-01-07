@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { UniversalModal } from '../Modals/UniversalModal';
 import CustomTimePicker from '../TimePicker'
@@ -8,10 +8,18 @@ interface SleepModalProps {
   isVisible: boolean;
   onClose: () => void;
   onSave: (time: { hour: string; minute: string }) => void;
+  initialValue?: { hour: string; minute: string };
 }
 
-const SleepModal: React.FC<SleepModalProps> = ({ isVisible, onClose, onSave }) => {
+const SleepModal: React.FC<SleepModalProps> = ({ isVisible, onClose, onSave ,initialValue}) => {
   const [selectedTime, setSelectedTime] = useState({ hour: '08', minute: '24' });
+
+  // 3. Aa useEffect add karo
+  useEffect(() => {
+    if (isVisible && initialValue) {
+      setSelectedTime(initialValue);
+    }
+  }, [isVisible, initialValue]);
 
   return (
     <UniversalModal isVisible={isVisible} onClose={onClose}>
@@ -37,7 +45,9 @@ const SleepModal: React.FC<SleepModalProps> = ({ isVisible, onClose, onSave }) =
       {/* Custom Picker Section */}
       <View className="w-full items-center mb-16">
         <CustomTimePicker 
-          onTimeChange={(h, m) => setSelectedTime({ hour: h, minute: m })} 
+          onTimeChange={(h, m) => setSelectedTime({ hour: h, minute: m })}
+          initialHour={selectedTime.hour} 
+    initialMinute={selectedTime.minute} 
         />
       </View>
 

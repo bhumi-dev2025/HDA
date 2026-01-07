@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Plus, Minus } from 'lucide-react-native';
 import { UniversalModal } from '../Modals/UniversalModal';
@@ -8,10 +8,18 @@ interface WaterTrackerModalProps {
   visible: boolean;
   onClose: () => void;
   onSave: (liters: number) => void;
+  initialValue?: number;
 }
 
-const WaterTrackerModal: React.FC<WaterTrackerModalProps> = ({ visible, onClose, onSave }) => {
+const WaterTrackerModal: React.FC<WaterTrackerModalProps> = ({ visible, onClose, onSave,initialValue }) => {
   const [liters, setLiters] = useState(1.5);
+
+  // 2. New useEffect
+  useEffect(() => {
+    if (visible && initialValue !== undefined) {
+      setLiters(initialValue);
+    }
+  }, [visible, initialValue]);
 
   //button press.. event 
   const [isPlusPressed, setIsPlusPressed] = useState(false);

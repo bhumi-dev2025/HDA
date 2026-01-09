@@ -3,6 +3,7 @@ import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from 'rea
 import { Plus, Heart, Trash2 } from 'lucide-react-native';
 import { StatusBar } from 'expo-status-bar';
 import { supabase } from '../../lib/supabase';
+import * as Clipboard from 'expo-clipboard'; // Clipboard import
 
 // Assets Imports
 import I5 from '../../assets/photo/home/I5.svg'
@@ -30,6 +31,8 @@ const ProfileScreen = () => {
 
   const [showExpertise, setShowExpertise] = useState(false);
   const [showPortfolio, setShowPortfolio] = useState(false);
+
+  const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -72,6 +75,27 @@ const ProfileScreen = () => {
     }
   }
 
+  // --- Main Logic: Handle Link Press ---
+  const handleMainLinkPress = async () => {
+    // Jo portfolio nathi to modal khulse
+    if (portfolios.length === 0) {
+      setShowPortfolio(true);
+      return;
+    }
+
+    // Jo portfolio che to pehli item ni link copy thase
+    const linkToCopy = portfolios[0].link;
+    await Clipboard.setStringAsync(linkToCopy);
+    
+    // Copied state set karo
+    setIsCopied(true);
+    
+    // 2 second pachi pachu normal thy jase
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 2000);
+  };
+
   return (
     <View className="flex-1 bg-white">
       <StatusBar style="dark" />
@@ -113,8 +137,22 @@ const ProfileScreen = () => {
               <View className="rounded-full p-1"><P1 height={20} width={20} /></View>
             </View>
             <Text className="text-lg font-semibold text-center">Will work for humans not for machin</Text>
-            <TouchableOpacity className="flex-row items-center space-x-1 mt-1 gap-2">
-              <P2 /><Text className="text-blue-500 font-medium text-base underline">Portfolio link</Text>
+            <TouchableOpacity 
+            onPress={handleMainLinkPress}
+            className={`flex-row items-center space-x-1 mt-1 gap-2 px-3 py-1 rounded-full ${isCopied ? 'bg-green-100' : ''}`}
+            >
+              {isCopied ? (
+                <P2 color="green" /> 
+              ) : (
+                <P2 />
+              )}
+              
+              <Text className={`${isCopied ? 'text-green-600 font-bold' : 'text-blue-500 font-medium underline'} text-base`}>
+                {isCopied 
+                  ? "Copied!" 
+                  : (portfolios.length > 0 ? "Portfolio link" : "Add Portfolio")
+                }
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -178,6 +216,7 @@ const ProfileScreen = () => {
               ))}
 
               {/* Add Portfolio Button */}
+              {portfolios.length === 0 && (
               <TouchableOpacity
                 onPress={() => setShowPortfolio(true)}
                 className="flex-row items-center justify-center bg-[#F4F4F4] h-[50px] rounded-[12px] border-4 border-white mt-2" style={styles.customShadow}
@@ -187,11 +226,12 @@ const ProfileScreen = () => {
                 </View>
                 <Text className="text-gray-600 font-medium">Add Portfolio</Text>
               </TouchableOpacity>
+              )}
             </View>
           </View>
 
           {/* Footer */}
-          <View className="mt-10 pt-5 pb-10 items-center justify-center space-y-1">
+          <View className="mt-10 pt-5 pb-10 items-center justify-center space-y-1 bottom-5">
             <Heart size={20} color="#ef4444" fill="#ef4444" />
             <Text className="text-gray-400 text-xs font-semibold mt-2">Human Design Academy</Text>
             <Text className="text-gray-300 text-[10px]">Designed by Simple Studio</Text>

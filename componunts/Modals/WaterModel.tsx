@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Plus, Minus } from 'lucide-react-native';
 import { UniversalModal } from '../Modals/UniversalModal';
@@ -11,19 +11,16 @@ interface WaterTrackerModalProps {
   initialValue?: number;
 }
 
-const WaterTrackerModal: React.FC<WaterTrackerModalProps> = ({ visible, onClose, onSave,initialValue }) => {
+const WaterTrackerModal: React.FC<WaterTrackerModalProps> = ({ visible, onClose, onSave, initialValue }) => {
   const [liters, setLiters] = useState(1.5);
+  const [isPlusPressed, setIsPlusPressed] = useState(false);
+  const [isMinusPressed, setIsMinusPressed] = useState(false);
 
-  // 2. New useEffect
   useEffect(() => {
     if (visible && initialValue !== undefined) {
       setLiters(initialValue);
     }
   }, [visible, initialValue]);
-
-  //button press.. event 
-  const [isPlusPressed, setIsPlusPressed] = useState(false);
-  const [isMinusPressed, setIsMinusPressed] = useState(false);
 
   const increment = () => setLiters((prev) => parseFloat((prev + 0.1).toFixed(1)));
   const decrement = () => { if (liters > 0) setLiters((prev) => parseFloat((prev - 0.1).toFixed(1))); };
@@ -38,16 +35,15 @@ const WaterTrackerModal: React.FC<WaterTrackerModalProps> = ({ visible, onClose,
       </View>
 
       <View className="flex-row items-center justify-between w-full px-16 mb-16">
-        {/* PLUS BUTTON */}
+        {/* MINUS BUTTON */}
         <TouchableOpacity
           activeOpacity={1}
-          onPressIn={() => setIsPlusPressed(true)}
-          onPressOut={() => setIsPlusPressed(false)}
-          onPress={increment}
-          className={`w-20 h-20 rounded-2xl items-center justify-center border ${isPlusPressed ? 'bg-black border-black' : 'bg-white border-black'
-            }`}
+          onPressIn={() => setIsMinusPressed(true)}
+          onPressOut={() => setIsMinusPressed(false)}
+          onPress={decrement}
+          className={`w-20 h-20 rounded-2xl items-center justify-center border ${isMinusPressed ? 'bg-black border-black' : 'bg-white border-black'}`}
         >
-          <Plus color={isPlusPressed ? "white" : "black"} size={32} strokeWidth={3} />
+          <Minus color={isMinusPressed ? "white" : "black"} size={32} strokeWidth={3} />
         </TouchableOpacity>
 
         <View className="items-center">
@@ -55,18 +51,16 @@ const WaterTrackerModal: React.FC<WaterTrackerModalProps> = ({ visible, onClose,
           <Text className="text-gray-400 text-lg">Liters</Text>
         </View>
 
-        {/* MINUS BUTTON */}
+        {/* PLUS BUTTON */}
         <TouchableOpacity
           activeOpacity={1}
-          onPressIn={() => setIsMinusPressed(true)}
-          onPressOut={() => setIsMinusPressed(false)}
-          onPress={decrement}
-          className={`w-20 h-20 rounded-2xl items-center justify-center border ${isMinusPressed ? 'bg-black border-black' : 'bg-white border-black'
-            }`}
+          onPressIn={() => setIsPlusPressed(true)}
+          onPressOut={() => setIsPlusPressed(false)}
+          onPress={increment}
+          className={`w-20 h-20 rounded-2xl items-center justify-center border ${isPlusPressed ? 'bg-black border-black' : 'bg-white border-black'}`}
         >
-          <Minus color={isMinusPressed ? "white" : "black"} size={32} strokeWidth={3} />
+          <Plus color={isPlusPressed ? "white" : "black"} size={32} strokeWidth={3} />
         </TouchableOpacity>
-
       </View>
 
       <TouchableOpacity

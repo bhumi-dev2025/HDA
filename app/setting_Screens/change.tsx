@@ -158,25 +158,6 @@ export default function GoalWizard() {
     return (
         <View className="flex-row items-center justify-between w-full px-16 mt-20">
               
-              {/* PLUS BUTTON (Left Side as per your code) */}
-              <TouchableOpacity 
-                activeOpacity={1}
-                onPressIn={() => setIsPlusPressed(true)}
-                onPressOut={() => setIsPlusPressed(false)}
-                onPress={increment}
-                className={`w-20 h-20 rounded-2xl items-center justify-center border ${
-                  isPlusPressed ? 'bg-black border-black' : 'bg-white border-gray-200'
-                }`}
-              >
-                <Plus color={isPlusPressed ? "white" : "black"} size={32} strokeWidth={3} />
-              </TouchableOpacity>
-  
-              {/* Value Display */}
-              <View className="items-center">
-                <Text className="text-5xl font-bold text-black">{goals.water.toFixed(1)}</Text>
-                <Text className="text-gray-400 text-lg mt-1">Liters</Text>
-              </View>
-  
               {/* MINUS BUTTON (Right Side as per your code) */}
               <TouchableOpacity 
                 activeOpacity={1}
@@ -188,6 +169,27 @@ export default function GoalWizard() {
                 }`}
               >
                 <Minus color={isMinusPressed ? "white" : "black"} size={32} strokeWidth={3} />
+              </TouchableOpacity> 
+  
+              {/* Value Display */}
+              <View className="items-center">
+                <Text className="text-5xl font-bold text-black">{goals.water.toFixed(1)}</Text>
+                <Text className="text-gray-400 text-lg mt-1">Liters</Text>
+              </View>
+  
+             
+
+              {/* PLUS BUTTON (Left Side as per your code) */}
+              <TouchableOpacity 
+                activeOpacity={1}
+                onPressIn={() => setIsPlusPressed(true)}
+                onPressOut={() => setIsPlusPressed(false)}
+                onPress={increment}
+                className={`w-20 h-20 rounded-2xl items-center justify-center border ${
+                  isPlusPressed ? 'bg-black border-black' : 'bg-white border-gray-200'
+                }`}
+              >
+                <Plus color={isPlusPressed ? "white" : "black"} size={32} strokeWidth={3} />
               </TouchableOpacity>
   
         </View>

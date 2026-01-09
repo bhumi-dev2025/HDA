@@ -4,12 +4,11 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Modal,
   Keyboard,
   Platform,
-  TouchableWithoutFeedback,
-  Pressable
+  TouchableWithoutFeedback
 } from 'react-native';
+import { UniversalModal } from '../../componunts/Modals/UniversalModal';
 import C2 from '../../assets/photo/home/C2.svg';
 import C1 from '../../assets/photo/home/C1.svg';
 
@@ -18,7 +17,6 @@ interface TaskItem {
   isDone: boolean;
 }
 
-// 1. Props માં ફેરફાર: onSave હવે string array (ટાસ્કનું લિસ્ટ) લેશે
 interface TaskModalProps {
   visible: boolean;
   onClose: () => void;
@@ -26,15 +24,15 @@ interface TaskModalProps {
   initialTasks?: any[];
 }
 
-const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave,initialTasks }) => {
+const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave, initialTasks }) => {
   const defaultTasks = [
     { text: '', isDone: false },
     { text: '', isDone: false },
     { text: '', isDone: false },
   ];
   const [tasks, setTasks] = useState(defaultTasks);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
-  // 2. New useEffect
   useEffect(() => {
     if (visible) {
         if (initialTasks && initialTasks.length > 0) {
@@ -44,6 +42,12 @@ const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave,initialT
         }
     }
   }, [visible, initialTasks]);
+
+  useEffect(() => {
+    const show = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow', (e) => setKeyboardHeight(e.endCoordinates.height));
+    const hide = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide', () => setKeyboardHeight(0));
+    return () => { show.remove(); hide.remove(); };
+  }, []);
 
   const toggleTask = (index: number) => {
     const newTasks = [...tasks];
@@ -56,51 +60,22 @@ const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave,initialT
     newTasks[index].text = val;
     setTasks(newTasks);
   };
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
-      (e) => setKeyboardHeight(e.endCoordinates.height)
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
-      () => setKeyboardHeight(0)
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
 
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      transparent={true}
-      onRequestClose={onClose}
+    <UniversalModal 
+      isVisible={visible} 
+      onClose={onClose}
+      customStyle={{ paddingBottom: keyboardHeight > 0 ? keyboardHeight + 20 : 40 }}
     >
-      <Pressable 
-        className="absolute top-0 bottom-0 left-0 right-0 bg-black/40" 
-        onPress={onClose} 
-      />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-
-        <View className="flex-1 bg-black/40 justify-end" pointerEvents="box-none">
-          <View
-            style={{ paddingBottom: keyboardHeight > 0 ? keyboardHeight + 20 : 40 }}
-            className="bg-white rounded-t-[40px] p-6"
-          >
-            <View className="w-10 h-1 bg-gray-300 rounded-full self-center mb-6" />
-
+        <View className="w-full">
             <Text className="text-center text-xl font-bold mb-6 text-black">Enter Notes</Text>
 
             <View className="space-y-4 mb-6">
               {tasks.map((task, index) => (
                 <View key={index} className="flex-row items-center bg-[#18181B05] p-2 rounded-2xl border border-gray-100 mb-3">
                   <TouchableOpacity onPress={() => toggleTask(index)}>
-                    {task.isDone ? <C2 height={24} width={24} /> : <C1 height={24} width={24}></C1>}
+                    {task.isDone ? <C2 height={24} width={24} /> : <C1 height={24} width={24} />}
                   </TouchableOpacity>
                   <TextInput
                     placeholder={`${index + 1}st Task`}
@@ -114,7 +89,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave,initialT
             </View>
 
             <View className="flex-row items-center justify-center mb-5">
-              {/* 2. Save Button માં ફેરફાર: tasks array પાસ કરવો */}
               <TouchableOpacity
                 onPress={() => onSave(tasks)}
                 className="bg-black w-full py-5 rounded-2xl items-center mt-auto"
@@ -122,10 +96,9 @@ const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave,initialT
                 <Text className="text-white font-bold text-lg">Save</Text>
               </TouchableOpacity>
             </View>
-          </View>
         </View>
       </TouchableWithoutFeedback>
-    </Modal>
+    </UniversalModal>
   );
 };
 

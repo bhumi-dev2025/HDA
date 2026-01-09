@@ -48,7 +48,6 @@ const StepPickerModal: React.FC<StepPickerModalProps> = ({ isVisible, onClose, o
       <View className="mb-24">
         <M2 width={140} height={140} />
       </View>
-
       {/* Ruler Section */}
       <View className="w-full items-center justify-center mb-12">
         <Text className="absolute text-gray-400 mb-20">Steps</Text>

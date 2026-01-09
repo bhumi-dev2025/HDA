@@ -1,7 +1,7 @@
-import React, { useState , useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { UniversalModal } from '../Modals/UniversalModal';
-import CustomTimePicker from '../TimePicker'
+import CustomTimePicker from '../TimePicker';
 import M4 from '../../assets/photo/modal/M4.svg';
 
 interface SleepModalProps {
@@ -11,10 +11,9 @@ interface SleepModalProps {
   initialValue?: { hour: string; minute: string };
 }
 
-const SleepModal: React.FC<SleepModalProps> = ({ isVisible, onClose, onSave ,initialValue}) => {
+const SleepModal: React.FC<SleepModalProps> = ({ isVisible, onClose, onSave, initialValue }) => {
   const [selectedTime, setSelectedTime] = useState({ hour: '08', minute: '24' });
 
-  // 3. Aa useEffect add karo
   useEffect(() => {
     if (isVisible && initialValue) {
       setSelectedTime(initialValue);
@@ -47,7 +46,7 @@ const SleepModal: React.FC<SleepModalProps> = ({ isVisible, onClose, onSave ,ini
         <CustomTimePicker 
           onTimeChange={(h, m) => setSelectedTime({ hour: h, minute: m })}
           initialHour={selectedTime.hour} 
-    initialMinute={selectedTime.minute} 
+          initialMinute={selectedTime.minute} 
         />
       </View>
 

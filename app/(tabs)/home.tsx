@@ -4,6 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 //back end functions call....
 import { updateDailyLog, getTodayLog} from '../../lib/TrackerService';
 import { useRouter } from 'expo-router';
+import LottieView from 'lottie-react-native'; 
+
 
 // model import
 import MeditationModal from '../../componunts/Modals/MeditationModel';
@@ -157,10 +159,21 @@ export default function HomeScreen() {
           <View className="flex-1 gap-3">
 
             {/* 1. Good Morning Card */}
-            <CardContainer heightClass="h-20" className="bg-white flex-row items-center p-4 gap-2">
+            <CardContainer heightClass="h-20" className="bg-white flex-row items-center p-4 gap-1">
               {/* Background Image if needed, else plain white */}
-              <I12 />
-              <Text className="text-[#333] font-bold text-lg flex-1">Good Morning</Text>
+              {/* <I12 /> */}
+                      <LottieView
+                        // TAMARE AHIYA TAMARI FILE NO PATH AAPVO
+                        source={require('../../assets/lottie/moring.json')} 
+                        autoPlay
+                        loop
+                        renderMode="SOFTWARE" // renderMode="HARDWARE"
+                        //  renderMode="HARDWARE"
+                        style={{ width:30, height:30}}
+                        resizeMode="contain" // athva 'cover'
+                      />
+                    
+              <Text className="text-[#333] text-center font-bold text-lg flex-1">Good Morning</Text>
             </CardContainer>
 
             {/* 2. Meditation Card */}

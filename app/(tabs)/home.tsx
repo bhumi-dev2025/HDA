@@ -133,8 +133,8 @@ export default function HomeScreen() {
         <View className="flex-row justify-between items-center px-5 py-4">
           <L1 width={30} height={30} />
          
-            <TouchableOpacity className="w-12 h-12 items-center justify-center bg-[#D9D9D9] rounded-full" onPress={()=>router.push('/settings')}>
-              <A1></A1>
+            <TouchableOpacity className="w-12 h-12 items-center justify-center rounded-full" onPress={()=>router.push('/settings')}>
+              <A1 height={30} width={30} />
             </TouchableOpacity>
         </View>
         <ScrollView className="flex-1" contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 110 }} showsVerticalScrollIndicator={false}>
@@ -272,7 +272,7 @@ export default function HomeScreen() {
                       {todoTasks.filter(t => t.text !== '').slice(0, 5).map((item, index) => (
                         <View key={index} className='flex-row items-center gap-2 mt-2'>
                           {item.isDone ? <C2 width={18} height={18} /> : <C1 height={18} width={18} />}
-                          <Text numberOfLines={1} className={`text-[13px] font-semibold flex-1 ${item.isDone ? 'text-[#bbb9b9]' : 'text-[#333]'}`}>{item.text}</Text>
+                          <Text numberOfLines={1} className={`text-[13px] font-semibold flex-1 ${item.isDone ? 'text-[#bbb9b9] line-through' : 'text-[#333]'}`}>{item.text}</Text>
                         </View>
                       ))}
                     </View>

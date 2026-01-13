@@ -17,6 +17,7 @@ const Login = () => { // Component name Capital રાખવું સારુ�
     GoogleSignin.configure({
       //google clude code ni -> web id 
       webClientId: '241217798940-f6ik71i9je097slar0i4rco98mc1re7m.apps.googleusercontent.com',
+      iosClientId: '241217798940-ipmglh828epjv8q7v0ob4lrf2pvnuhs3.apps.googleusercontent.com',
       offlineAccess: true,
     });
   }, []);

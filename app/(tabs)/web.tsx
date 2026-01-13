@@ -1,20 +1,22 @@
-import React, { useMemo, useState } from "react";
-import { View, Dimensions, ScrollView, Text, Image, TouchableOpacity, Modal,ImageSourcePropType} from "react-native";
-import { Canvas, Path, BlurMask, Skia, Group } from "@shopify/react-native-skia";
-import { Sparkles, GitGraph, Bot, Heart, Lightbulb, Code, Package, Link, SquareTerminal, LineSquiggle, GitCompareArrows, Cog, Layers2, Bubbles, Video, AudioLines, MicVocal, ChartNetwork, Film, Images, Wand, LayoutTemplate, Boxes, Earth, Smartphone } from 'lucide-react-native';
-import { ROADMAP_PATH_STRING, ROADMAP_ITEMS } from "../../constants/roadmapData";
-import { getIconComponent } from "../../componunts/RoadmapIcons";
-import { ModalDataType } from "../../constants/roadmapData";
+import React, { useMemo, useState, useRef } from "react";
+import { View, Dimensions, ScrollView, Text, Image, TouchableOpacity, Modal, ImageSourcePropType, PanResponder, Animated, PanResponderInstance } from "react-native";
+// ✅ Skia કાઢી નાખ્યું છે
+// ✅ NEW IMPORT: react-native-svg added
+import Svg, { Path as SvgPath, G } from "react-native-svg";
 import { SvgProps } from "react-native-svg";
-import L1 from '../../assets/photo/home/L1.svg'
-import A1 from '../../assets/photo/home/A1.svg'
+
+import { Sparkles, GitGraph, Bot, Heart, Lightbulb, Code, Package, Link, SquareTerminal, LineSquiggle, GitCompareArrows, Cog, Layers2, Bubbles, Video, AudioLines, MicVocal, ChartNetwork, Film, Images, Wand, LayoutTemplate, Boxes, Earth, Smartphone } from 'lucide-react-native';
 import { useRouter } from "expo-router";
+
+// તમારી Constants ફાઈલ માંથી આ ડેટા આવે છે એમ માની લઉં છું
+import { ROADMAP_PATH_STRING, ROADMAP_ITEMS, ModalDataType } from "../../constants/roadmapData";
+import { getIconComponent } from "../../componunts/RoadmapIcons";
 
 const { width: screenWidth } = Dimensions.get("window");
 const SVG_HEIGHT = 5509;
 
+// --- List Icon Component ---
 const ListIcon = ({ name }: { name: string }) => {
-  // સાદા આઈકોન અથવા તમારા SVG અહી વાપરી શકો
   if (name === 'bot') return <Bot size={24} color="#333" />;
   if (name === 'diagram') return <GitGraph size={24} color="#333" />;
   if (name === 'ai') return <Sparkles size={24} color="#333" />;
@@ -44,26 +46,60 @@ const ListIcon = ({ name }: { name: string }) => {
 
 export default function RoadmapScreen() {
   const router = useRouter();
-  const skiaPath = useMemo(() => Skia.Path.MakeFromSVGString(ROADMAP_PATH_STRING), []);
+  
+  // ❌ Removed Skia Path logic
+  // const skiaPath = useMemo(() => Skia.Path.MakeFromSVGString(ROADMAP_PATH_STRING), []);
+
   const xOffset = (screenWidth - 305) / 2;
   const yOffset = 50;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedData, setSelectedData] = useState<ModalDataType | null>(null);
 
+  // --- Animation Value for Swipe Down ---
+  const panY = useRef(new Animated.Value(0)).current;
+
+  // --- PanResponder for Handling Swipe Gestures ---
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (_, gestureState) => {
+        // માત્ર નીચે તરફ (Positive Y) ડ્રેગ કરવા દઈએ
+        if (gestureState.dy > 0) {
+          panY.setValue(gestureState.dy);
+        }
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        // જો યુઝરે 150 પિક્સેલ થી વધારે નીચે ખેંચ્યું હોય તો મોડલ બંધ કરો
+        if (gestureState.dy > 150) {
+          setModalVisible(false);
+          panY.setValue(0); // Reset position
+        } else {
+          // નહિતર પાછું ઉપર સ્પ્રિંગ જેવું લાવો
+          Animated.spring(panY, {
+            toValue: 0,
+            useNativeDriver: true,
+            bounciness: 10
+          }).start();
+        }
+      },
+    })
+  ).current;
+
   const handleButtonPress = (item: any) => {
     if (item.modalData) {
       setSelectedData(item.modalData);
       setModalVisible(true);
+      panY.setValue(0); // Reset animation when opening
     }
   };
-
-  if (!skiaPath) return <View />;
 
   const renderItem = (item: any) => {
     const rotationDegree = item.rotation || 0;
     const itemScale = item.scale || 1;
 
+    // TypeScript: dynamicStyle definition
     const dynamicStyle: any = {
       position: 'absolute',
       top: item.y + yOffset,
@@ -80,26 +116,19 @@ export default function RoadmapScreen() {
     const labelColor = item.labelConfig?.color ?? 'black';
     const labelSize = item.labelConfig?.fontSize ?? 12;
 
-    // ✅ --- CHANGE START: Simple Image with SVG & PNG Support ---
+    // --- SIMPLE IMAGE TYPE ---
     if (item.type === 'simple-image') {
       const imgWidth = item.width || 50;
       const imgHeight = item.height || 50;
-
-      // 1. ચેક કરો કે ઈમેજ SVG છે કે PNG
       const isSvg = typeof item.image === 'function';
-      
-      // 2. SVG Component માટે Type Cast
       const SvgComponent = item.image as React.FC<SvgProps>;
 
       return (
         <View key={item.id} style={[dynamicStyle, { alignItems: 'center', justifyContent: 'center' }]}>
-
-          {/* જો SVG હોય તો SvgComponent વાપરો, નહિતર Image */}
           {isSvg ? (
             <SvgComponent width={imgWidth} height={imgHeight} />
           ) : (
             <Image
-              // PNG માટે Type Cast
               source={item.image as ImageSourcePropType}
               style={{
                 width: imgWidth,
@@ -108,8 +137,6 @@ export default function RoadmapScreen() {
               }}
             />
           )}
-
-          {/* લેબલ */}
           {item.label && (
             <Text style={{
               position: 'absolute',
@@ -128,9 +155,8 @@ export default function RoadmapScreen() {
         </View>
       );
     }
-    // ✅ --- CHANGE END ---
 
-    // --- 1. PHOTO TYPE HANDLE ---
+    // --- PHOTO TYPE ---
     if (item.type === 'photo') {
       const icon = getIconComponent(item);
       return (
@@ -155,7 +181,7 @@ export default function RoadmapScreen() {
       );
     }
 
-    // --- 2. BUTTON TYPE HANDLE ---
+    // --- BUTTON TYPE ---
     if (item.type === 'button') {
       const icon = getIconComponent(item);
       return (
@@ -185,7 +211,7 @@ export default function RoadmapScreen() {
       );
     }
 
-    // --- 3. OTHER ICONS ---
+    // --- OTHER ICONS ---
     const iconComponent = getIconComponent(item);
     if (iconComponent) {
       return (
@@ -210,7 +236,7 @@ export default function RoadmapScreen() {
       );
     }
 
-    // --- 4. LABEL BOX TYPE ---
+    // --- LABEL TYPE ---
     if (item.type === 'label') {
       const boxBackgroundColor = item.style?.backgroundColor || 'white';
       const defaultTextColor = boxBackgroundColor === 'black' ? 'white' : 'black';
@@ -235,44 +261,76 @@ export default function RoadmapScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#F1F1F1", paddingTop: 50 }}>
-       <View className="flex-row justify-between items-center px-5 py-2">
-          <L1 width={30} height={30} />
-            <TouchableOpacity className="w-12 h-12 items-center justify-center bg-[#D9D9D9] rounded-full" onPress={()=>router.push('/settings')}>
-              <A1></A1>
-            </TouchableOpacity>
-        </View>
+    <View style={{ flex: 1, backgroundColor: "black", paddingTop: 50 }}>
       <ScrollView contentContainerStyle={{ height: SVG_HEIGHT + yOffset + 200 }}>
         <ScrollView horizontal contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
           <View style={{ width: screenWidth, height: SVG_HEIGHT + yOffset }}>
 
-            <Canvas style={{ width: screenWidth, height: SVG_HEIGHT + yOffset, position: 'absolute', top: 50, left: 0 }}>
-              <Group transform={[{ translateX: xOffset }, { translateY: yOffset }]}>
-                <Path path={skiaPath} color="rgba(0, 0, 0, 0.08)" style="stroke" strokeWidth={80} strokeCap="round" strokeJoin="round">
-                  <BlurMask blur={25} style="normal" />
-                </Path>
-                <Path path={skiaPath} color="#848074" style="stroke" strokeWidth={60} strokeCap="round" strokeJoin="round" />
-                <Path path={skiaPath} color="black" style="stroke" strokeWidth={50} strokeCap="round" strokeJoin="round" />
-              </Group>
-            </Canvas>
+            {/* ✅ UPDATED: Used react-native-svg instead of Skia */}
+            <Svg 
+              height={SVG_HEIGHT + yOffset} 
+              width={screenWidth} 
+              style={{ position: 'absolute', top: 50, left: 0 }}
+            >
+              <G x={xOffset} y={yOffset}>
+                {/* 1. Shadow Layer */}
+                <SvgPath
+                  d={ROADMAP_PATH_STRING}
+                  stroke="rgba(0,0,0,0.08)" // Light shadow color
+                  strokeWidth="80"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  fill="none"
+                />
+                
+                {/* 2. White Border Layer */}
+                <SvgPath
+                  d={ROADMAP_PATH_STRING}
+                  stroke="white"
+                  strokeWidth="60"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  fill="none"
+                />
 
+                {/* 3. Black Inner Line Layer */}
+                <SvgPath
+                  d={ROADMAP_PATH_STRING}
+                  stroke="black"
+                  strokeWidth="50"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  fill="none"
+                />
+              </G>
+            </Svg>
+
+            {/* Items Rendering (No Changes needed here) */}
             {ROADMAP_ITEMS.map((item) => renderItem(item))}
 
           </View>
         </ScrollView>
       </ScrollView>
       
-      {/* Modal Component Code... (જેમ હતું તેમ) */}
+      {/* --- Modal Section --- */}
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-         {/* ... તમારો મોડલ કોડ ... */}
-         <View className="flex-1 bg-black/60 justify-end">
-          <View className="bg-white w-full h-[85%] rounded-t-[35px] overflow-hidden">
-            <View className="items-center pt-4 pb-2">
+        <View className="flex-1 bg-black/60 justify-end">
+          <Animated.View 
+            style={{ 
+              transform: [{ translateY: panY }] 
+            }}
+            className="bg-white w-full h-[85%] rounded-t-[35px] overflow-hidden"
+          >
+            {/* Header / Grab Bar */}
+            <View 
+              {...panResponder.panHandlers} 
+              className="items-center pt-4 pb-2 w-full bg-white z-10"
+            >
               <View className="w-12 h-1.5 bg-gray-300 rounded-full" />
             </View>
 
@@ -299,7 +357,7 @@ export default function RoadmapScreen() {
 
                 <View className="px-5">
                   {selectedData.learningList?.map((item, index) => (
-                    <View key={item.id} className="flex-row items-center bg-gray-50 p-4 rounded-2xl mb-3">
+                    <View key={item.id || index} className="flex-row items-center bg-gray-50 p-4 rounded-2xl mb-3">
                       <View className="w-10 h-10 items-center justify-center mr-4">
                         <ListIcon name={item.iconName} />
                       </View>
@@ -318,11 +376,7 @@ export default function RoadmapScreen() {
                 </View>
               </ScrollView>
             )}
-
-            <TouchableOpacity className="absolute top-5 right-5 bg-gray-100 p-2 rounded-full" onPress={() => setModalVisible(false)}>
-              <Text className="text-gray-500 font-bold text-xs">✕</Text>
-            </TouchableOpacity>
-          </View>
+          </Animated.View>
         </View>
       </Modal>
     </View>

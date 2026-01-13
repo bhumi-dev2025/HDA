@@ -188,7 +188,7 @@ export const AddPortfolioModal = ({ isVisible, onClose, onSave }: PortfolioModal
                 {/* Input Field */}
                 <View className="flex-row items-center border border-gray-200 rounded-xl px-4 py-3 mb-6 bg-white w-full">
                     <TextInput 
-                        className="flex-1 text-base text-gray-800 p-0"
+                        className="flex-1 text-base text-gray-800 p-2 no-underline"
                         placeholder="Paste link (https://...)"
                         placeholderTextColor="#9CA3AF"
                         value={link}
@@ -232,7 +232,7 @@ export const AddPortfolioModal = ({ isVisible, onClose, onSave }: PortfolioModal
 
             <TouchableOpacity
                 disabled={link.length === 0} // લિંક ખાલી હોય તો બટન ડિસેબલ
-                className={`w-full p-4 rounded-2xl items-center mt-2 shadow-lg mb-2 ${
+                className={`w-full p-4 rounded-2xl items-center mt-2 mb-2 ${
                     link.length > 0 ? 'bg-black' : 'bg-gray-300' // કલર ચેન્જ લોજીક
                 }`}
                 onPress={handlePressSave}

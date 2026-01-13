@@ -73,7 +73,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave, initial
 
             <View className="space-y-4 mb-6">
               {tasks.map((task, index) => (
-                <View key={index} className="flex-row items-center bg-[#18181B05] p-2 rounded-2xl border border-gray-100 mb-3">
+                <View key={index} className="flex-row items-center bg-[#18181B05] p-5 rounded-2xl border border-gray-100 mb-3">
                   <TouchableOpacity onPress={() => toggleTask(index)}>
                     {task.isDone ? <C2 height={24} width={24} /> : <C1 height={24} width={24} />}
                   </TouchableOpacity>
@@ -82,7 +82,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave, initial
                     placeholderTextColor={'#C7C7CC'}
                     value={task.text}
                     onChangeText={(text) => updateTaskText(index, text)}
-                    className={`flex-1 ml-3 text-lg ${task.isDone ? 'text-gray-400 line-through' : 'text-black'}`}
+                    className={`flex-1 ml-3 text-lg py-0 leading-tight ${task.isDone ? 'text-gray-400 line-through' : 'text-black'}`}
                   />
                 </View>
               ))}

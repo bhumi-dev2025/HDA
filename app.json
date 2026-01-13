@@ -10,8 +10,21 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "y",
+      "bundleIdentifier": "com.simple.humandesignacademy",
+      "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.241217798940-ipmglh828epjv8q7v0ob4lrf2pvnuhs3"
+            ]
+          },
+          {
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.241217798940-ipmglh828epjv8q7v0ob4lrf2pvnuhs3"
+            ]
+          }
+        ],
         "ITSAppUsesNonExemptEncryption": false
       }
     },

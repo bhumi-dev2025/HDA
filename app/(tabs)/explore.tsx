@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { Video, ResizeMode } from 'expo-av';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Ruler from '@/componunts/Ruler';
+import Ruler from '../../componunts/Ruler';
 
 // સ્ક્રીનની પહોળાઈ મેળવો
 const { width } = Dimensions.get('window');
@@ -67,7 +67,6 @@ const ComingSoonScreen = () => {
         >
           Coming Soon...
         </Text>
-        <Ruler></Ruler>
       </View>
     </SafeAreaView>
   );

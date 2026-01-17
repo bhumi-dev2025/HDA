@@ -1,6 +1,6 @@
 // app/profile-screens/_layout.tsx
 import { Stack, useRouter } from 'expo-router';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View,Platform} from 'react-native';
 import { ChevronLeft } from 'lucide-react-native'; // અથવા @expo/vector-icons માંથી પણ લઈ શકો
 
 export default function ProfileLayout() {
@@ -19,6 +19,7 @@ export default function ProfileLayout() {
           fontWeight: '800', // ફોન્ટ જાડા કરવા
           fontSize: 18,
         },
+        headerBackVisible: false,
         // કસ્ટમ બેક બટન (ગોળ ગ્રે સર્કલ)
         headerLeft: () => (
           <TouchableOpacity 
@@ -28,7 +29,10 @@ export default function ProfileLayout() {
               padding: 8,
               borderRadius: 50, // ગોળ કરવા માટે
               marginLeft: 0, // ડાબી બાજુથી જગ્યા (જરૂર હોય તો વધારી શકાય)
+              alignItems: 'center',
+              justifyContent: 'center'
             }}
+
           >
             <ChevronLeft size={24} color="black" />
           </TouchableOpacity>

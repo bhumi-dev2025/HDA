@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 //back end functions call....
 import { updateDailyLog, getTodayLog} from '../../lib/TrackerService';
 import { useRouter } from 'expo-router';
-import LottieView from 'lottie-react-native'; 
+// import LottieView from 'lottie-react-native'; 
 
 
 // model import
@@ -13,6 +13,7 @@ import StepPickerModal from '../../componunts/Modals/StepModel';
 import SleepModal from '../../componunts/Modals/SleepModel';
 import TaskModal from '../../componunts/Modals/TodoModel';
 import WaterTrackerModal from '../../componunts/Modals/WaterModel';
+import WorkoutModal from '../../componunts/Modals/WorkoutModel';
 import ScoreChart from '../../componunts/Score';
 
 // icons & components
@@ -25,13 +26,14 @@ import I11 from '../../assets/photo/home/I11.svg'
 import I12 from '../../assets/photo/home/I12.svg'
 import I13 from '../../assets/photo/home/I13.svg'
 import I14 from '../../assets/photo/home/I14.svg'
+import I16 from '../../assets/photo/home/I16.svg'
 import C2 from '../../assets/photo/home/C2.svg'
 import C1 from '../../assets/photo/home/C1.svg'
 import L1 from '../../assets/photo/home/L1.svg'
 import A1 from '../../assets/photo/home/A1.svg'
 
 //interface ..
-type ModalType = 'meditation' | 'water' | 'todo' | 'step' | 'sleep' | null;
+type ModalType = 'meditation' | 'water' | 'todo' | 'step' | 'sleep' | 'workout'| null;
 type ModalData = string | number | { hour: string; minute: string } | { text: string; isDone: boolean }[];
 interface CardProps {
   children: React.ReactNode;      // બાળકો (ટેક્સ્ટ, ઈમેજ વગેરે)
@@ -40,9 +42,31 @@ interface CardProps {
   className?: string;             // એક્સ્ટ્રા સ્ટાઈલ (Optional)
 }
 
+ //image of cards background
+  const p1 = require('../../assets/photo/home/p1.png');
+  const p2 = require('../../assets/photo/home/p2.png');
+  const p3 = require('../../assets/photo/home/p3.png');
+  const p4 = require('../../assets/photo/home/p4.png');
+  const p5 = require('../../assets/photo/home/p5.png');
+  const p6 = require('../../assets/photo/home/p6.png');
+  const p7 = require('../../assets/photo/home/p7.png');
+  const p8 = require('../../assets/photo/home/p8.png');
+
+  const CardContainer = ({ children, onPress, heightClass = "h-auto", className = "" }: CardProps) => (
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.9}
+      // જો onPress ના હોય તો ક્લિક ડિસેબલ થઈ જાય (optional)
+      disabled={!onPress}
+      className={`w-full rounded-3xl overflow-hidden border-4 border-white relative ${heightClass} ${className}`}
+    >
+      {children}
+    </TouchableOpacity>
+  );
+
 export default function HomeScreen() {
   const router = useRouter();
-  const [userPhoto, setUserPhoto] = useState<string | null>(null); //photo
+  // const [userPhoto, setUserPhoto] = useState<string | null>(null); //photo
   const [currentScore, setCurrentScore] = useState(0); // Score mate navu state
   const [activeModal, setActiveModal] = useState<ModalType>(null); //modal active...
 
@@ -52,6 +76,7 @@ export default function HomeScreen() {
   const [stepData, setStepData] = useState('200');
   const [sleepData, setSleepData] = useState({ hour: '08', minute: '24' });
   const [todoTasks, setTodoTasks] = useState<{ text: string, isDone: boolean }[]>([]);
+  const [workoutData, setWorkoutData] = useState({ hour: '00', minute: '30' });
 
   // States for visibility (Before/After)
   const [isMeditationDone, setIsMeditationDone] = useState(false);
@@ -59,6 +84,7 @@ export default function HomeScreen() {
   const [isTodoDone, setIsTodoDone] = useState(false);
   const [isStepDone, setIsStepDone] = useState(false);
   const [isSleepDone, setIsSleepDone] = useState(false);
+  const [isWorkoutDone, setIsWorkoutDone] = useState(false);
 
   // Updated handleSave to accept value
   // Updated handleSave function
@@ -69,6 +95,7 @@ export default function HomeScreen() {
     if (type === 'todo' && Array.isArray(value)) { setTodoTasks(value); setIsTodoDone(true); }
     if (type === 'step' && typeof value === 'string') { setStepData(value); setIsStepDone(true); }
     if (type === 'sleep' && typeof value === 'object' && 'hour' in value) { setSleepData(value as { hour: string; minute: string }); setIsSleepDone(true); }
+    if (type === 'workout' && typeof value === 'object' && 'hour' in value) { setWorkoutData(value as { hour: string; minute: string }); setIsWorkoutDone(true); }
 
     setActiveModal(null); // Modal close
 
@@ -84,14 +111,7 @@ export default function HomeScreen() {
       }
     }
   };
-  //image of cards background
-  const p1 = require('../../assets/photo/home/p1.png');
-  const p2 = require('../../assets/photo/home/p2.png');
-  const p3 = require('../../assets/photo/home/p3.png');
-  const p4 = require('../../assets/photo/home/p4.png');
-  const p5 = require('../../assets/photo/home/p5.png');
-  const p6 = require('../../assets/photo/home/p6.png');
-  const p7 = require('../../assets/photo/home/p7.png');
+ 
 
   // Aa useEffect -> data load (open app)
   useEffect(() => {
@@ -109,20 +129,10 @@ export default function HomeScreen() {
       if (data.step_count) { setStepData(data.step_count.toString()); setIsStepDone(true); }
       if (data.sleep_data) { setSleepData(data.sleep_data); setIsSleepDone(true); }
       if (data.todo_list) { setTodoTasks(data.todo_list); setIsTodoDone(true); }
+      if (data.workout_time) { setWorkoutData(data.workout_time); setIsWorkoutDone(true);
     }
+  }
   };
-
-  const CardContainer = ({ children, onPress, heightClass = "h-auto", className = "" }: CardProps) => (
-    <TouchableOpacity
-      onPress={onPress}
-      activeOpacity={0.9}
-      // જો onPress ના હોય તો ક્લિક ડિસેબલ થઈ જાય (optional)
-      disabled={!onPress}
-      className={`w-full rounded-3xl overflow-hidden border-4 border-white relative ${heightClass} ${className}`}
-    >
-      {children}
-    </TouchableOpacity>
-  );
 
   return (
     <SafeAreaView className="flex-1 bg-[#F1F1F1]">
@@ -159,10 +169,10 @@ export default function HomeScreen() {
           <View className="flex-1 gap-3">
 
             {/* 1. Good Morning Card */}
-            <CardContainer heightClass="h-20" className="bg-white flex-row items-center p-4 gap-1">
+            {/* <CardContainer heightClass="h-20" className="bg-white flex-row items-center p-4 gap-1"> */}
               {/* Background Image if needed, else plain white */}
               {/* <I12 /> */}
-                      <LottieView
+                      {/* <LottieView
                         // TAMARE AHIYA TAMARI FILE NO PATH AAPVO
                         source={require('../../assets/lottie/moring.json')} 
                         autoPlay
@@ -171,12 +181,12 @@ export default function HomeScreen() {
                         //  renderMode="HARDWARE"
                         style={{ width:30, height:30}}
                         resizeMode="contain" // athva 'cover'
-                      />
+                      /> */}
                     
-              <Text className="text-[#333] text-center font-bold text-lg flex-1">Good Morning</Text>
-            </CardContainer>
+              {/* <Text className="text-[#333] text-center font-bold text-lg flex-1">Good Morning</Text> */}
+            {/* </CardContainer> */}
 
-            {/* 2. Meditation Card */}
+            {/* 1. Meditation Card */}
             <CardContainer onPress={() => setActiveModal('meditation')} heightClass="h-28" className=''>
               <Image source={p1} className="absolute w-full h-full" resizeMode="cover" />
               <View className="p-4 h-full flex-row items-center gap-4">
@@ -200,8 +210,32 @@ export default function HomeScreen() {
               </View>
             </CardContainer>
 
+                        {/* 2. Workout Card */}
+            <CardContainer onPress={() => setActiveModal('workout')} heightClass="h-24">
+              <Image source={p8} className="absolute w-full h-full" resizeMode="cover" />
+              <View className="p-4 h-full flex-row items-center gap-4">
+                {!isWorkoutDone ? (
+                  <>
+                    <I16 height={40} width={40} />
+                    <Text className="text-[#333] font-medium text-sm">Strength built in{'\n'}Stillness.</Text>
+                  </>
+                ) : (
+                  <>
+                    <I16 height={40} width={40} />
+                    <View className="w-[2px] h-10 bg-gray-200" />
+                    <View>
+                      <View className="bg-[#DFE3FF] px-2 py-0.5 rounded-full self-start mb-1">
+                        <Text className="text-[#1E33BD] text-[8px] font-bold">Workout</Text>
+                      </View>
+                      <Text className="text-[#333] text-2xl font-black">{workoutData.hour}:{workoutData.minute}</Text>
+                    </View>
+                  </>
+                )}
+              </View>
+            </CardContainer>
+
             {/* 3. Water Card (Tall Card on Left) */}
-            <CardContainer onPress={() => setActiveModal('water')} heightClass="h-60">
+            <CardContainer onPress={() => setActiveModal('water')} heightClass="h-56">
               {!isWaterDone ? (
                 <>
                   <Image source={p3} className="absolute w-full h-full" resizeMode="cover" />
@@ -316,6 +350,7 @@ export default function HomeScreen() {
       <TaskModal visible={activeModal === 'todo'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('todo', val)} initialTasks={todoTasks} />
       <StepPickerModal isVisible={activeModal === 'step'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('step', val)} initialValue={stepData}/>
       <SleepModal isVisible={activeModal === 'sleep'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('sleep', val)} initialValue={sleepData}/>
+      <WorkoutModal isVisible={activeModal === 'workout'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('workout', val)} initialValue={workoutData}/>
     </SafeAreaView>
   );
-}
+  }

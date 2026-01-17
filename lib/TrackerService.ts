@@ -1,100 +1,80 @@
-import { supabase } from './supabase'; // Tamari supabase config file
-// Jo tamari file 'lib/supabase.ts' ma hoy to barabar che via path check kari lejo.
+import { supabase } from './supabase';
 
-// Types define kariye
+// 1. Types Update: 'workout' add karyu che
 export type DailyData = {
   meditation?: string;
   water?: number;
   steps?: string;
   sleep?: { hour: string; minute: string };
+  workout?: { hour: string; minute: string }; // <--- NEW ADDED
   todos?: { text: string; isDone: boolean }[];
 };
 
-// --- SCORING ALGORITHM (0 - 100) ---
-// const calculateScore = (data: DailyData) => {
-//   let score = 0;
-
-//   // 1. Meditation (Any time added = 20 pts)
-//   if (data.meditation) score += 20;
-
-//   // 2. Water (Goal: 1.5L+)
-//   if (data.water && data.water >= 1.5) score += 20;
-//   else if (data.water && data.water > 0) score += 10;
-
-//   // 3. Steps (Goal: 2000+)
-//   const steps = parseInt(data.steps || '0');
-//   if (steps >= 2000) score += 20;
-//   else if (steps > 0) score += 10;
-
-//   // 4. Sleep (Any entry = 20 pts)
-//   if (data.sleep && data.sleep.hour) score += 20;
-
-//   // 5. Todo (Completion %)
-//   if (data.todos && data.todos.length > 0) {
-//     const total = data.todos.length;
-//     const completed = data.todos.filter(t => t.isDone).length;
-//     const percentage = completed / total;
-//     score += Math.round(percentage * 20);
-//   }
-
-//   return Math.min(score, 100); // Max 100
-// };
-// --- ADVANCED SCORING ALGORITHM (0 - 100) ---
+// --- NEW 6-ELEMENT SCORING ALGORITHM ---
 const calculateScore = (data: DailyData) => {
-  // 1. Define Targets & Weights
+  
+  // 1. Define Targets (Goals)
   const TARGETS = {
-    sleep: 8,       // 8 Hours
-    steps: 10000,   // 10,000 Steps
-    water: 4,       // 4 Liters
-    meditation: 60, // 60 Minutes
+    sleep: 8,          // 8 Hours
+    workout: 45,       // 45 Minutes (NEW)
+    steps: 8000,       // 8,000 Steps (Adjusted slightly)
+    water: 3.5,        // 3.5 Liters
+    meditation: 20,    // 20 Minutes (More realistic daily goal)
   };
 
+  // 2. Define Weights (Max Points) - Total 100
   const WEIGHTS = {
-    sleep: 30,      // Max 30 pts
-    todo: 20,       // Max 20 pts
-    steps: 20,      // Max 20 pts
-    water: 15,      // Max 15 pts
-    meditation: 15, // Max 15 pts
+    sleep: 20,         // Max 20 pts
+    workout: 20,       // Max 20 pts (NEW)
+    todo: 20,          // Max 20 pts
+    water: 15,         // Max 15 pts
+    meditation: 15,    // Max 15 pts
+    steps: 10,         // Max 10 pts
   };
 
-  // --- CALCULATION ---
+  // --- CALCULATION LOGIC ---
 
-  // 1. Sleep Score (30 Pts)
-  // Input format: { hour: "8", minute: "30" } -> Convert to 8.5 hours
+  // A. Sleep Score (20 Pts)
   let sleepScore = 0;
   if (data.sleep && data.sleep.hour) {
     const h = parseInt(data.sleep.hour) || 0;
     const m = parseInt(data.sleep.minute) || 0;
-    const totalHours = h + (m / 60); // Minutes ne hours ma convert karya
-    // Formula: (UserHours / 8) * 30
+    const totalHours = h + (m / 60);
     sleepScore = (Math.min(totalHours, TARGETS.sleep) / TARGETS.sleep) * WEIGHTS.sleep;
   }
 
-  // 2. Meditation Score (15 Pts)
-  // Input format: string like "10" or "10m"
+  // B. Workout Score (20 Pts) - NEW
+  let workoutScore = 0;
+  if (data.workout && data.workout.hour) {
+    const h = parseInt(data.workout.hour) || 0;
+    const m = parseInt(data.workout.minute) || 0;
+    const totalMins = (h * 60) + m; // Total minutes count karya
+    // Formula: (UserMins / 45) * 20
+    workoutScore = (Math.min(totalMins, TARGETS.workout) / TARGETS.workout) * WEIGHTS.workout;
+  }
+
+  // C. Meditation Score (15 Pts)
   let meditationScore = 0;
   if (data.meditation) {
-    const mins = parseInt(data.meditation) || 0; // String mathi number banavyo
+    // String mathi number (e.g., "10m" -> 10)
+    const mins = parseInt(data.meditation) || 0; 
     meditationScore = (Math.min(mins, TARGETS.meditation) / TARGETS.meditation) * WEIGHTS.meditation;
   }
 
-  // 3. Water Score (15 Pts)
-  // Input format: number (e.g., 1.5)
+  // D. Water Score (15 Pts)
   let waterScore = 0;
   if (data.water) {
     waterScore = (Math.min(data.water, TARGETS.water) / TARGETS.water) * WEIGHTS.water;
   }
 
-  // 4. Steps Score (20 Pts)
-  // Input format: string (e.g., "2500")
+  // E. Steps Score (10 Pts)
   let stepsScore = 0;
   if (data.steps) {
     const stepCount = parseInt(data.steps) || 0;
     stepsScore = (Math.min(stepCount, TARGETS.steps) / TARGETS.steps) * WEIGHTS.steps;
   }
 
-  // 5. To-Do Score (20 Pts)
-  // Logic: Completion Percentage based on total tasks
+  // F. To-Do Score (20 Pts)
   let todoScore = 0;
   if (data.todos && data.todos.length > 0) {
     const total = data.todos.length;
@@ -104,9 +84,9 @@ const calculateScore = (data: DailyData) => {
   }
 
   // Final Sum
-  const totalScore = sleepScore + meditationScore + waterScore + stepsScore + todoScore;
+  const totalScore = sleepScore + workoutScore + meditationScore + waterScore + stepsScore + todoScore;
 
-  // Round off to nearest integer (e.g., 67.8 -> 68)
+  // Round off (e.g., 67.8 -> 68)
   return Math.round(totalScore);
 };
 
@@ -118,7 +98,7 @@ export const updateDailyLog = async (type: string, value: any) => {
 
     const today = new Date().toISOString().split('T')[0];
 
-    // 1. Check karo ke aaj no data already che ke nai
+    // 1. Fetch existing data
     const { data: currentData } = await supabase
       .from('daily_logs')
       .select('*')
@@ -126,7 +106,7 @@ export const updateDailyLog = async (type: string, value: any) => {
       .eq('date', today)
       .single();
 
-    // 2. Data Prepare Karo
+    // 2. Prepare Updates
     let updates: any = { 
       user_id: user.id, 
       date: today,
@@ -134,7 +114,7 @@ export const updateDailyLog = async (type: string, value: any) => {
     };
 
     if (currentData) {
-        updates = { ...currentData }; // Juna data ne base tarike use karo
+        updates = { ...currentData };
     }
 
     // 3. Navi value update karo
@@ -143,15 +123,20 @@ export const updateDailyLog = async (type: string, value: any) => {
     if (type === 'step') updates.step_count = parseInt(value);
     if (type === 'sleep') updates.sleep_data = value;
     if (type === 'todo') updates.todo_list = value;
+    
+    // --- WORKOUT UPDATE ADDED ---
+    if (type === 'workout') updates.workout_time = value; 
 
-    // 4. Score farithi calculate karo
+    // 4. Score farithi calculate karo (NEW DATA PASSED HERE)
     const scoreData: DailyData = {
         meditation: updates.meditation_time,
         water: updates.water_intake,
         steps: updates.step_count ? updates.step_count.toString() : '0',
         sleep: updates.sleep_data,
-        todos: updates.todo_list
+        todos: updates.todo_list,
+        workout: updates.workout_time // <--- AA KHUBAJ JARURI CHE
     };
+    
     updates.score = calculateScore(scoreData);
 
     // 5. Database ma Save karo
@@ -169,7 +154,7 @@ export const updateDailyLog = async (type: string, value: any) => {
   }
 };
 
-// --- FETCH DATA (JYARE APP OPEN THAY) ---
+// --- FETCH DATA ---
 export const getTodayLog = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return null;
@@ -183,21 +168,8 @@ export const getTodayLog = async () => {
       .eq('date', today)
       .single();
       
-    if (error && error.code !== 'PGRST116') { // PGRST116 no matlab 'No data found' - e error nathi
+    if (error && error.code !== 'PGRST116') {
         console.log("Error fetching:", error);
     }
     return data;
-}
-
-// TrackerService.ts ની અંદર છેલ્લે આ કોડ ઉમેરો
-
-// --- USER PROFILE PHOTO ---
-export const getUserProfile = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    // Google login માં ફોટો 'avatar_url' માં હોય છે
-    if (user && user.user_metadata && user.user_metadata.avatar_url) {
-        return user.user_metadata.avatar_url;
-    }
-    return null; // જો ફોટો ના હોય તો null
 }

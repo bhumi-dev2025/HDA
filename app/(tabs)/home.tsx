@@ -322,7 +322,7 @@ export default function HomeScreen() {
                 {!isSleepDone ? (
                   <>
                     <I13 height={40} width={40} />
-                    <Text className="text-[#333] font-medium text-sm">Quiet mind. Deep{'\n'}Sleep.</Text>
+                    <Text className="text-[#333] font-medium text-sm">Quiet mind.{'\n'}Deep Sleep.</Text>
                   </>
                 ) : (
                   <>

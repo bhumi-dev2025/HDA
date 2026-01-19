@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
-import { Plus, Heart, Trash2 } from 'lucide-react-native';
+import { Plus, Heart, Trash2,User } from 'lucide-react-native';
 import { StatusBar } from 'expo-status-bar';
 import { supabase } from '../../lib/supabase';
 import * as Clipboard from 'expo-clipboard'; // Clipboard import
@@ -38,8 +38,8 @@ const ProfileScreen = () => {
     const loadData = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        setUsername(user.user_metadata?.full_name || 'User');
-        setAvatarUrl(user.user_metadata?.avatar_url);
+        setUsername(user.user_metadata?.full_name || user.email?.split('@')[0] || 'Academy User');
+        setAvatarUrl(user.user_metadata?.avatar_url || null);
 
         const savedIds = await getUserSkills();
         setSelectedSkillIds(savedIds);
@@ -116,10 +116,18 @@ const ProfileScreen = () => {
         <View className="absolute -top-16 left-0 right-0 items-center z-10">
           <View className="p-1 rounded-full border-2 border-dashed border-red-300">
             <View className="p-1 bg-white rounded-full">
-              <Image
-                source={{ uri: avatarUrl || defaultImage }}
+              {avatarUrl?(
+                <Image
+                source={{ uri: avatarUrl }}
                 className="w-24 h-24 rounded-full"
               />
+              ):(
+                <Image
+                source={{ uri: defaultImage }}
+                className="w-24 h-24 rounded-full"
+              />
+              )}
+              
             </View>
           </View>
           <TouchableOpacity className="absolute bottom-[-10px] bg-red-400 p-1 rounded-full border-4 border-white">

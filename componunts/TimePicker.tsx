@@ -60,10 +60,10 @@ const CustomTimePicker = ({ onTimeChange,initialHour = '08',initialMinute = '24'
                         windowSize: 3,         
                     }}
                 />
-                <Text className="text-2xl font-bold ml-2 pt-2">h</Text>
+                <Text className="text-3xl font-bold ml-2">h</Text>
             </View>
 
-            <Text className="text-2xl font-bold mx-4 pt-2">:</Text>
+            <Text className="text-3xl font-bold mx-4">:</Text>
 
             {/* Minutes Wheel */}
             <View className="flex-row items-center">
@@ -78,7 +78,7 @@ const CustomTimePicker = ({ onTimeChange,initialHour = '08',initialMinute = '24'
                         windowSize: 3,     
                     }}
                 />
-                <Text className="text-2xl font-bold ml-2 pt-2">m</Text>
+                <Text className="text-3xl font-bold ml-2">m</Text>
             </View>
             <View className="absolute right-0 h-full justify-around items-end">
                 {[...Array(11)].map((_, index) => {

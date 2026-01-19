@@ -1,11 +1,13 @@
-import { View, Text, Image, TouchableOpacity, Alert, StatusBar } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Alert, StatusBar, Platform } from 'react-native'
 import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import B1 from '../assets/photo/login/B1.svg'
+import B2 from '../assets/photo/login/B2.svg'
 //google login libary...
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { supabase } from '../lib/supabase';
 import { useRouter } from 'expo-router';
+import * as AppleAuthentication from 'expo-apple-authentication';
 
 //login code...
 const Login = () => { // Component name Capital રાખવું સારું (login -> Login)
@@ -57,6 +59,37 @@ const Login = () => { // Component name Capital રાખવું સારુ�
       }
     }
   };
+
+  const onAppleButtonPress = async () => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+
+      if (credential.identityToken) {
+        const { error, data } = await supabase.auth.signInWithIdToken({
+          provider: 'apple',
+          token: credential.identityToken,
+        });
+
+        if (error) {
+          Alert.alert("Supabase Error", error.message);
+        } else {
+          console.log("Apple Login Success");
+          router.replace("/(tabs)/home");
+        }
+      }
+    } catch (e: any) {
+      if (e.code === 'ERR_REQUEST_CANCELED') {
+        // User cancelled flow
+      } else {
+        Alert.alert("Error", e.message);
+      }
+    }
+  }
 //login view....
   return (
     <View className="flex-1 bg-white">
@@ -80,13 +113,26 @@ const Login = () => { // Component name Capital રાખવું સારુ�
           <TouchableOpacity 
             onPress={onGoogleButtonPress} 
             activeOpacity={0.9} 
-            className="bg-black flex-row items-center justify-center py-4 rounded-2xl shadow-lg gap-3"
+            className="bg-black flex-row items-center justify-center py-4 rounded-2xl shadow-lg gap-3 mb-4"
           >
             <B1 />
             <Text className="text-white font-bold text-lg">
               Sign in with Google
             </Text>
           </TouchableOpacity>
+          {Platform.OS === 'ios' && (
+            <TouchableOpacity 
+            onPress={onAppleButtonPress} 
+            activeOpacity={0.9} 
+            className="bg-white flex-row items-center justify-center py-4 rounded-2xl border shadow-lg gap-3"
+          >
+            <B2 />
+            <Text className="text-black font-bold text-lg">
+              Sign in with Apple
+            </Text>
+          </TouchableOpacity>
+          )}
+          
         </View>
 
       </SafeAreaView>

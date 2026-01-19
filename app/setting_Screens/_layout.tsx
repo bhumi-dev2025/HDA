@@ -20,13 +20,16 @@ export default function ProfileLayout() {
           fontSize: 18,
         },
         headerBackVisible: false,
+        headerBackTitle: '',
         // કસ્ટમ બેક બટન (ગોળ ગ્રે સર્કલ)
         headerLeft: () => (
           <TouchableOpacity 
             onPress={() => router.back()} 
             style={{
-              backgroundColor: '#F1F1F1', // આછો ગ્રે કલર
-              padding: 8,
+              backgroundColor:Platform.OS === 'android'? '#F1F1F1':'', // આછો ગ્રે કલર
+              // padding: 8,
+              height:40,
+              width:40,
               borderRadius: 50, // ગોળ કરવા માટે
               marginLeft: 0, // ડાબી બાજુથી જગ્યા (જરૂર હોય તો વધારી શકાય)
               alignItems: 'center',

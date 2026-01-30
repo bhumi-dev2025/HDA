@@ -3,15 +3,9 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { UniversalModal } from '../Modals/UniversalModal';
 import CustomTimePicker from '../TimePicker';
 import M4 from '../../assets/photo/modal/M4.svg';
+import {SleepModalProps} from '../../types'
 
-interface SleepModalProps {
-  isVisible: boolean;
-  onClose: () => void;
-  onSave: (time: { hour: string; minute: string }) => void;
-  initialValue?: { hour: string; minute: string };
-}
-
-const SleepModal: React.FC<SleepModalProps> = ({ isVisible, onClose, onSave, initialValue }) => {
+const SleepModal: React.FC<SleepModalProps> = ({ isVisible, onClose, onSave, initialValue }:SleepModalProps) => {
   const [selectedTime, setSelectedTime] = useState({ hour: '08', minute: '24' });
 
   useEffect(() => {

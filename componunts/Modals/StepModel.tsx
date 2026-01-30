@@ -11,6 +11,7 @@ import {
 import * as Haptics from 'expo-haptics';
 import { UniversalModal } from '../../componunts/Modals/UniversalModal';
 import M2 from '../../assets/photo/modal/M2.svg';
+import {StepPickerModalProps} from '../../types'
 
 const { width } = Dimensions.get('window');
 
@@ -24,19 +25,13 @@ const STEP_VALUE = 10;
 const MIN = 100;
 const MAX = 10000;
 
-interface StepPickerModalProps {
-  isVisible: boolean;
-  onClose: () => void;
-  onSave: (value: string) => void;
-  initialValue?: string;
-}
 
 const StepPickerModal: React.FC<StepPickerModalProps> = ({
   isVisible,
   onClose,
   onSave,
   initialValue = "200",
-}) => {
+}:StepPickerModalProps) => {
   const [currentValue, setCurrentValue] = useState(200);
   const flatListRef = useRef<FlatList>(null);
 

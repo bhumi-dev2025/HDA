@@ -9,8 +9,9 @@ import { Sparkles, GitGraph, Bot, Heart, Lightbulb, Code, Package, Link, SquareT
 import { useRouter } from "expo-router";
 
 // તમારી Constants ફાઈલ માંથી આ ડેટા આવે છે એમ માની લઉં છું
-import { ROADMAP_PATH_STRING, ROADMAP_ITEMS, ModalDataType } from "../../constants/roadmapData";
+import { ROADMAP_PATH_STRING, ROADMAP_ITEMS} from "../../constants/roadmapData";
 import { getIconComponent } from "../../componunts/RoadmapIcons";
+import { ModalDataType,RoadmapItemType } from "../../types";
 
 const { width: screenWidth } = Dimensions.get("window");
 const SVG_HEIGHT = 5509;
@@ -95,7 +96,7 @@ export default function RoadmapScreen() {
     }
   };
 
-  const renderItem = (item: any) => {
+  const renderItem = (item: RoadmapItemType) => {
     const rotationDegree = item.rotation || 0;
     const itemScale = item.scale || 1;
 

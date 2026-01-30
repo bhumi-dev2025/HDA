@@ -11,20 +11,9 @@ import {
 import { UniversalModal } from '../../componunts/Modals/UniversalModal';
 import C2 from '../../assets/photo/home/C2.svg';
 import C1 from '../../assets/photo/home/C1.svg';
+import {TaskModalProps} from '../../types'
 
-interface TaskItem {
-  text: string;
-  isDone: boolean;
-}
-
-interface TaskModalProps {
-  visible: boolean;
-  onClose: () => void;
-  onSave: (tasks: TaskItem[]) => void;
-  initialTasks?: any[];
-}
-
-const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave, initialTasks }) => {
+const TaskModal: React.FC<TaskModalProps> = ({isVisible, onClose, onSave, initialTasks }:TaskModalProps) => {
   const defaultTasks = [
     { text: '', isDone: false },
     { text: '', isDone: false },
@@ -34,14 +23,14 @@ const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave, initial
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
-    if (visible) {
+    if (isVisible) {
         if (initialTasks && initialTasks.length > 0) {
             setTasks(initialTasks);
         } else {
             setTasks(defaultTasks);
         }
     }
-  }, [visible, initialTasks]);
+  }, [isVisible, initialTasks]);
 
   useEffect(() => {
     const show = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow', (e) => setKeyboardHeight(e.endCoordinates.height));
@@ -63,7 +52,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ visible, onClose, onSave, initial
 
   return (
     <UniversalModal 
-      isVisible={visible} 
+      isVisible={isVisible} 
       onClose={onClose}
       customStyle={{ paddingBottom: keyboardHeight > 0 ? keyboardHeight + 20 : 40 }}
     >

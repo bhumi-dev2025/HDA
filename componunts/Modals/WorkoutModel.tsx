@@ -3,15 +3,9 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { UniversalModal } from './UniversalModal';
 import CustomTimePicker from '../TimePicker';
 import M4 from '../../assets/photo/modal/M5.svg';
+import {WorkoutModalProps} from '../../types'
 
-interface WorkoutModalProps {
-  isVisible: boolean;
-  onClose: () => void;
-  onSave: (time: { hour: string; minute: string }) => void;
-  initialValue?: { hour: string; minute: string };
-}
-
-const WorkoutModal: React.FC<WorkoutModalProps> = ({ isVisible, onClose, onSave, initialValue }) => {
+const WorkoutModal: React.FC<WorkoutModalProps> = ({ isVisible, onClose, onSave, initialValue }:WorkoutModalProps) => {
   const [selectedTime, setSelectedTime] = useState({ hour: '08', minute: '24' });
 
   useEffect(() => {

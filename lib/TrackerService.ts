@@ -1,14 +1,5 @@
 import { supabase } from './supabase';
-
-// 1. Types Update: 'workout' add karyu che
-export type DailyData = {
-  meditation?: string;
-  water?: number;
-  steps?: string;
-  sleep?: { hour: string; minute: string };
-  workout?: { hour: string; minute: string }; // <--- NEW ADDED
-  todos?: { text: string; isDone: boolean }[];
-};
+import { DailyData }  from '../types';
 
 // --- NEW 6-ELEMENT SCORING ALGORITHM ---
 const calculateScore = (data: DailyData) => {

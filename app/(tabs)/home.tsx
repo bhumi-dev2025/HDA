@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { updateDailyLog, getTodayLog} from '../../lib/TrackerService';
 import { useRouter } from 'expo-router';
 // import LottieView from 'lottie-react-native'; 
+import { HomeModalData,HomeModalType,CardProps,TimeData,TaskItem} from '../../types';
 
 
 // model import
@@ -31,16 +32,7 @@ import C2 from '../../assets/photo/home/C2.svg'
 import C1 from '../../assets/photo/home/C1.svg'
 import L1 from '../../assets/photo/home/L1.svg'
 import A1 from '../../assets/photo/home/A1.svg'
-
-//interface ..
-type ModalType = 'meditation' | 'water' | 'todo' | 'step' | 'sleep' | 'workout'| null;
-type ModalData = string | number | { hour: string; minute: string } | { text: string; isDone: boolean }[];
-interface CardProps {
-  children: React.ReactNode;      // બાળકો (ટેક્સ્ટ, ઈમેજ વગેરે)
-  onPress?: () => void;           // ક્લિક ફંક્શન (Optional - ? મુક્યું છે)
-  heightClass?: string;           // હાઈટ ક્લાસ (Optional)
-  className?: string;             // એક્સ્ટ્રા સ્ટાઈલ (Optional)
-}
+import A2 from '../../assets/photo/home/A2.svg'
 
  //image of cards background
   const p1 = require('../../assets/photo/home/p1.png');
@@ -68,15 +60,15 @@ export default function HomeScreen() {
   const router = useRouter();
   // const [userPhoto, setUserPhoto] = useState<string | null>(null); //photo
   const [currentScore, setCurrentScore] = useState(0); // Score mate navu state
-  const [activeModal, setActiveModal] = useState<ModalType>(null); //modal active...
+  const [activeModal, setActiveModal] = useState<HomeModalType>(null); //modal active...
 
   // States to store actual values from modals
   const [meditationData, setMeditationData] = useState('10m');
   const [waterData, setWaterData] = useState(1.5);
   const [stepData, setStepData] = useState('200');
-  const [sleepData, setSleepData] = useState({ hour: '08', minute: '24' });
-  const [todoTasks, setTodoTasks] = useState<{ text: string, isDone: boolean }[]>([]);
-  const [workoutData, setWorkoutData] = useState({ hour: '00', minute: '30' });
+  const [sleepData, setSleepData] = useState<TimeData>({ hour: '08', minute: '24' });
+  const [todoTasks, setTodoTasks] = useState<TaskItem[]>([]);
+  const [workoutData, setWorkoutData] = useState<TimeData>({ hour: '00', minute: '30' });
 
   // States for visibility (Before/After)
   const [isMeditationDone, setIsMeditationDone] = useState(false);
@@ -88,7 +80,7 @@ export default function HomeScreen() {
 
   // Updated handleSave to accept value
   // Updated handleSave function
-  const handleSave = async (type: ModalType, value: ModalData) => {
+  const handleSave = async (type: HomeModalType, value: HomeModalData) => {
     // A. Local UI update
     if (type === 'meditation' && typeof value === 'string') { setMeditationData(value); setIsMeditationDone(true); }
     if (type === 'water' && typeof value === 'number') { setWaterData(value); setIsWaterDone(true); }
@@ -142,10 +134,15 @@ export default function HomeScreen() {
         {/* Header Section */}
         <View className="flex-row justify-between items-center px-5 py-4">
           <L1 width={30} height={30} />
+            <View className="flex-row items-center gap-3">
+            <TouchableOpacity className="w-12 h-12 items-center justify-center rounded-full" onPress={()=>router.push('/wallet')}>
+              <A2 height={30} width={30} />
+            </TouchableOpacity>
          
             <TouchableOpacity className="w-12 h-12 items-center justify-center rounded-full" onPress={()=>router.push('/settings')}>
               <A1 height={30} width={30} />
             </TouchableOpacity>
+            </View>
         </View>
         <ScrollView className="flex-1" contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 110 }} showsVerticalScrollIndicator={false}>
 
@@ -346,8 +343,8 @@ export default function HomeScreen() {
 
       {/* Modals code same as before... */}
       <MeditationModal isVisible={activeModal === 'meditation'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('meditation', val)} initialValue={meditationData}/>
-      <WaterTrackerModal visible={activeModal === 'water'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('water', val)} initialValue={waterData}/>
-      <TaskModal visible={activeModal === 'todo'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('todo', val)} initialTasks={todoTasks} />
+      <WaterTrackerModal isVisible={activeModal === 'water'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('water', val)} initialValue={waterData}/>
+      <TaskModal isVisible={activeModal === 'todo'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('todo', val)} initialTasks={todoTasks} />
       <StepPickerModal isVisible={activeModal === 'step'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('step', val)} initialValue={stepData}/>
       <SleepModal isVisible={activeModal === 'sleep'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('sleep', val)} initialValue={sleepData}/>
       <WorkoutModal isVisible={activeModal === 'workout'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('workout', val)} initialValue={workoutData}/>

@@ -17,16 +17,11 @@ import {
 } from 'react-native';
 import { getLinkPreview } from 'link-preview-js';
 import * as Clipboard from 'expo-clipboard';
+import {PortfolioModalProps} from '../../types'
 
 const { height } = Dimensions.get('window');
 
-interface PortfolioModalProps {
-  isVisible: boolean;
-  onClose: () => void;
-  onSave: (link: string, title: string, image: string) => void; 
-}
-
-export const AddPortfolioModal = ({ isVisible, onClose, onSave }: PortfolioModalProps) => {
+export const AddPortfolioModal:React.FC<PortfolioModalProps> = ({ isVisible, onClose, onSave }: PortfolioModalProps) => {
   const [link, setLink] = useState('');
   const [previewData, setPreviewData] = useState<any>(null);
   const [loading, setLoading] = useState(false);

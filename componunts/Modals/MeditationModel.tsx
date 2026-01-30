@@ -2,15 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { UniversalModal } from '../../componunts/Modals/UniversalModal';
 import M1 from '../../assets/photo/modal/M1.svg';
+import {MeditationModalProps} from '../../types'
 
-interface MeditationModalProps {
-  isVisible: boolean;
-  onClose: () => void;
-  onSave: (time: string) => void;
-  initialValue?: string;
-}
-
-const MeditationModal: React.FC<MeditationModalProps> = ({ isVisible, onClose, onSave, initialValue }) => {
+const MeditationModal: React.FC<MeditationModalProps> = ({ isVisible, onClose, onSave, initialValue }:MeditationModalProps) => {
   const [selectedTime, setSelectedTime] = useState<string>('10m');
   const timeSlots = ['10m', '20m', '30m', '40m', '50m', '60m'];
 

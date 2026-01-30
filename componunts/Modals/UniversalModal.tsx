@@ -8,18 +8,12 @@ import {
   Dimensions ,
   ViewStyle
 } from 'react-native';
+import {UniversalModalProps} from '../../types';
 
 const { height } = Dimensions.get('window');
 
-interface UniversalModalProps {
-  isVisible: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
-  modalClassName?: string;
-  customStyle?: ViewStyle;
-}
 
-export const UniversalModal = ({ isVisible, onClose, children,modalClassName,customStyle }: UniversalModalProps) => {
+export const UniversalModal:React.FC<UniversalModalProps> = ({ isVisible, onClose, children,modalClassName,customStyle }: UniversalModalProps) => {
   // મોડલની પોઝિશન માટેનું એનિમેશન
   const panY = useRef(new Animated.Value(0)).current;
 

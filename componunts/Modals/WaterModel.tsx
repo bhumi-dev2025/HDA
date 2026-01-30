@@ -3,30 +3,24 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { Plus, Minus } from 'lucide-react-native';
 import { UniversalModal } from '../Modals/UniversalModal';
 import M3 from '../../assets/photo/modal/M3.svg';
+import {WaterTrackerModalProps} from '../../types';
 
-interface WaterTrackerModalProps {
-  visible: boolean;
-  onClose: () => void;
-  onSave: (liters: number) => void;
-  initialValue?: number;
-}
-
-const WaterTrackerModal: React.FC<WaterTrackerModalProps> = ({ visible, onClose, onSave, initialValue }) => {
+const WaterTrackerModal: React.FC<WaterTrackerModalProps> = ({ isVisible, onClose, onSave, initialValue }:WaterTrackerModalProps) => {
   const [liters, setLiters] = useState(1.5);
   const [isPlusPressed, setIsPlusPressed] = useState(false);
   const [isMinusPressed, setIsMinusPressed] = useState(false);
 
   useEffect(() => {
-    if (visible && initialValue !== undefined) {
+    if (isVisible && initialValue !== undefined) {
       setLiters(initialValue);
     }
-  }, [visible, initialValue]);
+  }, [isVisible, initialValue]);
 
   const increment = () => setLiters((prev) => parseFloat((prev + 0.1).toFixed(1)));
   const decrement = () => { if (liters > 0) setLiters((prev) => parseFloat((prev - 0.1).toFixed(1))); };
 
   return (
-    <UniversalModal isVisible={visible} onClose={onClose}>
+    <UniversalModal isVisible={isVisible} onClose={onClose}>
       <Text className="font-bold mb-1">Insights</Text>
       <Text className="text-6xl font-extrabold text-[#F2F2F7] mb-20">Water</Text>
 

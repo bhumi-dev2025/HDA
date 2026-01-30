@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import WheelPicker from 'react-native-wheel-picker-expo';
 // import * as Haptics from 'expo-haptics';
@@ -15,6 +15,11 @@ interface CustomTimePickerProps {
 const CustomTimePicker = ({ onTimeChange,initialHour = '08',initialMinute = '24' }: CustomTimePickerProps) => {
     const [hour, setHour] = useState(initialHour);
     const [minute, setMinute] = useState(initialMinute);
+
+    useEffect(() => {
+        setHour(initialHour);
+        setMinute(initialMinute);
+    }, [initialHour, initialMinute]);
 
     const startHourIndex = HOURS.indexOf(initialHour);
     const startMinuteIndex = MINUTES.indexOf(initialMinute);
@@ -50,6 +55,7 @@ const CustomTimePicker = ({ onTimeChange,initialHour = '08',initialMinute = '24'
             {/* Hours Wheel */}
             <View className="flex-row items-center">
                 <WheelPicker
+                    key={`hour-${initialHour}`}
                     initialSelectedIndex={startHourIndex !== -1 ? startHourIndex : 0}
                     items={HOURS.map(h => ({ label: h, value: h }))}
                     onChange={({ item }) => handleHourChange(item.value)}
@@ -68,6 +74,7 @@ const CustomTimePicker = ({ onTimeChange,initialHour = '08',initialMinute = '24'
             {/* Minutes Wheel */}
             <View className="flex-row items-center">
                 <WheelPicker
+                    key={`minute-${initialMinute}`}
                     initialSelectedIndex={startMinuteIndex !== -1 ? startMinuteIndex : 0}
                     items={MINUTES.map(m => ({ label: m, value: m }))}
                     onChange={({ item }) => handleMinuteChange(item.value)}

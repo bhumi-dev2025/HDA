@@ -15,17 +15,10 @@ import {
 } from 'react-native';
 import { Search } from 'lucide-react-native';
 import { MASTER_SKILLS } from '../../constants/skillData'; 
+import {ExpertiseModalProps} from '../../types'
 
 const { height } = Dimensions.get('window');
-
-interface ExpertiseModalProps {
-  isVisible: boolean;
-  onClose: () => void;
-  onSave: (selectedIds: string[]) => void;
-  initialSelectedSkills: string[];
-}
-
-export const AddExpertiseModal = ({ isVisible, onClose, onSave, initialSelectedSkills }: ExpertiseModalProps) => {
+export const AddExpertiseModal:React.FC<ExpertiseModalProps> = ({ isVisible, onClose, onSave, initialSelectedSkills }: ExpertiseModalProps) => {
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [search, setSearch] = useState('');
   const [keyboardHeight, setKeyboardHeight] = useState(0);

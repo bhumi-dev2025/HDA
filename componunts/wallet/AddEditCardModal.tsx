@@ -1,16 +1,24 @@
-// components/AddEditCardModal.tsx
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Image,
-  KeyboardAvoidingView, Modal, Platform, Pressable, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView, // અહી ScrollView ઉમેર્યું છે
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View
 } from 'react-native';
 import { CARD_THEMES } from '../../constants/constant';
 import type { ModalProps } from '../../types';
 
-export const AddEditCardModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave, initialData }:ModalProps) => {
+export const AddEditCardModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave, initialData }: ModalProps) => {
   const [formData, setFormData] = useState({
     type: '',
     issuer: '',
@@ -25,10 +33,10 @@ export const AddEditCardModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave
 
   useEffect(() => {
     if (initialData) {
-      const theme = CARD_THEMES.find(t => 
+      const theme = CARD_THEMES.find(t =>
         JSON.stringify(t.gradientColors) === JSON.stringify(initialData.gradientColors)
       ) || CARD_THEMES[0];
-      //data hoy to bhro
+      
       setFormData({
         type: initialData.type,
         issuer: initialData.issuer,
@@ -41,7 +49,6 @@ export const AddEditCardModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave
         imageUri: initialData.imageUri || '',
       });
     } else {
-      //edit hoy to khaali karo
       setFormData({
         type: '', issuer: '', number: '', name: '', emoji: '',
         gradientColors: CARD_THEMES[0].gradientColors,
@@ -60,10 +67,10 @@ export const AddEditCardModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave
     }
 
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes:['images'], // images, videos, all
-      allowsEditing: true, // true , false crop na option mate 
-      aspect: [16, 10], //[1,1] [4,3] [16,9]
-      quality: 1, // o to 1 best quality
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [16, 10],
+      quality: 1,
     });
 
     if (!result.canceled) {
@@ -81,7 +88,6 @@ export const AddEditCardModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave
   };
 
   const handleSubmit = () => {
-    // જો ફોટો અપલોડ કર્યો હોય તો બાકીની વિગત ઓપ્શનલ રાખી શકાય, પણ અત્યારે આપણે રિક્વાયર્ડ રાખીએ
     if (!formData.type) {
       Alert.alert("Missing Information", "Please enter at least the Card Type.");
       return;
@@ -97,17 +103,26 @@ export const AddEditCardModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave
 
   return (
     <Modal visible={isOpen} transparent={true} animationType="fade" onRequestClose={onClose}>
-      <Pressable className="flex-1 bg-black/50 justify-center items-center p-4" onPress={onClose}>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="w-full max-w-sm">
+      {/* 1. KeyboardAvoidingView ને Main Container બનાવ્યું */}
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+        className="flex-1"
+      >
+        <Pressable className="flex-1 bg-black/50 justify-center items-center p-4" onPress={onClose}>
           <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
-            <View className="bg-white rounded-2xl shadow-xl w-full max-h-[90%]">
-              <View className="p-6 border-b border-gray-200">
+            
+            {/* 2. અહી મહત્તમ ઊંચાઈ આપી દીધી */}
+            <View className="bg-white rounded-2xl shadow-xl w-full max-h-[85%] flex overflow-hidden">
+              
+              <View className="p-5 border-b border-gray-200 bg-gray-50">
                 <Text className="text-xl font-bold text-gray-900">{initialData ? 'Edit Card' : 'Add New Card'}</Text>
               </View>
 
-              <View className="p-6">
-                {/* 3. ઈમેજ પિકર બટન અને પ્રિવ્યુ */}
-                <TouchableOpacity onPress={pickImage} className="w-full h-40 bg-gray-100 rounded-xl mb-4 justify-center items-center overflow-hidden border border-gray-300 border-dashed">
+              {/* 3. ScrollView ઉમેર્યું જેથી કીબોર્ડ આવે તો સ્ક્રોલ થાય */}
+              <ScrollView className="p-5" showsVerticalScrollIndicator={false}>
+                
+                {/* Image Picker */}
+                <TouchableOpacity onPress={pickImage} className="w-full h-40 bg-gray-100 rounded-xl mb-6 justify-center items-center overflow-hidden border border-gray-300 border-dashed">
                   {formData.imageUri ? (
                     <Image source={{ uri: formData.imageUri }} className="w-full h-full" resizeMode="cover" />
                   ) : (
@@ -118,35 +133,86 @@ export const AddEditCardModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave
                   )}
                 </TouchableOpacity>
 
-                <TextInput className="w-full p-3 border border-gray-300 rounded-lg text-gray-800 mb-2" placeholder="Card Type (e.g. Aadhar)" value={formData.type} onChangeText={(text) => updateField('type', text)} />
-                <TextInput className="w-full p-3 border border-gray-300 rounded-lg text-gray-800 mb-2" placeholder="Issuer" value={formData.issuer} onChangeText={(text) => updateField('issuer', text)} />
-                <TextInput className="w-full p-3 border border-gray-300 rounded-lg text-gray-800 mb-2" placeholder="Card Number" value={formData.number} onChangeText={(text) => updateField('number', text)} />
-                <TextInput className="w-full p-3 border border-gray-300 rounded-lg text-gray-800 mb-2" placeholder="Name" value={formData.name} onChangeText={(text) => updateField('name', text)} />
+                {/* 4. Inputs માં Placeholder અને PlaceholderTextColor ઉમેર્યા */}
+                <View className="space-y-4">
+                    <View>
+                        <Text className="text-gray-500 text-xs font-semibold ml-1 mb-1">CARD TYPE</Text>
+                        <TextInput 
+                            className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 text-base" 
+                            placeholder="e.g. Aadhar Card, Visa, RC Book" 
+                            placeholderTextColor="#9CA3AF"
+                            value={formData.type} 
+                            onChangeText={(text) => updateField('type', text)} 
+                        />
+                    </View>
+
+                    <View>
+                        <Text className="text-gray-500 text-xs font-semibold ml-1 mb-1">ISSUER (Optional)</Text>
+                        <TextInput 
+                            className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 text-base" 
+                            placeholder="e.g. Govt of India, HDFC" 
+                            placeholderTextColor="#9CA3AF"
+                            value={formData.issuer} 
+                            onChangeText={(text) => updateField('issuer', text)} 
+                        />
+                    </View>
+
+                    <View>
+                        <Text className="text-gray-500 text-xs font-semibold ml-1 mb-1">CARD NUMBER</Text>
+                        <TextInput 
+                            className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 text-base" 
+                            placeholder="XXXX XXXX XXXX" 
+                            placeholderTextColor="#9CA3AF"
+                            value={formData.number} 
+                            onChangeText={(text) => updateField('number', text)} 
+                        />
+                    </View>
+
+                    <View>
+                        <Text className="text-gray-500 text-xs font-semibold ml-1 mb-1">NAME ON CARD</Text>
+                        <TextInput 
+                            className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 text-base" 
+                            placeholder="Your Name" 
+                            placeholderTextColor="#9CA3AF"
+                            value={formData.name} 
+                            onChangeText={(text) => updateField('name', text)} 
+                        />
+                    </View>
+                </View>
                 
-                <View className="mt-2">
-                  <Text className="text-sm font-medium text-gray-700 mb-2">Card Color (Behind Photo)</Text>
+                {/* <View className="mt-6 mb-4">
+                  <Text className="text-sm font-medium text-gray-700 mb-3">Card Color (Behind Photo)</Text>
                   <View className="flex-row flex-wrap gap-3">
                     {CARD_THEMES.map(theme => (
                       <TouchableOpacity 
                         key={theme.name} 
                         onPress={() => handleThemeChange(theme)}
-                        className={`w-8 h-8 rounded-full overflow-hidden border-2 ${formData.themeName === theme.name ? 'border-blue-500' : 'border-transparent'}`}
+                        className={`w-10 h-10 rounded-full overflow-hidden border-2 ${formData.themeName === theme.name ? 'border-blue-500 scale-110' : 'border-transparent'}`}
                       >
-                         <LinearGradient colors={theme.gradientColors as [string, string]} className="w-full h-full" />
+                          <LinearGradient colors={theme.gradientColors as [string, string]} className="w-full h-full" />
                       </TouchableOpacity>
                     ))}
                   </View>
-                </View>
+                </View> */}
 
-                <View className="flex-row justify-end gap-3 pt-6">
-                  <TouchableOpacity onPress={onClose} className="px-6 py-2 rounded-lg bg-gray-200"><Text className="font-semibold text-gray-700">Cancel</Text></TouchableOpacity>
-                  <TouchableOpacity onPress={handleSubmit} className="px-6 py-2 rounded-lg bg-blue-500"><Text className="font-semibold text-white">Save</Text></TouchableOpacity>
-                </View>
+                {/* નીચે થોડી જગ્યા જેથી બટન સ્ક્રોલ કરીને જોઈ શકાય */}
+                <View className="h-4" />
+              </ScrollView>
+
+              {/* Footer Buttons (Fixed at Bottom) */}
+              <View className="p-5 border-t border-gray-200 flex-row gap-3 bg-gray-50">
+                  <TouchableOpacity onPress={onClose} className="flex-1 py-3.5 rounded-xl bg-white border border-gray-300">
+                      <Text className="font-semibold text-gray-700 text-center">Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleSubmit} className="flex-1 py-3.5 rounded-xl bg-black shadow-sm">
+                      <Text className="font-semibold text-white text-center">Save Card</Text>
+                  </TouchableOpacity>
               </View>
+
             </View>
           </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-      </Pressable>
+        </Pressable>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };

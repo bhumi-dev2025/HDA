@@ -49,7 +49,9 @@ export const Card: React.FC<CardPro> = ({ card, isSelected, index, onPress, onEd
           </View>
         ) : (
           <LinearGradient
-            colors={card.gradientColors}
+            colors={card.gradientColors && card.gradientColors.length > 1 
+                    ? card.gradientColors 
+                    : ['#4b5563', '#000000']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             className="w-full h-full rounded-3xl p-6 flex flex-col justify-between overflow-hidden relative"

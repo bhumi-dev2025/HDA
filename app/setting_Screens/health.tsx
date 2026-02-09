@@ -25,7 +25,7 @@ export default function HealthDetailsScreen() {
       <View className="bg-white rounded-2xl overflow-hidden">
         
         {/* Field 1: Date of Birth */}
-        <View className="flex-row items-center justify-between p-4 border-b border-gray-100">
+        <View className="flex-row items-center justify-between p-4">
           <Text className="text-lg text-black font-medium">Date of Birth</Text>
           <TextInput 
             value={dob}
@@ -35,21 +35,24 @@ export default function HealthDetailsScreen() {
             className="text-right text-gray-500 text-base flex-1 ml-4"
           />
         </View>
+        <View className="h-[2px] bg-gray-100 mx-1" />
 
         {/* Field 2: Sex */}
-        <View className="flex-row items-center justify-between p-4 border-b border-gray-100">
+        <View className="flex-row items-center justify-between p-4">
           <Text className="text-lg text-black font-medium">Sex</Text>
           <TextInput 
             value={sex}
             onChangeText={setSex}
-            placeholder="Male/Female"
+            placeholder="male/female"
             placeholderTextColor="#C7C7CC"
             className="text-right text-gray-500 text-base flex-1 ml-4"
           />
         </View>
+        <View className="h-[2px] bg-gray-100 mx-1" />
+
 
         {/* Field 3: Height */}
-        <View className="flex-row items-center justify-between p-4 border-b border-gray-100">
+        <View className="flex-row items-center justify-between p-4">
           <Text className="text-lg text-black font-medium">Height</Text>
           <TextInput 
             value={height}
@@ -60,6 +63,8 @@ export default function HealthDetailsScreen() {
             className="text-right text-gray-500 text-base flex-1 ml-4"
           />
         </View>
+        <View className="h-[2px] bg-gray-100 mx-1" />
+
 
         {/* Field 4: Weight */}
         <View className="flex-row items-center justify-between p-4">

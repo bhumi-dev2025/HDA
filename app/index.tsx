@@ -1,5 +1,5 @@
-import { View, Text, Image, TouchableOpacity, Alert, StatusBar, Platform } from 'react-native'
-import React, { useEffect } from 'react'
+import { View, Text, Image, TouchableOpacity, Alert, StatusBar, Platform, ScrollView, KeyboardAvoidingView, TextInput ,ActivityIndicator} from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import B1 from '../assets/photo/login/B1.svg'
 import B2 from '../assets/photo/login/B2.svg'
@@ -15,6 +15,13 @@ const Login = () => { // Component name Capital રાખવું સારુ�
   const back = require('../assets/photo/login/back.png')
   const logo = require('../assets/photo/login/b2.png')
 
+  //for demouser login state
+  const [tapCount, setTapCount] = useState(0);
+  const [showDemoLogin, setShowDemoLogin] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     GoogleSignin.configure({
       //google clude code ni -> web id 
@@ -23,6 +30,41 @@ const Login = () => { // Component name Capital રાખવું સારુ�
       offlineAccess: true,
     });
   }, []);
+
+  //email password login code...
+  const handleSecretTap = () => {
+    if (showDemoLogin) return; // Jo already khuli gayu hoy to kai nai karvanu
+
+    if (tapCount + 1 >= 5) {
+      setShowDemoLogin(true);
+      setTapCount(0);
+      Alert.alert("Developer Mode", "Demo Login Enabled for Reviewers!");
+    } else {
+      setTapCount(tapCount + 1);
+    }
+  };
+
+  // --- DEMO LOGIN FUNCTION ---
+  const onDemoLoginPress = async () => {
+    if (!email || !password) {
+      Alert.alert("Error", "Please enter demo email and password");
+      return;
+    }
+
+    setLoading(true);
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    if (error) {
+      Alert.alert("Demo Login Failed", error.message);
+    } else {
+      console.log("Demo Login Success:", data.user.email);
+      router.replace("/(tabs)/home");
+    }
+    setLoading(false);
+  };
 
   const onGoogleButtonPress = async () => {
     try {
@@ -100,14 +142,62 @@ const Login = () => { // Component name Capital રાખવું સારુ�
         className="absolute w-full h-full" 
         resizeMode="cover" 
       />
-      <SafeAreaView className="flex-1">
+      {/* KeyboardAvoidingView mukyu che jethi keyboard khule to input dankaay nai */}
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
+      >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <SafeAreaView className="flex-1 justify-between">
+
         <View className="flex-1 justify-center items-center w-full px-4">
+        <TouchableOpacity activeOpacity={1} onPress={handleSecretTap} className="w-full items-center justify-center">
             <Image 
               source={logo} 
-              className="w-[80%] h-[50%]" 
+              className="w-[80%] h-64" 
               resizeMode="contain" 
             />
-        </View>
+        </TouchableOpacity>
+
+        {/* --- HIDDEN DEMO LOGIN SECTION --- */}
+                {showDemoLogin && (
+                  <View className="w-full bg-white/90 p-4 rounded-xl border border-gray-200 shadow-sm mt-4 mb-4">
+                    <Text className="text-center font-bold mb-2 text-gray-500">Reviewer Login</Text>
+                    <TextInput 
+                      placeholder="Demo Email"
+                      placeholderTextColor="#9CA3AF"
+                      value={email}
+                      onChangeText={setEmail}
+                      className="p-3 rounded-lg mb-2 border border-gray-300"
+                      autoCapitalize="none"
+                    />
+                    <TextInput 
+                      placeholder="Password"
+                      placeholderTextColor="#9CA3AF"
+                      value={password}
+                      onChangeText={setPassword}
+                      secureTextEntry
+                      className="p-3 rounded-lg mb-3 border border-gray-300"
+                    />
+                    <TouchableOpacity 
+                      onPress={onDemoLoginPress}
+                      className="bg-black p-3 rounded-lg items-center"
+                    >
+                      {loading ? (
+                        <ActivityIndicator color="white" />
+                      ) : (
+                        <Text className="text-white font-bold">Login as Demo User</Text>
+                      )}
+                    </TouchableOpacity>
+                    
+                    {/* Hide Button */}
+                    <TouchableOpacity onPress={() => setShowDemoLogin(false)} className="mt-2 items-center">
+                        <Text className="text-red-500 text-xs">Hide</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+                {/* --------------------------------- */}
+                </View>
 
         <View className="w-full px-8 mb-12">
           <TouchableOpacity 
@@ -136,6 +226,8 @@ const Login = () => { // Component name Capital રાખવું સારુ�
         </View>
 
       </SafeAreaView>
+      </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   )
 }

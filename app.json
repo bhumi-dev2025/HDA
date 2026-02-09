@@ -19,11 +19,6 @@
             "CFBundleURLSchemes": [
               "com.googleusercontent.apps.241217798940-ipmglh828epjv8q7v0ob4lrf2pvnuhs3"
             ]
-          },
-          {
-            "CFBundleURLSchemes": [
-              "com.googleusercontent.apps.241217798940-ipmglh828epjv8q7v0ob4lrf2pvnuhs3"
-            ]
           }
         ],
         "ITSAppUsesNonExemptEncryption": false
@@ -63,7 +58,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos."
+          "photosPermission": "Allow access to your photos so you can select and save ID cards locally on your device. Your photos remain private and are not uploaded to any external server."
         }
       ]
     ],

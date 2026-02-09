@@ -1,5 +1,5 @@
 import * as ImagePicker from 'expo-image-picker';
-import { LinearGradient } from 'expo-linear-gradient';
+// import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
@@ -105,21 +105,22 @@ export const AddEditCardModal: React.FC<ModalProps> = ({ isOpen, onClose, onSave
     <Modal visible={isOpen} transparent={true} animationType="fade" onRequestClose={onClose}>
       {/* 1. KeyboardAvoidingView ને Main Container બનાવ્યું */}
       <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} 
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 1}
         className="flex-1"
       >
         <Pressable className="flex-1 bg-black/50 justify-center items-center p-4" onPress={onClose}>
           <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
             
             {/* 2. અહી મહત્તમ ઊંચાઈ આપી દીધી */}
-            <View className="bg-white rounded-2xl shadow-xl w-full max-h-[85%] flex overflow-hidden">
+            <View className="bg-white rounded-2xl shadow-xl w-full max-h-[85%] min-h-[60%]">
               
               <View className="p-5 border-b border-gray-200 bg-gray-50">
                 <Text className="text-xl font-bold text-gray-900">{initialData ? 'Edit Card' : 'Add New Card'}</Text>
               </View>
 
               {/* 3. ScrollView ઉમેર્યું જેથી કીબોર્ડ આવે તો સ્ક્રોલ થાય */}
-              <ScrollView className="p-5" showsVerticalScrollIndicator={false}>
+              <ScrollView className="p-5 flex-1" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
                 
                 {/* Image Picker */}
                 <TouchableOpacity onPress={pickImage} className="w-full h-40 bg-gray-100 rounded-xl mb-6 justify-center items-center overflow-hidden border border-gray-300 border-dashed">

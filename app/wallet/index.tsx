@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Pressable, Alert, ActivityIndicator, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// FileSystem નો ઈમ્પોર્ટ નીચે મુજબ જ રાખજો (Error ફિક્સ કરવા)
 import * as FileSystem from 'expo-file-system/legacy';
 
 import { Header } from '../../componunts/wallet/Header';
@@ -12,7 +11,7 @@ import { AddEditCardModal } from '../../componunts/wallet/AddEditCardModal';
 import { INITIAL_CARDS } from '../../constants/constant';
 import type { CardData } from '../../types';
 
-const STORAGE_KEY = 'wallet_cards'; // મેં કી બદલી છે જેથી જૂનો ખરાબ ડેટા પ્રોબ્લેમ ન કરે
+const STORAGE_KEY = 'wallet_cards_a';
 
 const index = () => {
   const [cards, setCards] = useState<CardData[]>([]);
@@ -21,7 +20,6 @@ const index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCard, setEditingCard] = useState<CardData | null>(null);
 
-  // --- 1. એપ ખુલે ત્યારે ડેટા લોડ કરો ---
   useEffect(() => {
     loadCards();
   }, []);
@@ -48,7 +46,6 @@ const index = () => {
     }
   };
 
-  // --- 2. ફોટો સેવ કરવાનું ફંક્શન (વધારે સુરક્ષિત) ---
   const saveImagePermanently = async (uri: string) => {
     if (!uri) return '';
     try {
@@ -77,26 +74,24 @@ const index = () => {
     }
   };
 
-  // --- 3. સ્ટોરેજમાં સેવ કરવાનું ફંક્શન ---
   const saveCardsToStorage = async (newCards: CardData[]) => {
     try {
-      setCards(newCards); // UI અપડેટ
+      setCards(newCards); // ui update kre 
       const jsonValue = JSON.stringify(newCards);
-      await AsyncStorage.setItem(STORAGE_KEY, jsonValue); // મેમરીમાં સેવ
-      console.log("Data Saved Successfully!"); // ટર્મિનલમાં ચેક કરજો
+      await AsyncStorage.setItem(STORAGE_KEY, jsonValue); // memory ma save
+      console.log("Data Saved Successfully!");
     } catch (e) {
       console.error("Save error:", e);
       Alert.alert("Error", "Could not save data.");
     }
   };
 
-  // --- UI Handlers ---
 
   const handleCardClick = (clickedCardId: number) => {
     if (isModalOpen) return;
     setSelectedCardId(clickedCardId);
     
-    // કાર્ડને ક્લિક કરવા પર ઉપર લાવવું (Optional)
+    // Move the clicked card to the top of the list
     setCards(prevCards => {
       const clickedCard = prevCards.find(c => c.id === clickedCardId);
       if (!clickedCard) return prevCards;
@@ -120,20 +115,16 @@ const index = () => {
     setEditingCard(null);
   };
 
-  // --- Save Button Click ---
   const handleSaveCard = async (cardData: Omit<CardData, 'id'>) => {
     try {
-      // 1. ફોટો સેવ કરવાનો પ્રયત્ન
       let finalImageUri = cardData.imageUri;
       if (cardData.imageUri) {
           finalImageUri = await saveImagePermanently(cardData.imageUri);
       }
 
-      // 2. ડેટા તૈયાર કરો (જો કલર ન હોય તો ડિફોલ્ટ મૂકો)
       const safeCardData = {
         ...cardData,
         imageUri: finalImageUri,
-        // જો કલર પસંદ કરવાનું કાઢી નાખ્યું હોય, તો ડિફોલ્ટ કલર અહીં સેટ થશે
         gradientColors: cardData.gradientColors || ['#38bdf8', '#3b82f6'], 
         textColor: cardData.textColor || 'text-white'
       };
@@ -141,10 +132,9 @@ const index = () => {
       let newCardsList: CardData[];
 
       if (editingCard) {
-        // Edit Mode
         newCardsList = cards.map(c => (c.id === editingCard.id ? { ...editingCard, ...safeCardData } : c));
       } else {
-        // Add Mode (નવું કાર્ડ લિસ્ટમાં સૌથી ઉપર)
+        // Add Mode
         const newCard: CardData = {
           id: Date.now(),
           ...safeCardData,
@@ -153,7 +143,7 @@ const index = () => {
         newCardsList = [newCard, ...cards];
       }
 
-      // 3. ફાઈનલ સેવ
+      // 3. Save to AsyncStorage
       await saveCardsToStorage(newCardsList);
       handleCloseModal();
       
@@ -200,7 +190,7 @@ const index = () => {
           className="flex-1 p-4 relative"
           onPress={handleBackgroundClick}
         >
-          <View className="relative h-full">
+          <View className="relative h-full w-full">
             {cards.map((card, index) => (
               <Card
                 key={card.id}

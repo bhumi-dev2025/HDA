@@ -1,6 +1,6 @@
 // components/Card.tsx
 import React from 'react';
-import { Text, TouchableOpacity, View, Pressable, Image } from 'react-native';
+import { Text, TouchableOpacity, View, Pressable, Image, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { 
   useAnimatedStyle, 
@@ -18,7 +18,7 @@ export const Card: React.FC<CardPro> = ({ card, isSelected, index, onPress, onEd
   
   const animatedStyle = useAnimatedStyle(() => {
     const targetMarginTop = isSelected ? -CARD_HEIGHT / 2 : -CARD_HEIGHT / 2 - (index * 45);
-    const targetScale = isSelected ? 1.05 : 1 - index * 0.04;
+    const targetScale = isSelected ? 1.05 : 1 - index * 0.05;
     const targetOpacity = index < VISIBLE_CARDS ? 1 : 0;
 
     return {
@@ -30,12 +30,19 @@ export const Card: React.FC<CardPro> = ({ card, isSelected, index, onPress, onEd
     };
   }, [isSelected, index]);
 
+  const shadowStyle = Platform.OS === 'ios' ? {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+  } : { elevation: 5 };
+
   return (
     <Animated.View 
-      className="absolute w-full"
-      style={[{ height: CARD_HEIGHT }, animatedStyle]}
+      className="absolute"
+      style={[{ height: CARD_HEIGHT,width:'100%',left:0,right:0 }, animatedStyle]}
     >
-      <Pressable onPress={onPress} className="w-full h-full rounded-3xl shadow-lg bg-white">
+      <Pressable onPress={onPress} className="w-full h-full rounded-3xl shadow-lg bg-white" style={shadowStyle}>
         
         {card.imageUri ? (
           <View className="w-full h-full rounded-3xl overflow-hidden relative bg-black">
@@ -54,9 +61,10 @@ export const Card: React.FC<CardPro> = ({ card, isSelected, index, onPress, onEd
                     : ['#4b5563', '#000000']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            className="w-full h-full rounded-3xl p-6 flex flex-col justify-between overflow-hidden relative"
+            style={{ borderRadius: 24, padding: 24, width: '100%', height: '100%' }}
+            className="flex flex-col justify-between overflow-hidden relative"
           >
-            <View className="flex-row items-start justify-between">
+            <View className="flex-row items-start justify-between mb-28">
               <View>
                 <Text className={`font-semibold text-lg ${card.textColor}`}>{card.type}</Text>
                 <Text className={`text-sm opacity-80 ${card.textColor}`}>{card.issuer}</Text>

@@ -58,6 +58,10 @@ export default function ProfileLayout() {
         name="unit"
         options={{ title: 'Unit of Measure' }}
       />
+      <Stack.Screen
+        name="account"
+        options={{ title: 'Manage Account',headerShown: false }} // આ સ્ક્રીન માટે કસ્ટમ હેડર છે, તેથી ડિફોલ્ટ હેડર છુપાવ્યું
+      />
     </Stack>
   );
 }

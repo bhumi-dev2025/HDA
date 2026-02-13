@@ -161,8 +161,14 @@ const Settingscreen = () => {
             <ChevronRight size={20} color="#D1D1D1" />
           </TouchableOpacity>
         </View>
+        <View className="bg-white rounded-md overflow-hidden mb-1 shadow-sm">
+          <TouchableOpacity  onPress={()=>router.push('/setting_Screens/account')} className='flex-row items-center justify-between p-5'>
+            <Text className="text-base font-semibold text-black">Manage Account</Text>
+            <ChevronRight size={20} color="#D1D1D1" />
+          </TouchableOpacity>
+        </View>
         {/* --- Sign Out --- */}
-        <TouchableOpacity className="bg-white rounded-md p-5 mb-20 shadow-sm" onPress={handleLogout}>
+        <TouchableOpacity className="bg-white rounded-md p-5 mb-20" onPress={handleLogout}>
           <Text className="text-base font-medium text-red-600">Sign Out</Text>
         </TouchableOpacity>
 

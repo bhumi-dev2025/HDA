@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { View } from "react-native";
+import { View,Platform } from "react-native";
 
 
 import I1 from '../../assets/photo/home/I1.svg'
@@ -64,6 +64,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="explore" // તમારી ફાઈલનું નામ
         options={{
+          href: Platform.OS === 'ios' ? null : undefined,
           headerShown: false,
           tabBarItemStyle: { width: 60, flex: 0},
           tabBarIcon: ({ focused }) => (

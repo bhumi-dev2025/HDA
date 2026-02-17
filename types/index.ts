@@ -209,3 +209,4 @@ export interface CardPro {
   onEdit: () => void;
   onDelete: () => void;
 }
+

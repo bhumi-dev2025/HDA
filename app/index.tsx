@@ -10,7 +10,7 @@ import { useRouter } from 'expo-router';
 import * as AppleAuthentication from 'expo-apple-authentication';
 
 //login code...
-const Login = () => { // Component name Capital રાખવું સારું (login -> Login)
+const Login = () => { 
   const router = useRouter();
   const back = require('../assets/photo/login/back.png')
   const logo = require('../assets/photo/login/b2.png')
@@ -168,7 +168,7 @@ const Login = () => { // Component name Capital રાખવું સારુ�
                       placeholderTextColor="#9CA3AF"
                       value={email}
                       onChangeText={setEmail}
-                      className="p-3 rounded-lg mb-2 border border-gray-300"
+                      className="text-black p-3 rounded-lg mb-2 border border-gray-300"
                       autoCapitalize="none"
                     />
                     <TextInput 
@@ -177,7 +177,7 @@ const Login = () => { // Component name Capital રાખવું સારુ�
                       value={password}
                       onChangeText={setPassword}
                       secureTextEntry
-                      className="p-3 rounded-lg mb-3 border border-gray-300"
+                      className="text-black p-3 rounded-lg mb-3 border border-gray-300"
                     />
                     <TouchableOpacity 
                       onPress={onDemoLoginPress}

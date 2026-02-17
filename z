@@ -891,3 +891,156 @@
 // prvcy policy for ios ... https://www.termsfeed.com/live/b1af1437-f3d8-4d2d-b1a1-dfe87fef1ba7
 
 // prvcy policy for google ... https://www.termsfeed.com/live/d4d90956-3ffe-4fe0-8ab9-291b3835b31a
+
+
+// // import React, { useState } from 'react';
+// import { 
+//   View, 
+//   Text, 
+//   TextInput, 
+//   Image, 
+//   ScrollView, 
+//   TouchableOpacity, 
+//   ActivityIndicator, 
+//   Linking 
+// } from 'react-native';
+// import { getLinkPreview } from 'link-preview-js';
+
+// const LinkPreviewTest = () => {
+//   const [url, setUrl] = useState('');
+//   const [loading, setLoading] = useState(false);
+//   const [previewData, setPreviewData] = useState<any>(null);
+
+//   // 1. Username Extractor Function
+//   const getUsername = (link: string) => {
+//     try {
+//       const uri = new URL(link);
+//       const domain = uri.hostname.replace('www.', '');
+//       const pathname = uri.pathname.split('/').filter(x => x.length > 0);
+
+//       if (domain.includes('x.com') || domain.includes('twitter.com')) {
+//         return pathname[0] ? `@${pathname[0]}` : 'X User';
+//       } else if (domain.includes('youtube.com')) {
+//         return pathname[0]?.startsWith('@') ? pathname[0] : 'YouTube Channel';
+//       }
+//       return domain.split('.')[0]; 
+//     } catch (e) {
+//       return 'Link';
+//     }
+//   };
+
+//   // 2. Fetch Data Function
+//   const handleFetch = async (text: string) => {
+//     setUrl(text);
+//     if (text.match(/https?:\/\/[^\s]+/)) {
+//       setLoading(true);
+//       try {
+//         const data = await getLinkPreview(text, {
+//           headers: { 'user-agent': 'googlebot' }
+//         });
+//         setPreviewData(data);
+//       } catch (err) {
+//         console.log("Fetch Error:", err);
+//         setPreviewData(null);
+//       } finally {
+//         setLoading(false);
+//       }
+//     } else {
+//       setPreviewData(null);
+//     }
+//   };
+
+//   // 3. Google Favicon URL
+//   const getLogo = (link: string) => {
+//     try {
+//       const domain = new URL(link).hostname;
+//       return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+//     } catch (e) {
+//       return null;
+//     }
+//   };
+
+//   return (
+//     <ScrollView className="flex-1 bg-gray-50 p-6">
+//       <View className="mt-10">
+//         <Text className="text-2xl font-extrabold text-slate-900 mb-2">Preview Tester</Text>
+//         <Text className="text-gray-500 mb-6">Link nakhi ne card check karo</Text>
+
+//         {/* Input area */}
+//         <View className="bg-white rounded-2xl p-2 shadow-sm border border-gray-200 mb-8">
+//           <TextInput
+//             className="h-12 px-4 text-base text-slate-800"
+//             placeholder="https://x.com/username/status/..."
+//             value={url}
+//             onChangeText={handleFetch}
+//             autoCapitalize="none"
+//           />
+//         </View>
+
+//         {/* Loading Indicator */}
+//         {loading && <ActivityIndicator size="large" color="#3B82F6" />}
+
+//         {/* Live Card Preview */}
+//         {previewData && !loading && (
+//           <TouchableOpacity 
+//             activeOpacity={0.9}
+//             onPress={() => Linking.openURL(url)}
+//             className="bg-white rounded-[32px] overflow-hidden shadow-xl border border-gray-100"
+//           >
+//             {/* Header: Logo & Username */}
+//             <View className="flex-row items-center p-5">
+//               <Image 
+//                 source={{ uri: getLogo(url) as string }} 
+//                 className="w-10 h-10 rounded-full bg-gray-100" 
+//               />
+//               <View className="ml-3">
+//                 <Text className="font-bold text-slate-900 text-lg">
+//                   {getUsername(url)}
+//                 </Text>
+//                 <Text className="text-gray-400 text-xs uppercase tracking-widest">
+//                   {new URL(url).hostname}
+//                 </Text>
+//               </View>
+//             </View>
+
+//             {/* Main Preview Image */}
+//             {previewData.images?.[0] ? (
+//               <Image 
+//                 source={{ uri: previewData.images[0] }} 
+//                 className="w-full h-56"
+//                 resizeMode="cover"
+//               />
+//             ) : (
+//               <View className="w-full h-20 bg-gray-100 items-center justify-center">
+//                 <Text className="text-gray-400 italic">No Preview Image</Text>
+//               </View>
+//             )}
+
+//             {/* Content Details */}
+//             <View className="p-6">
+//               <Text className="text-xl font-bold text-slate-900 leading-7" numberOfLines={2}>
+//                 {previewData.title || "No Title Found"}
+//               </Text>
+//               <Text className="text-gray-500 mt-2 text-sm leading-5" numberOfLines={3}>
+//                 {previewData.description || "Aa link ma koi description available nathi."}
+//               </Text>
+              
+//               {/* Bottom Badge */}
+//               <View className="mt-4 pt-4 border-t border-gray-50 flex-row justify-between items-center">
+//                 <Text className="text-blue-500 font-semibold text-xs">View Original</Text>
+//                 <View className="bg-green-100 px-3 py-1 rounded-full">
+//                   <Text className="text-green-600 text-[10px] font-bold">LIVE PREVIEW</Text>
+//                 </View>
+//               </View>
+//             </View>
+//           </TouchableOpacity>
+//         )}
+//       </View>
+//     </ScrollView>
+//   );
+// };
+
+// export default LinkPreviewTest;
+
+
+// 1c4236279244cf2573f8503a5bd7e63a

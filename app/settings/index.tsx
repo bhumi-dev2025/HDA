@@ -4,7 +4,7 @@ import { ChevronRight, Heart,User as UserIcon } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import L1 from '../../assets/photo/home/L1.svg'
 import { useRouter } from 'expo-router';
-import { supabase } from '../../lib/supabase'; // ખાતરી કરજો કે આ પાથ સાચો છે
+import { supabase } from '../../lib/supabase';
 import { Session } from '@supabase/supabase-js';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { ChevronLeft } from 'lucide-react-native';
@@ -25,14 +25,14 @@ const Settingscreen = () => {
       async function getProfile() {
         try {
           setLoading(true);
-          // વર્તમાન સેશન મેળવો
+          // currunt session 
           const { data: { session }, error } = await supabase.auth.getSession();
     
           if (error) throw error;
     
           if (session) {
             setSession(session);
-            // Google લૉગિન મેટાડેટામાંથી ડેટા સેટ કરો
+            // Google login on metadeta set
             setAvatarUrl(session.user.user_metadata?.avatar_url || null);
             setUsername(session.user.user_metadata?.full_name || 'Human Design User');
           }

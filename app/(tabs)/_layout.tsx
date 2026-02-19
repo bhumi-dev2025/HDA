@@ -64,7 +64,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="explore" // તમારી ફાઈલનું નામ
         options={{
-          href: Platform.OS === 'ios' ? null : undefined,
+          // href: Platform.OS === 'ios' ? null : undefined,
           headerShown: false,
           tabBarItemStyle: { width: 60, flex: 0},
           tabBarIcon: ({ focused }) => (

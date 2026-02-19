@@ -1,75 +1,222 @@
-import { View, Text, Dimensions } from 'react-native';
-import React, { useRef } from 'react';
-import { Video, ResizeMode } from 'expo-av';
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Ruler from '../../componunts/Ruler';
+import React, { useState, useCallback } from "react";
+import {
+  View,
+  FlatList,
+  Text,
+  Image,
+  TouchableOpacity,
+  Linking,
+  Alert,
+  ImageBackground,
+  Platform
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { supabase } from "../../lib/supabase";
+import { useRouter, useFocusEffect } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
 
-// સ્ક્રીનની પહોળાઈ મેળવો
-const { width } = Dimensions.get('window');
 
-// રિસ્પોન્સિવ સાઈઝ ફંક્શન (ફોન્ટ અને આઈકોન માટે)
-const scale = (size:any) => (width / 375) * size;
+const ADMIN_EMAIL = "simplebhumidev@gmail.com";
 
-const ComingSoonScreen = () => {
-  const video = useRef(null);
+export default function Explore() {
+  const [links, setLinks] = useState<any[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const router = useRouter();
 
-  // વિડીયોની સાઈઝ સ્ક્રીનના 70% રાખીએ
-  const videoSize = width * 0.7;
+  const fetchLinks = async () => {
+    const { data } = await supabase
+      .from("links")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    setLinks(data || []);
+  };
+
+  const checkUser = async () => {
+    const { data } = await supabase.auth.getUser();
+    const email = data?.user?.email;
+    if (email === ADMIN_EMAIL) setIsAdmin(true);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchLinks();
+      checkUser();
+    }, [])
+  );
+
+  const handleDelete = async (id: string) => {
+    Alert.alert("Delete Post", "Are you sure?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          await supabase.from("links").delete().eq("id", id);
+          fetchLinks();
+        },
+      },
+    ]);
+  };
+
+  // const renderItem = ({ item }: any) =>(
+  //     <TouchableOpacity onPress={() => Linking.openURL(item.url)}>
+  //       <View className="bg-white rounded-[32px] overflow-hidden shadow-md mb-4">
+
+  //   {/* IMAGE SECTION */}
+  //   <View className="relative">
+  //     {item.image && (
+  //       <ImageBackground
+  //         source={{ uri: item.image }}
+  //         className="w-full h-64"
+  //         resizeMode="cover"
+  //       />
+  //     )}
+
+  //     {/* Gradient + Title Overlay */}
+  //     <LinearGradient
+  //       colors={["transparent", "rgba(0,0,0,0.85)"]}
+  //       className="absolute bottom-0 left-0 right-0 h-36 px-5 justify-end pb-4"
+  //     >
+  //       <Text
+  //         className="text-white text-xl font-bold"
+  //         numberOfLines={2}
+  //       >
+  //         {item.description}
+  //       </Text>
+  //     </LinearGradient>
+  //   </View>
+
+  //   {/* USER + DELETE ROW */}
+  //   <View className="flex-row items-center justify-between px-5 py-4">
+
+  //     <View className="flex-row items-center">
+  //       <Image
+  //         source={{ uri: item.logo }}
+  //         className="w-10 h-10 rounded-full bg-gray-200"
+  //       />
+  //       <View className="ml-3">
+  //         <Text className="text-base font-semibold text-gray-900">
+  //           {item.username}
+  //         </Text>
+  //         <Text className="text-xs text-gray-400">
+  //           {/* {new URL(item.url).hostname} */}
+  //           Tap to view
+  //         </Text>
+  //       </View>
+  //     </View>
+
+  //     {isAdmin && (
+  //       <TouchableOpacity
+  //         onPress={() => handleDelete(item.id)}
+  //         className="bg-red-500 px-3 py-1 rounded-full"
+  //       >
+  //         <Text className="text-white text-xs font-bold">
+  //           Delete
+  //         </Text>
+  //       </TouchableOpacity>
+  //     )}
+  //   </View>
+
+  //   {/* DESCRIPTION */}
+  //   {/* {item.description && (
+  //     <View className="px-5 pb-5">
+  //       <Text
+  //         className="text-gray-600"
+  //         numberOfLines={2}
+  //       >
+  //         {item.description}
+  //       </Text>
+  //     </View>
+  //   )} */}
+
+  // </View>
+  //     </TouchableOpacity>
+  // );
+const renderItem = ({ item }: any) => (
+  <TouchableOpacity onPress={() => Linking.openURL(item.url)}>
+    <View className="bg-white rounded-[32px] overflow-hidden shadow-md mb-4">
+
+      {/* IMAGE BACKGROUND SECTION */}
+      <ImageBackground
+        source={{ uri: item.image }}
+        className="w-full h-64 justify-end"
+        resizeMode="cover"
+      >
+        {/* GRADIENT OVERLAY */}
+        <LinearGradient
+          colors={["#00000000", "#000000E6"]} 
+          className="w-full px-5 pb-5 pt-16"
+        >
+          <Text
+            className={`text-white text-xl font-bold ${Platform.OS === "ios" ? "m-4" : ""}`}
+            numberOfLines={2}
+          >
+            {item.description}
+          </Text>
+        </LinearGradient>
+      </ImageBackground>
+
+      {/* USER + DELETE ROW */}
+      <View className="flex-row items-center justify-between px-5 py-4">
+
+        <View className="flex-row items-center">
+          <Image
+            source={{ uri: item.logo }}
+            className="w-10 h-10 rounded-full bg-gray-200"
+          />
+          <View className="ml-3">
+            <Text className="text-base font-semibold text-gray-900">
+              {item.username}
+            </Text>
+            <Text className="text-xs text-gray-400">
+              Tap to view
+            </Text>
+          </View>
+        </View>
+
+        {isAdmin && (
+          <TouchableOpacity
+            onPress={() => handleDelete(item.id)}
+            className="bg-red-500 px-3 py-1 rounded-full"
+          >
+            <Text className="text-white text-xs font-bold">
+              Delete
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
+    </View>
+  </TouchableOpacity>
+);
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F1F1F1]">
-      <StatusBar style="dark" />
-      
-      {/* Change 1: 'justify-evenly' 
-         આનાથી ઉપર, વચ્ચે અને નીચે એકસરખી જગ્યા રહેશે (Margins ની જરૂર નથી)
-      */}
-      <View className="flex-1 items-center justify-center w-full mb-10">
-        
-        {/* Title Section */}
-        <View className="items-center justify-center mb-10">
-          <Text 
-            className="text-black font-bold"
-            style={{ fontSize: scale(14) }} // Responsive Font
-          >
-            Superhuman Activities
+    <SafeAreaView className="flex-1 bg-gray-50">
+      <View className="flex-1 p-6">
+
+        <View className="flex-row justify-center items-center mb-6">
+          <Text className="text-2xl font-extrabold text-slate-900">
+            Featured Alumni Posts
           </Text>
-          
-          <Text 
-            className="text-gray-300 font-bold "
-            style={{ fontSize: scale(40) }} // Responsive Font
-          >
-            Alumni
-          </Text>
+
+          {isAdmin && (
+            <TouchableOpacity
+              onPress={() => router.push("/AddLink")}
+              className="bg-black w-9 h-9 rounded-full items-center justify-center"
+            >
+              <Text className="text-white text-xl">+</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
-        {/* Video Section */}
-        {/* Change 2: Dynamic Width & Height
-           w-64 ને બદલે videoSize વાપર્યું જેથી દરેક ફોનમાં પરફેક્ટ દેખાય
-        */}
-        <View style={{ width: videoSize, height: videoSize }} className='mb-10'>
-          <Video
-            ref={video}
-            style={{ width: '100%', height: '100%' }}
-            source={require('../../assets/video/v2.mp4')} 
-            useNativeControls={false}
-            resizeMode={ResizeMode.CONTAIN}
-            isLooping
-            shouldPlay
-            isMuted={true}
-          />
-        </View>
-
-        {/* Subtitle */}
-        <Text 
-          className="text-gray-500 font-medium"
-          style={{ fontSize: scale(12) }} // Responsive Font
-        >
-          Coming Soon...
-        </Text>
+        <FlatList
+          data={links}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+        />
       </View>
     </SafeAreaView>
   );
-};
-
-export default ComingSoonScreen;
+}

@@ -62,7 +62,7 @@ export default function RootLayout() {
       {/* Ahiya tamari badhi screens Stack ma automatic avi jase */}
       <Stack.Screen name="index" /> 
       <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="AddLink" />
+      {/* <Stack.Screen name="collectionDetail" /> */}
     </Stack>
   ); 
 }

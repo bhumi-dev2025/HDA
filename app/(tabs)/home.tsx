@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 //back end functions call....
-import { updateDailyLog, getTodayLog} from '../../lib/TrackerService';
+import { updateDailyLog, getTodayLog } from '../../lib/TrackerService';
 import { useRouter } from 'expo-router';
 // import LottieView from 'lottie-react-native'; 
-import { HomeModalData,HomeModalType,CardProps,TimeData,TaskItem} from '../../types';
+import { HomeModalData, HomeModalType, CardProps, TimeData, TaskItem } from '../../types';
+import { fetchGoogleFitSteps } from "../../lib/googleFitService";
 
 
 // model import
@@ -34,27 +35,27 @@ import L1 from '../../assets/photo/home/L1.svg'
 import A1 from '../../assets/photo/home/A1.svg'
 import A2 from '../../assets/photo/home/A2.svg'
 
- //image of cards background
-  const p1 = require('../../assets/photo/home/p1.png');
-  const p2 = require('../../assets/photo/home/p2.png');
-  const p3 = require('../../assets/photo/home/p3.png');
-  const p4 = require('../../assets/photo/home/p4.png');
-  const p5 = require('../../assets/photo/home/p5.png');
-  const p6 = require('../../assets/photo/home/p6.png');
-  const p7 = require('../../assets/photo/home/p7.png');
-  const p8 = require('../../assets/photo/home/p8.png');
+//image of cards background
+const p1 = require('../../assets/photo/home/p1.png');
+const p2 = require('../../assets/photo/home/p2.png');
+const p3 = require('../../assets/photo/home/p3.png');
+const p4 = require('../../assets/photo/home/p4.png');
+const p5 = require('../../assets/photo/home/p5.png');
+const p6 = require('../../assets/photo/home/p6.png');
+const p7 = require('../../assets/photo/home/p7.png');
+const p8 = require('../../assets/photo/home/p8.png');
 
-  const CardContainer = ({ children, onPress, heightClass = "h-auto", className = "" }: CardProps) => (
-    <TouchableOpacity
-      onPress={onPress}
-      activeOpacity={0.9}
-      // જો onPress ના હોય તો ક્લિક ડિસેબલ થઈ જાય (optional)
-      disabled={!onPress}
-      className={`w-full rounded-3xl overflow-hidden border-4 border-white relative ${heightClass} ${className}`}
-    >
-      {children}
-    </TouchableOpacity>
-  );
+const CardContainer = ({ children, onPress, heightClass = "h-auto", className = "" }: CardProps) => (
+  <TouchableOpacity
+    onPress={onPress}
+    activeOpacity={0.9}
+    // જો onPress ના હોય તો ક્લિક ડિસેબલ થઈ જાય (optional)
+    disabled={!onPress}
+    className={`w-full rounded-3xl overflow-hidden border-4 border-white relative ${heightClass} ${className}`}
+  >
+    {children}
+  </TouchableOpacity>
+);
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -103,12 +104,43 @@ export default function HomeScreen() {
       }
     }
   };
- 
+
+
+  const handleStepPress = async () => {
+
+    const steps = await fetchGoogleFitSteps();
+
+    if (steps !== null) {
+
+      setStepData(steps.toString());
+      setIsStepDone(true);
+
+      handleSave("step", steps.toString());
+
+    } else {
+
+      // Google Fit use nathi karto → manual modal
+      setActiveModal("step");
+
+    }
+
+  };
 
   // Aa useEffect -> data load (open app)
   useEffect(() => {
     loadData();
   }, []);
+
+  //step 5 minit ma update mate
+  useEffect(() => {
+
+  const interval = setInterval(() => {
+    handleStepPress();
+  }, 300000); // 5 min
+
+  return () => clearInterval(interval);
+
+}, []);
 
   const loadData = async () => {
     const data = await getTodayLog();
@@ -121,30 +153,54 @@ export default function HomeScreen() {
       if (data.step_count) { setStepData(data.step_count.toString()); setIsStepDone(true); }
       if (data.sleep_data) { setSleepData(data.sleep_data); setIsSleepDone(true); }
       if (data.todo_list) { setTodoTasks(data.todo_list); setIsTodoDone(true); }
-      if (data.workout_time) { setWorkoutData(data.workout_time); setIsWorkoutDone(true);
+      if (data.workout_time) {
+        setWorkoutData(data.workout_time); setIsWorkoutDone(true);
+      }
     }
-  }
+
+    try {
+
+      const steps = await fetchGoogleFitSteps();
+
+      if (steps !== null) {
+
+        console.log("Auto Google Fit Steps:", steps);
+
+        setStepData(steps.toString());
+        setIsStepDone(true);
+
+        await handleSave("step", steps.toString());
+
+      }
+
+    } catch (error) {
+
+      console.log("Auto step sync error:", error);
+
+    }
+
+
   };
 
   return (
     <SafeAreaView className="flex-1 bg-[#F1F1F1]">
       <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
-      
 
-        {/* Header Section */}
-        <View className="flex-row justify-between items-center px-5 py-4">
-          <L1 width={30} height={30} />
-            <View className="flex-row items-center gap-3">
-            <TouchableOpacity className="w-12 h-12 items-center justify-center rounded-full" onPress={()=>router.push('/wallet')}>
-              <A2 height={30} width={30} />
-            </TouchableOpacity>
-         
-            <TouchableOpacity className="w-12 h-12 items-center justify-center rounded-full" onPress={()=>router.push('/settings')}>
-              <A1 height={30} width={30} />
-            </TouchableOpacity>
-            </View>
+
+      {/* Header Section */}
+      <View className="flex-row justify-between items-center px-5 py-4">
+        <L1 width={30} height={30} />
+        <View className="flex-row items-center gap-3">
+          <TouchableOpacity className="w-12 h-12 items-center justify-center rounded-full" onPress={() => router.push('/wallet')}>
+            <A2 height={30} width={30} />
+          </TouchableOpacity>
+
+          <TouchableOpacity className="w-12 h-12 items-center justify-center rounded-full" onPress={() => router.push('/settings')}>
+            <A1 height={30} width={30} />
+          </TouchableOpacity>
         </View>
-        <ScrollView className="flex-1" contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 110 }} showsVerticalScrollIndicator={false}>
+      </View>
+      <ScrollView className="flex-1" contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 110 }} showsVerticalScrollIndicator={false}>
 
         {/* Score Section */}
         <View className="flex-row items-center gap-2 mb-4">
@@ -167,9 +223,9 @@ export default function HomeScreen() {
 
             {/* 1. Good Morning Card */}
             {/* <CardContainer heightClass="h-20" className="bg-white flex-row items-center p-4 gap-1"> */}
-              {/* Background Image if needed, else plain white */}
-              {/* <I12 /> */}
-                      {/* <LottieView
+            {/* Background Image if needed, else plain white */}
+            {/* <I12 /> */}
+            {/* <LottieView
                         // TAMARE AHIYA TAMARI FILE NO PATH AAPVO
                         source={require('../../assets/lottie/moring.json')} 
                         autoPlay
@@ -179,8 +235,8 @@ export default function HomeScreen() {
                         style={{ width:30, height:30}}
                         resizeMode="contain" // athva 'cover'
                       /> */}
-                    
-              {/* <Text className="text-[#333] text-center font-bold text-lg flex-1">Good Morning</Text> */}
+
+            {/* <Text className="text-[#333] text-center font-bold text-lg flex-1">Good Morning</Text> */}
             {/* </CardContainer> */}
 
             {/* 1. Meditation Card */}
@@ -207,7 +263,7 @@ export default function HomeScreen() {
               </View>
             </CardContainer>
 
-                        {/* 2. Workout Card */}
+            {/* 2. Workout Card */}
             <CardContainer onPress={() => setActiveModal('workout')} heightClass="h-24">
               <Image source={p8} className="absolute w-full h-full" resizeMode="cover" />
               <View className="p-4 h-full flex-row items-center gap-4">
@@ -261,7 +317,7 @@ export default function HomeScreen() {
           <View className="flex-1 gap-3">
 
             {/* 1. Steps Card */}
-            <CardContainer onPress={() => setActiveModal('step')} heightClass="h-24">
+            <CardContainer onPress={handleStepPress} heightClass="h-24">
               <Image source={p2} className="absolute w-full h-full" resizeMode="cover" />
               <View className="p-4 h-full flex-row items-center gap-4">
                 {!isStepDone ? (
@@ -342,12 +398,12 @@ export default function HomeScreen() {
       </ScrollView>
 
       {/* Modals code same as before... */}
-      <MeditationModal isVisible={activeModal === 'meditation'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('meditation', val)} initialValue={meditationData}/>
-      <WaterTrackerModal isVisible={activeModal === 'water'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('water', val)} initialValue={waterData}/>
+      <MeditationModal isVisible={activeModal === 'meditation'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('meditation', val)} initialValue={meditationData} />
+      <WaterTrackerModal isVisible={activeModal === 'water'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('water', val)} initialValue={waterData} />
       <TaskModal isVisible={activeModal === 'todo'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('todo', val)} initialTasks={todoTasks} />
-      <StepPickerModal isVisible={activeModal === 'step'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('step', val)} initialValue={stepData}/>
-      <SleepModal isVisible={activeModal === 'sleep'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('sleep', val)} initialValue={sleepData}/>
-      <WorkoutModal isVisible={activeModal === 'workout'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('workout', val)} initialValue={workoutData}/>
+      <StepPickerModal isVisible={activeModal === 'step'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('step', val)} initialValue={stepData} />
+      <SleepModal isVisible={activeModal === 'sleep'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('sleep', val)} initialValue={sleepData} />
+      <WorkoutModal isVisible={activeModal === 'workout'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('workout', val)} initialValue={workoutData} />
     </SafeAreaView>
   );
-  }
+}

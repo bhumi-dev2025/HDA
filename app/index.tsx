@@ -28,6 +28,11 @@ const Login = () => {
       webClientId: '241217798940-f6ik71i9je097slar0i4rco98mc1re7m.apps.googleusercontent.com',
       iosClientId: '241217798940-ipmglh828epjv8q7v0ob4lrf2pvnuhs3.apps.googleusercontent.com',
       offlineAccess: true,
+    scopes: [
+    'profile',
+    'email',
+    'https://www.googleapis.com/auth/fitness.activity.read',
+  ],
     });
   }, []);
 
@@ -66,41 +71,85 @@ const Login = () => {
     setLoading(false);
   };
 
-  const onGoogleButtonPress = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
+  // const onGoogleButtonPress = async () => {
+  //   try {
+  //     await GoogleSignin.hasPlayServices();
+  //     const userInfo = await GoogleSignin.signIn();
       
-      if (userInfo.data?.idToken) {
-        const { data, error } = await supabase.auth.signInWithIdToken({
-          provider: 'google',
-          token: userInfo.data.idToken,
-        });
+  //     if (userInfo.data?.idToken) {
+  //       const { data, error } = await supabase.auth.signInWithIdToken({
+  //         provider: 'google',
+  //         token: userInfo.data.idToken,
+  //       });
 
-        if (error) {
-          Alert.alert("Supabase Error", error.message);
-        } else {
-          console.log("Login Success:", data.user.email);
-          router.replace("/(tabs)/home");
-        }
-      } else {
-        throw new Error('No ID token present!');
-      }
+  //       if (error) {
+  //         Alert.alert("Supabase Error", error.message);
+  //       } else {
+  //         console.log("Login Success:", data.user.email);
+  //         router.replace("/(tabs)/home");
+  //       }
+  //     } else {
+  //       throw new Error('No ID token present!');
+  //     }
 
-    } catch (error: any) {
-      // Error handling same as before...
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log("User cancelled the login flow");
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log("Sign in is in progress");
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        Alert.alert("Error", "Google Play Services not available or outdated");
-      } else {
-        console.log("Error:", error);
-        Alert.alert("Error", error.message);
-      }
+  //   } catch (error: any) {
+  //     // Error handling same as before...
+  //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+  //       console.log("User cancelled the login flow");
+  //     } else if (error.code === statusCodes.IN_PROGRESS) {
+  //       console.log("Sign in is in progress");
+  //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+  //       Alert.alert("Error", "Google Play Services not available or outdated");
+  //     } else {
+  //       console.log("Error:", error);
+  //       Alert.alert("Error", error.message);
+  //     }
+  //   }
+  // };
+  const onGoogleButtonPress = async () => {
+  try {
+
+    await GoogleSignin.hasPlayServices();
+
+    const userInfo = await GoogleSignin.signIn();
+
+    const idToken = userInfo.data?.idToken;
+
+    // 🔥 Access token levu
+    const tokens = await GoogleSignin.getTokens();
+    const accessToken = tokens.accessToken;
+
+    if (!idToken) {
+      throw new Error("No ID token");
     }
-  };
+
+    // Supabase login
+    const { data, error } = await supabase.auth.signInWithIdToken({
+      provider: "google",
+      token: idToken,
+    });
+
+    if (error) {
+      Alert.alert("Supabase Error", error.message);
+      return;
+    }
+
+    console.log("Access Token:", accessToken);
+
+    // Save access token in database
+    await supabase
+      .from("profiles")
+      .update({
+        google_access_token: accessToken
+      })
+      .eq("id", data.user.id);
+
+    router.replace("/(tabs)/home");
+
+  } catch (error:any) {
+    Alert.alert("Error", error.message);
+  }
+};
 
   const onAppleButtonPress = async () => {
     try {

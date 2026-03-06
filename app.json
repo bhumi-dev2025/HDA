@@ -20,13 +20,14 @@
             ]
           }
         ],
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSMotionUsageDescription": "This app uses motion data to count your steps."
       }
     },
     "android": {
       "versionCode": 7,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon.png",  
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
       "predictiveBackGestureEnabled": false,
@@ -40,6 +41,17 @@
     },
     "plugins": [
       "expo-router",
+      [
+      "react-native-health-connect"
+    ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26
+          }
+        }
+      ],
       [
         "expo-splash-screen",
         {
@@ -58,7 +70,8 @@
         {
           "photosPermission": "Allow access to your photos so you can select and save ID cards locally on your device. Your photos remain private and are not uploaded to any external server."
         }
-      ]
+      ],
+      "@react-native-community/datetimepicker"
     ],
     "experiments": {
       "typedRoutes": true,

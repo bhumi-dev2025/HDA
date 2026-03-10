@@ -21,7 +21,8 @@
           }
         ],
         "ITSAppUsesNonExemptEncryption": false,
-        "NSMotionUsageDescription": "This app uses motion data to count your steps."
+          "NSHealthShareUsageDescription": "This app reads your step count from Apple Health to track your daily activity.",
+          "NSHealthUpdateUsageDescription": "This app may write health data to Apple Health if needed."
       }
     },
     "android": {
@@ -42,8 +43,12 @@
     "plugins": [
       "expo-router",
       [
-      "react-native-health-connect"
-    ],
+        "@kingstinct/react-native-healthkit",
+        {
+          "healthSharePermission": "This app reads step count from Apple Health",
+          "healthUpdatePermission": "This app may write health data if needed"
+        }
+      ],
       [
         "expo-build-properties",
         {
@@ -72,7 +77,7 @@
         }
       ],
       "@react-native-community/datetimepicker"
-    ],
+        ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true

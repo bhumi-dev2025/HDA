@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import B1 from '../assets/photo/login/B1.svg'
 import B2 from '../assets/photo/login/B2.svg'
 //google login libary...
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { supabase } from '../lib/supabase';
 import { useRouter } from 'expo-router';
 import * as AppleAuthentication from 'expo-apple-authentication';
@@ -116,11 +116,11 @@ const Login = () => {
     const idToken = userInfo.data?.idToken;
 
     // 🔥 Access token levu
-    const tokens = await GoogleSignin.getTokens();
-    const accessToken = tokens.accessToken;
+    // const tokens = await GoogleSignin.getTokens();
+    // const accessToken = tokens.accessToken;
 
     if (!idToken) {
-      throw new Error("No ID token");
+      throw new Error("Login was cancelled. Please try signing in again.");
     }
 
     // Supabase login
@@ -134,15 +134,15 @@ const Login = () => {
       return;
     }
 
-    console.log("Access Token:", accessToken);
+    // console.log("Access Token:", accessToken);
 
     // Save access token in database
-    await supabase
-      .from("profiles")
-      .update({
-        google_access_token: accessToken
-      })
-      .eq("id", data.user.id);
+    // await supabase
+    //   .from("profiles")
+    //   .update({
+    //     google_access_token: accessToken
+    //   })
+    //   .eq("id", data.user.id);
 
     router.replace("/(tabs)/home");
 
@@ -281,4 +281,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Login  

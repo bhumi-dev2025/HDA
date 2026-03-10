@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, StatusBar } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, StatusBar, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 //back end functions call....
 import { updateDailyLog, getTodayLog } from '../../lib/TrackerService';
@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 // import LottieView from 'lottie-react-native'; 
 import { HomeModalData, HomeModalType, CardProps, TimeData, TaskItem } from '../../types';
 import { fetchGoogleFitSteps } from "../../lib/googleFitService";
+import { useHealthkitAuthorization,useMostRecentQuantitySample,useStatisticsForQuantity } from "@kingstinct/react-native-healthkit";
 
 
 // model import
@@ -79,6 +80,24 @@ export default function HomeScreen() {
   const [isSleepDone, setIsSleepDone] = useState(false);
   const [isWorkoutDone, setIsWorkoutDone] = useState(false);
 
+  const [authorizationStatus, requestAuthorization] =
+  useHealthkitAuthorization({
+    toRead: ["HKQuantityTypeIdentifierStepCount"]
+  });
+
+//   const stepSample = useMostRecentQuantitySample(
+//   "HKQuantityTypeIdentifierStepCount"
+// );
+
+const stepStats = useStatisticsForQuantity(
+  "HKQuantityTypeIdentifierStepCount",
+  ["cumulativeSum"],                         // options
+  new Date(new Date().setHours(0,0,0,0)),    // from
+  new Date()                                 // to
+);
+
+// const totalAppleSteps = stepStats?.sumQuantity ?? 0;
+
   // Updated handleSave to accept value
   // Updated handleSave function
   const handleSave = async (type: HomeModalType, value: HomeModalData) => {
@@ -106,25 +125,69 @@ export default function HomeScreen() {
   };
 
 
-  const handleStepPress = async () => {
+  // const handleStepPress = async () => {
 
-    const steps = await fetchGoogleFitSteps();
+  //   const steps = await fetchGoogleFitSteps();
+
+  //   if (steps !== null) {
+
+  //     setStepData(steps.toString());
+  //     setIsStepDone(true);
+
+  //     handleSave("step", steps.toString());
+
+  //   } else {
+
+  //     // Google Fit use nathi karto → manual modal
+  //     setActiveModal("step");
+
+  //   }
+
+  // };
+ const handleStepPress = async () => {
+
+  try {
+
+    let steps = null;
+
+    if (Platform.OS === "android") {
+      steps = await fetchGoogleFitSteps();
+    }
+
+    if (Platform.OS === "ios") {
+
+      // first permission
+      // await requestAuthorization();
+
+      // then fetch steps
+      // if (stepSample?.quantity) {
+      //   steps = stepSample.quantity;
+      // }
+      steps = stepStats?.sumQuantity?.quantity ?? stepStats?.sumQuantity ?? 0;
+      console.log("Fetched Apple Steps:", steps);
+    }
 
     if (steps !== null) {
 
       setStepData(steps.toString());
       setIsStepDone(true);
 
-      handleSave("step", steps.toString());
+      await handleSave("step", steps.toString());
 
     } else {
 
-      // Google Fit use nathi karto → manual modal
       setActiveModal("step");
 
     }
 
-  };
+  } catch (error) {
+
+    console.log("Step fetch crash:", error);
+    setActiveModal("step");
+
+  }
+
+};
 
   // Aa useEffect -> data load (open app)
   useEffect(() => {
@@ -132,13 +195,27 @@ export default function HomeScreen() {
   }, []);
 
   //step 5 minit ma update mate
-  useEffect(() => {
+ useEffect(() => {
 
-  const interval = setInterval(() => {
-    handleStepPress();
-  }, 300000); // 5 min
+  if (Platform.OS === "android") {
 
-  return () => clearInterval(interval);
+    const interval = setInterval(() => {
+      handleStepPress();
+    }, 600000);
+
+    return () => clearInterval(interval);
+
+  }
+
+  
+
+}, []);
+
+useEffect(() => {
+
+  if (Platform.OS === "ios") {
+    requestAuthorization();
+  }
 
 }, []);
 
@@ -160,7 +237,16 @@ export default function HomeScreen() {
 
     try {
 
-      const steps = await fetchGoogleFitSteps();
+      // const steps = await fetchGoogleFitSteps();
+      let steps = null;
+
+      if (Platform.OS === "android") {
+        steps = await fetchGoogleFitSteps();
+      }
+
+      // if (Platform.OS === "ios") {
+      //   steps = await fetchAppleSteps();
+      // }
 
       if (steps !== null) {
 

@@ -85,18 +85,18 @@ export default function HomeScreen() {
     toRead: ["HKQuantityTypeIdentifierStepCount"]
   });
 
+ //last data ave step na .. 
 //   const stepSample = useMostRecentQuantitySample(
 //   "HKQuantityTypeIdentifierStepCount"
 // );
 
+// for sumof steps in a day...
 const stepStats = useStatisticsForQuantity(
   "HKQuantityTypeIdentifierStepCount",
   ["cumulativeSum"],                         // options
   new Date(new Date().setHours(0,0,0,0)),    // from
   new Date()                                 // to
 );
-
-// const totalAppleSteps = stepStats?.sumQuantity ?? 0;
 
   // Updated handleSave to accept value
   // Updated handleSave function
@@ -154,7 +154,7 @@ const stepStats = useStatisticsForQuantity(
       steps = await fetchGoogleFitSteps();
     }
 
-    if (Platform.OS === "ios") {
+    else if (Platform.OS === "ios") {
 
       // first permission
       // await requestAuthorization();
@@ -167,7 +167,7 @@ const stepStats = useStatisticsForQuantity(
       console.log("Fetched Apple Steps:", steps);
     }
 
-    if (steps !== null) {
+    if (steps !== null && steps !== undefined) {
 
       setStepData(steps.toString());
       setIsStepDone(true);
@@ -197,7 +197,7 @@ const stepStats = useStatisticsForQuantity(
   //step 5 minit ma update mate
  useEffect(() => {
 
-  if (Platform.OS === "android") {
+  
 
     const interval = setInterval(() => {
       handleStepPress();
@@ -205,7 +205,6 @@ const stepStats = useStatisticsForQuantity(
 
     return () => clearInterval(interval);
 
-  }
 
   
 

@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, Alert, StatusBar, Platform, ScrollView, KeyboardAvoidingView, TextInput ,ActivityIndicator} from 'react-native'
+import { View, Text, Image, TouchableOpacity, Alert, StatusBar, Platform, ScrollView, KeyboardAvoidingView, TextInput, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import B1 from '../assets/photo/login/B1.svg'
@@ -10,7 +10,7 @@ import { useRouter } from 'expo-router';
 import * as AppleAuthentication from 'expo-apple-authentication';
 
 //login code...
-const Login = () => { 
+const Login = () => {
   const router = useRouter();
   const back = require('../assets/photo/login/back.png')
   const logo = require('../assets/photo/login/b2.png')
@@ -28,11 +28,12 @@ const Login = () => {
       webClientId: '241217798940-f6ik71i9je097slar0i4rco98mc1re7m.apps.googleusercontent.com',
       iosClientId: '241217798940-ipmglh828epjv8q7v0ob4lrf2pvnuhs3.apps.googleusercontent.com',
       offlineAccess: true,
-    scopes: [
-    'profile',
-    'email',
-    'https://www.googleapis.com/auth/fitness.activity.read',
-  ],
+      scopes: Platform.OS === "android" ? [
+        'profile',
+        'email',
+        'https://www.googleapis.com/auth/fitness.activity.read',
+      ] : ["profile",
+        "email"]
     });
   }, []);
 
@@ -75,7 +76,7 @@ const Login = () => {
   //   try {
   //     await GoogleSignin.hasPlayServices();
   //     const userInfo = await GoogleSignin.signIn();
-      
+
   //     if (userInfo.data?.idToken) {
   //       const { data, error } = await supabase.auth.signInWithIdToken({
   //         provider: 'google',
@@ -107,49 +108,50 @@ const Login = () => {
   //   }
   // };
   const onGoogleButtonPress = async () => {
-  try {
+    try {
+      if (Platform.OS === "android") {
 
-    await GoogleSignin.hasPlayServices();
+        await GoogleSignin.hasPlayServices();
+      }
+      const userInfo = await GoogleSignin.signIn();
 
-    const userInfo = await GoogleSignin.signIn();
+      const idToken = userInfo.data?.idToken;
 
-    const idToken = userInfo.data?.idToken;
+      // 🔥 Access token levu
+      // const tokens = await GoogleSignin.getTokens();
+      // const accessToken = tokens.accessToken;
 
-    // 🔥 Access token levu
-    // const tokens = await GoogleSignin.getTokens();
-    // const accessToken = tokens.accessToken;
+      if (!idToken) {
+        throw new Error("Login was cancelled. Please try signing in again.");
+      }
 
-    if (!idToken) {
-      throw new Error("Login was cancelled. Please try signing in again.");
+      // Supabase login
+      const { data, error } = await supabase.auth.signInWithIdToken({
+        provider: "google",
+        token: idToken,
+      });
+
+      if (error) {
+        Alert.alert("Supabase Error", error.message);
+        return;
+      }
+
+      // console.log("Access Token:", accessToken);
+
+      // Save access token in database
+      // await supabase
+      //   .from("profiles")
+      //   .update({
+      //     google_access_token: accessToken
+      //   })
+      //   .eq("id", data.user.id);
+
+      router.replace("/(tabs)/home");
+
+    } catch (error: any) {
+      Alert.alert("Error", error.message);
     }
-
-    // Supabase login
-    const { data, error } = await supabase.auth.signInWithIdToken({
-      provider: "google",
-      token: idToken,
-    });
-
-    if (error) {
-      Alert.alert("Supabase Error", error.message);
-      return;
-    }
-
-    // console.log("Access Token:", accessToken);
-
-    // Save access token in database
-    // await supabase
-    //   .from("profiles")
-    //   .update({
-    //     google_access_token: accessToken
-    //   })
-    //   .eq("id", data.user.id);
-
-    router.replace("/(tabs)/home");
-
-  } catch (error:any) {
-    Alert.alert("Error", error.message);
-  }
-};
+  };
 
   const onAppleButtonPress = async () => {
     try {
@@ -181,101 +183,101 @@ const Login = () => {
       }
     }
   }
-//login view....
+  //login view....
   return (
     <View className="flex-1 bg-white">
       <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
       {/**background image */}
-      <Image 
-        source={back} 
-        className="absolute w-full h-full" 
-        resizeMode="cover" 
+      <Image
+        source={back}
+        className="absolute w-full h-full"
+        resizeMode="cover"
       />
       {/* KeyboardAvoidingView mukyu che jethi keyboard khule to input dankaay nai */}
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"
       >
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <SafeAreaView className="flex-1 justify-between">
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <SafeAreaView className="flex-1 justify-between">
 
-        <View className="flex-1 justify-center items-center w-full px-4">
-        <TouchableOpacity activeOpacity={1} onPress={handleSecretTap} className="w-full items-center justify-center">
-            <Image 
-              source={logo} 
-              className="w-[80%] h-64" 
-              resizeMode="contain" 
-            />
-        </TouchableOpacity>
+            <View className="flex-1 justify-center items-center w-full px-4">
+              <TouchableOpacity activeOpacity={1} onPress={handleSecretTap} className="w-full items-center justify-center">
+                <Image
+                  source={logo}
+                  className="w-[80%] h-64"
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
 
-        {/* --- HIDDEN DEMO LOGIN SECTION --- */}
-                {showDemoLogin && (
-                  <View className="w-full bg-white/90 p-4 rounded-xl border border-gray-200 shadow-sm mt-4 mb-4">
-                    <Text className="text-center font-bold mb-2 text-gray-500">Reviewer Login</Text>
-                    <TextInput 
-                      placeholder="Demo Email"
-                      placeholderTextColor="#9CA3AF"
-                      value={email}
-                      onChangeText={setEmail}
-                      className="text-black p-3 rounded-lg mb-2 border border-gray-300"
-                      autoCapitalize="none"
-                    />
-                    <TextInput 
-                      placeholder="Password"
-                      placeholderTextColor="#9CA3AF"
-                      value={password}
-                      onChangeText={setPassword}
-                      secureTextEntry
-                      className="text-black p-3 rounded-lg mb-3 border border-gray-300"
-                    />
-                    <TouchableOpacity 
-                      onPress={onDemoLoginPress}
-                      className="bg-black p-3 rounded-lg items-center"
-                    >
-                      {loading ? (
-                        <ActivityIndicator color="white" />
-                      ) : (
-                        <Text className="text-white font-bold">Login as Demo User</Text>
-                      )}
-                    </TouchableOpacity>
-                    
-                    {/* Hide Button */}
-                    <TouchableOpacity onPress={() => setShowDemoLogin(false)} className="mt-2 items-center">
-                        <Text className="text-red-500 text-xs">Hide</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-                {/* --------------------------------- */}
+              {/* --- HIDDEN DEMO LOGIN SECTION --- */}
+              {showDemoLogin && (
+                <View className="w-full bg-white/90 p-4 rounded-xl border border-gray-200 shadow-sm mt-4 mb-4">
+                  <Text className="text-center font-bold mb-2 text-gray-500">Reviewer Login</Text>
+                  <TextInput
+                    placeholder="Demo Email"
+                    placeholderTextColor="#9CA3AF"
+                    value={email}
+                    onChangeText={setEmail}
+                    className="text-black p-3 rounded-lg mb-2 border border-gray-300"
+                    autoCapitalize="none"
+                  />
+                  <TextInput
+                    placeholder="Password"
+                    placeholderTextColor="#9CA3AF"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry
+                    className="text-black p-3 rounded-lg mb-3 border border-gray-300"
+                  />
+                  <TouchableOpacity
+                    onPress={onDemoLoginPress}
+                    className="bg-black p-3 rounded-lg items-center"
+                  >
+                    {loading ? (
+                      <ActivityIndicator color="white" />
+                    ) : (
+                      <Text className="text-white font-bold">Login as Demo User</Text>
+                    )}
+                  </TouchableOpacity>
+
+                  {/* Hide Button */}
+                  <TouchableOpacity onPress={() => setShowDemoLogin(false)} className="mt-2 items-center">
+                    <Text className="text-red-500 text-xs">Hide</Text>
+                  </TouchableOpacity>
                 </View>
+              )}
+              {/* --------------------------------- */}
+            </View>
 
-        <View className="w-full px-8 mb-12">
-          <TouchableOpacity 
-            onPress={onGoogleButtonPress} 
-            activeOpacity={0.9} 
-            className="bg-black flex-row items-center justify-center py-4 rounded-2xl shadow-lg gap-3 mb-4"
-          >
-            <B1 />
-            <Text className="text-white font-bold text-lg">
-              Sign in with Google
-            </Text>
-          </TouchableOpacity>
-          {Platform.OS === 'ios' && (
-            <TouchableOpacity 
-            onPress={onAppleButtonPress} 
-            activeOpacity={0.9} 
-            className="bg-white flex-row items-center justify-center py-4 rounded-2xl border shadow-lg gap-3"
-          >
-            <B2 />
-            <Text className="text-black font-bold text-lg">
-              Sign in with Apple
-            </Text>
-          </TouchableOpacity>
-          )}
-          
-        </View>
+            <View className="w-full px-8 mb-12">
+              <TouchableOpacity
+                onPress={onGoogleButtonPress}
+                activeOpacity={0.9}
+                className="bg-black flex-row items-center justify-center py-4 rounded-2xl shadow-lg gap-3 mb-4"
+              >
+                <B1 />
+                <Text className="text-white font-bold text-lg">
+                  Sign in with Google
+                </Text>
+              </TouchableOpacity>
+              {Platform.OS === 'ios' && (
+                <TouchableOpacity
+                  onPress={onAppleButtonPress}
+                  activeOpacity={0.9}
+                  className="bg-white flex-row items-center justify-center py-4 rounded-2xl border shadow-lg gap-3"
+                >
+                  <B2 />
+                  <Text className="text-black font-bold text-lg">
+                    Sign in with Apple
+                  </Text>
+                </TouchableOpacity>
+              )}
 
-      </SafeAreaView>
-      </ScrollView>
+            </View>
+
+          </SafeAreaView>
+        </ScrollView>
       </KeyboardAvoidingView>
     </View>
   )

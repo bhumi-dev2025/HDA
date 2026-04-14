@@ -1,5 +1,5 @@
+import { DailyData } from '../types';
 import { supabase } from './supabase';
-import { DailyData }  from '../types';
 
 // --- NEW 6-ELEMENT SCORING ALGORITHM ---
 const calculateScore = (data: DailyData) => {

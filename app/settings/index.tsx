@@ -121,6 +121,17 @@ const Settingscreen = () => {
           <ChevronRight size={20} color="#D1D1D1" />
         </View> */}
 
+        {/* --- AI Key --- */}
+        <View className="bg-white rounded-md overflow-hidden mb-6 shadow-sm">
+          <TouchableOpacity onPress={()=>router.push('/settings/ai')} className='flex-row items-center justify-between p-5'>
+            <View className="flex-row items-center gap-3">
+              <Text className="text-lg">✨</Text>
+              <Text className="text-base font-semibold text-black">Gemini AI Key</Text>
+            </View>
+            <ChevronRight size={20} color="#D1D1D1" />
+          </TouchableOpacity>
+        </View>
+
         {/* --- Menu Items Group --- */}
         <View className="bg-white rounded-md overflow-hidden mb-6 shadow-sm">
           <TouchableOpacity onPress={()=>router.push('/setting_Screens/notifications')} className='flex-row items-center justify-between p-5'>

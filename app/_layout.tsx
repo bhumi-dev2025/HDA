@@ -1,10 +1,9 @@
-import { Stack } from "expo-router";
 import { Session } from "@supabase/supabase-js";
-import "../global.css"
-import { useRouter, useSegments } from "expo-router";
-import { View, ActivityIndicator } from "react-native";
+import { Stack, useRouter, useSegments } from "expo-router";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, View } from "react-native";
+import "../global.css";
 import { supabase } from "../lib/supabase";
-import { useState, useEffect } from "react";
 
 
 export default function RootLayout() {
@@ -16,16 +15,32 @@ export default function RootLayout() {
   useEffect(() => {
     // 1. App start thay tyare check karo ke user already login chhe?
     const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session);
-      setInitialized(true);
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) {
+          // Invalid/expired token — clear session, login par moklo
+          await supabase.auth.signOut();
+          setSession(null);
+        } else {
+          setSession(session);
+        }
+      } catch (e) {
+        await supabase.auth.signOut();
+        setSession(null);
+      } finally {
+        setInitialized(true);
+      }
     };
 
     checkUser();
 
     // 2. Login ke Logout thay tyare aa function automatic run thase
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT') {
+        setSession(null);
+      } else {
+        setSession(session);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -62,6 +77,7 @@ export default function RootLayout() {
       {/* Ahiya tamari badhi screens Stack ma automatic avi jase */}
       <Stack.Screen name="index" /> 
       <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="settings/ai" options={{ headerShown: true, title: "AI Settings" }} />
       {/* <Stack.Screen name="collectionDetail" /> */}
     </Stack>
   ); 

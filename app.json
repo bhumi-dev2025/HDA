@@ -8,7 +8,7 @@
     "scheme": "app",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "buildNumber": "6",
+      "buildNumber": "8",
       "supportsTablet": false,
       "bundleIdentifier": "com.simple.humandesignacademy",
       "googleServicesFile": "./GoogleService-Info.plist",
@@ -21,19 +21,20 @@
           }
         ],
         "ITSAppUsesNonExemptEncryption": false,
-          "NSHealthShareUsageDescription": "This app reads your step count from Apple Health to track your daily activity.",
-          "NSHealthUpdateUsageDescription": "This app may write health data to Apple Health if needed."
+        "NSHealthShareUsageDescription": "This app reads your step count from Apple Health to track your daily activity.",
+        "NSHealthUpdateUsageDescription": "This app may write health data to Apple Health if needed."
       }
     },
     "android": {
-      "versionCode": 7,
+      "versionCode": 9,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.simple.humandesignacademy",
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "resize",
+      "edgeToEdgeEnabled": true
     },
     "web": {
       "output": "static",
@@ -76,8 +77,9 @@
           "photosPermission": "Allow access to your photos so you can select and save ID cards locally on your device. Your photos remain private and are not uploaded to any external server."
         }
       ],
-      "@react-native-community/datetimepicker"
-        ],
+      "@react-native-community/datetimepicker",
+      "expo-video"
+    ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true

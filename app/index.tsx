@@ -153,19 +153,55 @@ const Login = () => {
     }
   };
 
+  // const onAppleButtonPress = async () => {
+  //   try {
+  //     const credential = await AppleAuthentication.signInAsync({
+  //       requestedScopes: [
+  //         AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+  //         AppleAuthentication.AppleAuthenticationScope.EMAIL,
+  //       ],
+  //     });
+
+  //     if (credential.identityToken) {
+  //       const { error, data } = await supabase.auth.signInWithIdToken({
+  //         provider: 'apple',
+  //         token: credential.identityToken,
+  //       });
+
+  //       if (error) {
+  //         Alert.alert("Supabase Error", error.message);
+  //       } else {
+  //         console.log("Apple Login Success");
+  //         router.replace("/(tabs)/home");
+  //       }
+  //     }
+  //   } catch (e: any) {
+  //     if (e.code === 'ERR_REQUEST_CANCELED') {
+  //       // User cancelled flow
+  //     } else {
+  //       Alert.alert("Error", e.message);
+  //     }
+  //   }
+  // }
+
   const onAppleButtonPress = async () => {
     try {
+      const rawNonce = Math.random().toString(36).substring(2) + 
+                       Math.random().toString(36).substring(2);
+      
       const credential = await AppleAuthentication.signInAsync({
         requestedScopes: [
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
+        nonce: rawNonce,
       });
 
       if (credential.identityToken) {
         const { error, data } = await supabase.auth.signInWithIdToken({
           provider: 'apple',
           token: credential.identityToken,
+          nonce: rawNonce,
         });
 
         if (error) {
@@ -177,12 +213,13 @@ const Login = () => {
       }
     } catch (e: any) {
       if (e.code === 'ERR_REQUEST_CANCELED') {
-        // User cancelled flow
+        // User cancelled
       } else {
         Alert.alert("Error", e.message);
       }
     }
   }
+  
   //login view....
   return (
     <View className="flex-1 bg-white">

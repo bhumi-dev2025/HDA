@@ -106,7 +106,7 @@ export default function HomeScreen() {
     }
   };
 
-  const autoSyncSteps = useCallback(async () => {
+const autoSyncSteps = useCallback(async () => {
     if (isSyncingSteps.current) return;
     const now = Date.now();
     if (now - lastStepSyncTime.current < 600000) return;
@@ -114,12 +114,11 @@ export default function HomeScreen() {
     lastStepSyncTime.current = now;
     try {
       let steps: number | null = null;
-      if (Platform.OS === "android") { steps = await fetchGoogleFitSteps(); }
-      else if (Platform.OS === "ios") {
-        const qty = stepStats?.sumQuantity;
-        steps = (typeof qty === 'number' ? qty : (qty as any)?.quantity) ?? 0;
+      if (Platform.OS === "android") { 
+        steps = await fetchGoogleFitSteps(); 
       }
-      if (steps !== null && steps !== undefined) {
+      // iOS mate autoSync ma koi save nahi — stepStats useEffect handle karshe
+      if (steps !== null && steps !== undefined && Platform.OS === "android") {
         setStepData(steps.toString());
         setIsStepDone(true);
         const result = await updateDailyLog("step", steps.toString());
@@ -134,9 +133,9 @@ export default function HomeScreen() {
       let steps: number | null = null;
       if (Platform.OS === "android") { steps = await fetchGoogleFitSteps(); }
       else if (Platform.OS === "ios") {
-        const qty = stepStats?.sumQuantity;
-        steps = (typeof qty === 'number' ? qty : (qty as any)?.quantity) ?? 0;
-      }
+    const qty = stepStats?.sumQuantity;
+    steps = Math.round(typeof qty === 'number' ? qty : (qty as any)?.quantity ?? 0);
+  }
       if (steps !== null && steps !== undefined) {
         setStepData(steps.toString()); setIsStepDone(true);
         await handleSave("step", steps.toString());
@@ -213,9 +212,24 @@ export default function HomeScreen() {
     return () => clearInterval(interval);
   }, [autoSyncSteps]);
 
-  useEffect(() => {
-    if (Platform.OS === "ios") { requestAuthorization(); }
-  }, []);
+ const lastSyncedSteps = useRef<number>(0);
+
+useEffect(() => {
+  if (Platform.OS !== "ios") return;
+  const qty = stepStats?.sumQuantity;
+  const steps = Math.round(typeof qty === 'number' ? qty : (qty as any)?.quantity ?? 0);
+  if (steps > 0 && steps !== lastSyncedSteps.current) {
+    lastSyncedSteps.current = steps;
+    setStepData(steps.toString());
+    setIsStepDone(true);
+    // Thodi delay rakho — refreshAll sathe conflict na thay
+    setTimeout(() => {
+      updateDailyLog("step", steps.toString()).then(result => {
+        if (result.success && result.newScore !== undefined) setCurrentScore(result.newScore);
+      });
+    }, 500);
+  }
+}, [stepStats?.sumQuantity]);
 
   return (
     <>

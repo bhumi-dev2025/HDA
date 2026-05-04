@@ -1,5 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import MaskedView from "@react-native-masked-view/masked-view";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -14,15 +16,20 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AI1 from '../assets/photo/home/AI1.svg';
+import AI4 from '../assets/photo/home/AI4.svg';
+import AI5 from '../assets/photo/home/AI5.svg';
+import AI6 from '../assets/photo/home/AI6.svg';
+import AI7 from '../assets/photo/home/AI7.svg';
 import { GeminiResponse, getStoredApiKey, sendMessage } from "../lib/gemini";
 import { todoEvents } from "../lib/todoEvents";
 import { addTasksToDailyLog, removeTasksFromDailyLog } from "../lib/todoService";
 import { getTodayLog, updateDailyLog } from "../lib/TrackerService";
 import ChatBubble from "./ChatBubble";
+
 
 const CHAT_HISTORY_KEY = "chat_history";
 const MAX_HISTORY = 20;
@@ -33,12 +40,15 @@ type Message = {
   text: string;
 };
 
+type ActiveTab = "todo" | "health";
+
 export default function FloatingChatButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [hasKey, setHasKey] = useState<boolean | null>(null);
+  const [activeTab, setActiveTab] = useState<ActiveTab>("todo");
   const flatListRef = useRef<FlatList>(null);
   const isAtBottom = useRef(true);
   const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -47,14 +57,16 @@ export default function FloatingChatButton() {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
-    if (Platform.OS !== "android") return;
     const onShow = (e: any) => {
       setKeyboardHeight(e.endCoordinates.height);
       setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 150);
     };
     const onHide = () => setKeyboardHeight(0);
-    const showSub = Keyboard.addListener("keyboardDidShow", onShow);
-    const hideSub = Keyboard.addListener("keyboardDidHide", onHide);
+    // iOS: keyboardWillShow for smooth animation, Android: keyboardDidShow
+    const showEvent = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
+    const hideEvent = Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
+    const showSub = Keyboard.addListener(showEvent, onShow);
+    const hideSub = Keyboard.addListener(hideEvent, onHide);
     return () => { showSub.remove(); hideSub.remove(); };
   }, []);
 
@@ -204,7 +216,7 @@ export default function FloatingChatButton() {
         sleep: todayLog?.sleep_data,
         workout: todayLog?.workout_time,
       };
-      const response: GeminiResponse = await sendMessage(currentHistory, userMsg.text, liveTodos, liveHealth);
+      const response: GeminiResponse = await sendMessage(currentHistory, userMsg.text, activeTab, liveTodos, liveHealth);
       if (response.type === "text") { appendMessage("model", response.text); }
       else if (response.type === "tool_call") { await handleToolCall(response.functionName, response.args); }
       else if (response.type === "multi_tool_call") { for (const call of response.calls) { await handleToolCall(call.functionName, call.args); } }
@@ -221,99 +233,190 @@ export default function FloatingChatButton() {
 
   const NoKeyBanner = () =>
     hasKey === false ? (
-      <TouchableOpacity onPress={() => { setIsOpen(false); router.push("/settings/ai"); }}
-        className="mx-4 mt-3 bg-amber-50 border border-amber-300 rounded-xl px-4 py-3 flex-row items-center">
-        <Ionicons name="warning-outline" size={18} color="#d97706" />
-        <Text className="text-amber-700 text-sm ml-2 flex-1">No API key found. Tap to add your Gemini key in Settings.</Text>
-        <Ionicons name="chevron-forward" size={16} color="#d97706" />
+      <TouchableOpacity
+        onPress={() => { setIsOpen(false); router.push("/settings/ai"); }}
+        style={{
+          marginHorizontal: 16, marginTop: 10,
+          backgroundColor: "#FFF8E1",
+          borderWidth: 1, borderColor: "#FFD54F",
+          borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10,
+          flexDirection: "row", alignItems: "center",
+        }}>
+        <Ionicons name="warning-outline" size={16} color="#F59E0B" />
+        <Text style={{ color: "#92400E", fontSize: 12, marginLeft: 8, flex: 1 }}>
+          No API key found. Tap to add your Gemini key in Settings.
+        </Text>
+        <Ionicons name="chevron-forward" size={14} color="#F59E0B" />
       </TouchableOpacity>
     ) : null;
 
   const EmptyState = () => (
-    <View className="flex-1 items-center justify-center px-8">
-      <Text className="text-5xl mb-4">✨</Text>
-      <Text className="text-xl font-bold text-gray-700 mb-2">Health Assistant</Text>
-      <Text className="text-gray-400 text-center text-sm leading-6">
-        Track your daily health by chatting!{"\n\n"}
-        🧘 "Meditated for 20 mins"{"\n"}
-        💧 "Drank 2 liters of water"{"\n"}
-        😴 "Slept for 8 hours"{"\n"}
-        💪 "Gym karyu 45 min"{"\n"}
-        ✅ "Add buy groceries to todo"
-      </Text>
+    <View style={{ flex: 1, justifyContent: "center", paddingHorizontal: 20 }}>
+      {activeTab === "todo" ? (
+        <View>
+          {["Buy groceries", "Call client tomorrow", "Finish project report", "Remove gym task"].map((item, i) => (
+            <View key={i} style={{
+              flexDirection: "row", alignItems: "center", justifyContent: "space-between",
+              paddingVertical: 13, borderBottomWidth: 0.5, borderBottomColor: "#F0F0F5",
+            }}>
+              <Text style={{ fontSize: 14, color: "#C0C0CC", fontWeight: "400" }}>{item}</Text>
+              <Ionicons name="arrow-up-outline" size={14} color="#D0D0DC" style={{ transform: [{ rotate: "45deg" }] }} />
+            </View>
+          ))}
+        </View>
+      ) : (
+        <View>
+          {["8.5 Hours Sleep", "10 Min Meditation", "Drank 2 liters water", "Gym workout 45 Min"].map((item, i) => (
+            <View key={i} style={{
+              flexDirection: "row", alignItems: "center", justifyContent: "space-between",
+              paddingVertical: 13, borderBottomWidth: 0.5, borderBottomColor: "#F0F0F5",
+            }}>
+              <Text style={{ fontSize: 14, color: "#C0C0CC", fontWeight: "400" }}>{item}</Text>
+              <Ionicons name="arrow-up-outline" size={14} color="#D0D0DC" style={{ transform: [{ rotate: "45deg" }] }} />
+            </View>
+          ))}
+        </View>
+      )}
     </View>
   );
+
+  // ── Tab Button ─────────────────────────────────────────────────────────────
+  const handleTodoTab = () => setActiveTab("todo");
+  const handleHealthTab = () => setActiveTab("health");
 
   const TAB_BAR_HEIGHT = 90;
   const BUTTON_BOTTOM = TAB_BAR_HEIGHT + 16;
 
   return (
     <>
-      {/* Floating Button */}
-      <Animated.View style={{ position: "absolute", bottom: BUTTON_BOTTOM, right: 20, zIndex: 999, transform: [{ scale: scaleAnim }] }}>
-        <TouchableOpacity onPress={handleButtonPress} activeOpacity={0.9}
-          className="w-[60px] h-[60px] rounded-[18px] items-center justify-center"
-          // style={{ shadowColor: "#7C3AED", shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.45, shadowRadius: 12, elevation: 10 }}
-          >
-          {/* <LinearGradient
-            colors={["#a855f7", "#6366f1", "#3b82f6"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            className="w-[60px] h-[60px] rounded-[18px] items-center justify-center border-2 border-white/30"> */}
-            <View className="rounded-[16px] overflow-hidden">
-              <AI1 width={48} height={48} />
-            </View>
-          {/* </LinearGradient> */}
+      <Animated.View style={{
+        position: "absolute", bottom: BUTTON_BOTTOM, right: 20,
+        zIndex: 999, transform: [{ scale: scaleAnim }],
+      }}>
+        <TouchableOpacity
+          onPress={handleButtonPress}
+          activeOpacity={0.9}
+          style={{ width: 60, height: 60, borderRadius: 18, alignItems: "center", justifyContent: "center" }}
+        >
+          <View style={{ borderRadius: 16, overflow: "hidden" }}>
+            <AI1 width={48} height={48} />
+          </View>
         </TouchableOpacity>
       </Animated.View>
 
-      {/* Modal */}
       <Modal visible={isOpen} transparent animationType="slide" onRequestClose={() => setIsOpen(false)}>
-        <View className="flex-1 justify-end">
+        <View style={{ flex: 1, justifyContent: "flex-end" }}>
+
           <TouchableOpacity
-            className="absolute top-0 left-0 right-0 bottom-0 bg-black/30"
-            activeOpacity={1} onPress={() => setIsOpen(false)} />
-          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={0}>
-            <View
-              className="bg-white rounded-t-3xl overflow-hidden"
-              style={{
-                height: keyboardHeight > 0 ? 580 - keyboardHeight + 260 : 580,
-                marginBottom: Platform.OS === "android" ? keyboardHeight : 0
-              }}>
+            style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.25)" }}
+            activeOpacity={1}
+            onPress={() => setIsOpen(false)}
+          />
+          {/* <TouchableWithoutFeedback onPress={() => setIsOpen(false)}>
+  <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.25)" }} />
+</TouchableWithoutFeedback> */}
+
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            keyboardVerticalOffset={0}
+          >
+            <View style={{
+              backgroundColor: "#FFFFFF",
+              borderTopLeftRadius: 28,
+              borderTopRightRadius: 28,
+              overflow: "hidden",
+              height: Platform.OS === "ios"
+                ? (keyboardHeight > 0 ? 720 - keyboardHeight : 580)
+                : (keyboardHeight > 0 ? 420 : 580),
+              marginBottom: Platform.OS === "android" ? keyboardHeight : 0,
+            }}>
 
               {/* Drag Handle */}
-              <View className="items-center pt-2.5 pb-1">
-                <View className="w-10 h-1 rounded-full bg-gray-200" />
+              <View style={{ alignItems: "center", paddingTop: 10, paddingBottom: 4 }}>
+                <View style={{ width: 36, height: 4, borderRadius: 2, backgroundColor: "#E5E7EB" }} />
               </View>
 
-              {/* Header */}
-              <View className="flex-row items-center justify-between px-4 py-2.5 border-b border-gray-100">
-                <View className="flex-row items-center">
-                  <Ionicons name="sparkles" size={18} color="#3b82f6" />
-                  <Text className="text-base font-bold text-gray-800 ml-1.5">Health Assistant</Text>
-                </View>
-                <View className="flex-row items-center gap-1">
+              {/* Header - sirf empty chat ma dikhe */}
+              {messages.length === 0 && (
+              <View style={{
+                alignItems: "center", paddingTop: 16, paddingBottom: 12,
+                borderBottomWidth: 0.5, borderBottomColor: "#F3F4F6",
+              }}>
+                <View style={{ position: "absolute", right: 12, top: 12, flexDirection: "row", alignItems: "center" }}>
                   {messages.length > 0 && (
-                    <TouchableOpacity onPress={clearHistory} className="p-2">
-                      <Ionicons name="trash-outline" size={18} color="#9ca3af" />
+                    <TouchableOpacity onPress={clearHistory} style={{ padding: 8 }}>
+                      <Ionicons name="trash-outline" size={18} color="#C4C4D0" />
                     </TouchableOpacity>
                   )}
-                  <TouchableOpacity onPress={() => setIsOpen(false)} className="p-2">
-                    <Ionicons name="chevron-down" size={20} color="#9ca3af" />
+                  <TouchableOpacity onPress={() => setIsOpen(false)} style={{ padding: 8 }}>
+                    <Ionicons name="chevron-down" size={20} color="#C4C4D0" />
                   </TouchableOpacity>
                 </View>
+
+                {/* AI Icon - Rounded Corners */}
+                <View style={{
+                  marginBottom: 10,
+                  borderRadius: 10,
+                  overflow: "hidden",
+                  width: 52,
+                  height: 52,
+                }}>
+                  <AI1 width={52} height={52} />
+                </View>
+
+                {/* Gradient Title */}
+                <MaskedView
+                  maskElement={
+                    <Text style={{ fontSize: 22, fontWeight: "700", marginBottom: 4, letterSpacing: 0.2 }}>
+                      Health Assistant
+                    </Text>
+                  }
+                >
+                  <LinearGradient
+                    colors={["#6015C0", "#247FFB"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                  >
+                    <Text style={{ fontSize: 22, fontWeight: "700", marginBottom: 4, letterSpacing: 0.2, opacity: 0 }}>
+                      Health Assistant
+                    </Text>
+                  </LinearGradient>
+                </MaskedView>
+
+                <Text style={{ fontSize: 12, color: "#A0A0B0" }}>
+                  Track your daily health by chatting!
+                </Text>
               </View>
+              )}
+
+              {/* Header with only close/trash - jyare messages hoy */}
+              {messages.length > 0 && (
+              <View style={{
+                flexDirection: "row", justifyContent: "flex-end",
+                paddingHorizontal: 12, paddingTop: 8, paddingBottom: 4,
+              }}>
+                <TouchableOpacity onPress={clearHistory} style={{ padding: 8 }}>
+                  <Ionicons name="trash-outline" size={18} color="#C4C4D0" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setIsOpen(false)} style={{ padding: 8 }}>
+                  <Ionicons name="chevron-down" size={20} color="#C4C4D0" />
+                </TouchableOpacity>
+              </View>
+              )}
 
               <NoKeyBanner />
 
+              {/* Chat Messages */}
               <FlatList
                 ref={flatListRef}
                 data={messages}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => <ChatBubble role={item.role} text={item.text} />}
                 contentContainerStyle={messages.length === 0 ? { flex: 1 } : { paddingVertical: 12 }}
-                ListEmptyComponent={<EmptyState />}
-                onContentSizeChange={() => { if (isAtBottom.current) flatListRef.current?.scrollToEnd({ animated: true }); }}
+                ListEmptyComponent={messages.length === 0 ? <EmptyState /> : null}
+                onContentSizeChange={() => {
+                  if (isAtBottom.current) flatListRef.current?.scrollToEnd({ animated: true });
+                }}
                 onScroll={({ nativeEvent }) => {
                   const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
                   isAtBottom.current = layoutMeasurement.height + contentOffset.y >= contentSize.height - 40;
@@ -324,34 +427,113 @@ export default function FloatingChatButton() {
 
               {/* Loading */}
               {loading && (
-                <View className="flex-row items-center px-4 pb-2">
-                  <View className="bg-gray-100 rounded-2xl px-4 py-2.5 flex-row items-center">
+                <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 16, paddingBottom: 8 }}>
+                  <View style={{
+                    backgroundColor: "#F3F4F6", borderRadius: 16,
+                    paddingHorizontal: 14, paddingVertical: 10,
+                    flexDirection: "row", alignItems: "center",
+                  }}>
                     <ActivityIndicator size="small" color="#6b7280" />
-                    <Text className="text-gray-500 text-sm ml-2">Thinking…</Text>
+                    <Text style={{ color: "#6B7280", fontSize: 13, marginLeft: 8 }}>Thinking…</Text>
                   </View>
                 </View>
               )}
 
-              {/* Input */}
-              <View
-                className="flex-row items-end px-3 pt-2.5 border-t border-gray-100 bg-white"
-                style={{ paddingBottom: Platform.OS === "android" ? 35 : insets.bottom + 12 }}>
-                <TextInput
-                  className="flex-1 bg-gray-100 rounded-[20px] px-4 py-2.5 text-[15px] text-gray-800"
-                  style={{ maxHeight: 120 }}
-                  placeholder="Meditation, water, sleep, workout, todos..."
-                  placeholderTextColor="#9ca3af"
-                  value={input}
-                  onChangeText={setInput}
-                  multiline
-                  onSubmitEditing={handleSend}
-                />
-                <TouchableOpacity
-                  onPress={handleSend}
-                  disabled={loading || !input.trim()}
-                  className={`ml-2 mb-0.5 w-[42px] h-[42px] rounded-full items-center justify-center ${input.trim() && !loading ? "bg-blue-500" : "bg-gray-200"}`}>
-                  <Ionicons name="arrow-up" size={20} color={input.trim() && !loading ? "white" : "#9ca3af"} />
-                </TouchableOpacity>
+              {/* Bottom — Tab + Input */}
+              <View style={{
+                borderTopWidth: 0.5, borderTopColor: "#F3F4F6",
+                paddingTop: 10, paddingHorizontal: 14,
+                paddingBottom: Platform.OS === "ios"
+                  ? (keyboardHeight > 0 ? 8 : insets.bottom + 8)
+                  : (keyboardHeight > 0 ? 40 : 32),
+                backgroundColor: "#FFFFFF",
+              }}>
+                <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
+  {/* Todo Tab */}
+  <TouchableOpacity
+    onPress={() => setActiveTab("todo")}
+    activeOpacity={0.8}
+    style={{
+      flexDirection: "row", alignItems: "center",
+      paddingHorizontal: 14, paddingVertical: 7,
+      borderRadius: 10, marginRight: 8,
+      backgroundColor: activeTab === "todo" ? "#FFFFFF" : "transparent",
+      borderWidth: activeTab === "todo" ? 1.5 : 0,
+      borderColor: activeTab === "todo" ? "#1A1A2E" : "transparent",
+    }}
+  >
+    <AI5
+      width={18} height={18}
+      color={activeTab === "todo" ? "#1A1A2E" : "#9CA3AF"}
+      style={{ marginRight: 5 }}
+    />
+    <Text style={{ fontSize: 13, fontWeight: "600", color: activeTab === "todo" ? "#1A1A2E" : "#9CA3AF" }}>
+      Todo
+    </Text>
+  </TouchableOpacity>
+
+  {/* Health Tab */}
+  <TouchableOpacity
+    onPress={() => setActiveTab("health")}
+    activeOpacity={0.8}
+    style={{
+      flexDirection: "row", alignItems: "center",
+      paddingHorizontal: 14, paddingVertical: 7,
+      borderRadius: 10,
+      backgroundColor: activeTab === "health" ? "#FFFFFF" : "transparent",
+      borderWidth: activeTab === "health" ? 1.5 : 0,
+      borderColor: activeTab === "health" ? "#1A1A2E" : "transparent",
+    }}
+  >
+    <AI4
+      width={18} height={18}
+      color={activeTab === "health" ? "#1A1A2E" : "#9CA3AF"}
+      style={{ marginRight: 5 }}
+    />
+    <Text style={{ fontSize: 13, fontWeight: "600", color: activeTab === "health" ? "#1A1A2E" : "#9CA3AF" }}>
+      Health
+    </Text>
+  </TouchableOpacity>
+</View>
+
+                <View style={{
+                  flexDirection: "row", alignItems: "center",
+                  backgroundColor: "#18181B05",
+                  borderRadius: 10,
+                  borderColor: "#C7C7CC",
+                  borderWidth: 1,
+                  paddingLeft: 16,
+                  paddingRight: 6,
+                  paddingVertical: 6,
+                }}>
+                  <TextInput
+                    style={{
+                      flex: 1,
+                      fontSize: 14,
+                      color: "#1A1A2E",
+                      maxHeight: 120,
+                      paddingVertical: 4,
+                    }}
+                    placeholder={activeTab === "todo" ? "Add a task..." : "Ask HDA Ai..."}
+                    placeholderTextColor="#B0B0C0"
+                    value={input}
+                    onChangeText={setInput}
+                    multiline
+                    onSubmitEditing={handleSend}
+                  />
+                  <TouchableOpacity
+                    onPress={input.trim() ? handleSend : undefined}
+                    disabled={loading}
+                    style={{ marginLeft: 6 }}
+                    activeOpacity={0.8}
+                  >
+                    {input.trim() ? (
+                      <AI7 width={36} height={36} />
+                    ) : (
+                      <AI6 width={36} height={36} />
+                    )}
+                  </TouchableOpacity>
+                </View>
               </View>
 
             </View>

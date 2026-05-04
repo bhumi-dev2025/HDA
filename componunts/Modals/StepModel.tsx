@@ -123,7 +123,7 @@ const StepPickerModal: React.FC<StepPickerModalProps> = ({
             {/* White Background આપ્યું જેથી પાછળ સરકતા ગ્રે નંબરો દેખાય નહીં */}
             <View className="bg-white items-center px-4">
                 <Text className="text-4xl font-extrabold text-black">
-                    {currentValue}
+                     {Math.round(currentValue).toLocaleString()}
                 </Text>
                 <Text className="text-gray-400 font-medium mt-1 text-sm">Steps</Text>
             </View>

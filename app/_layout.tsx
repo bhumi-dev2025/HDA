@@ -1,7 +1,8 @@
 import { Session } from "@supabase/supabase-js";
+import { Ionicons } from "@expo/vector-icons";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 import "../global.css";
 import { supabase } from "../lib/supabase";
 
@@ -13,12 +14,10 @@ export default function RootLayout() {
   const segments = useSegments();
 
   useEffect(() => {
-    // 1. App start thay tyare check karo ke user already login chhe?
     const checkUser = async () => {
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
         if (error) {
-          // Invalid/expired token — clear session, login par moklo
           await supabase.auth.signOut();
           setSession(null);
         } else {
@@ -34,7 +33,6 @@ export default function RootLayout() {
 
     checkUser();
 
-    // 2. Login ke Logout thay tyare aa function automatic run thase
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_OUT') {
         setSession(null);
@@ -49,22 +47,15 @@ export default function RootLayout() {
   useEffect(() => {
     if (!initialized) return;
 
-    // Check karo ke user kyare (tabs) folder ma chhe ke nahi
     const inAuthGroup = segments[0] === '(tabs)';
     
-    // Logic:
-    // Case 1: User Login NATHI pan Home page (tabs) access kare chhe -> Login par moklo
     if (!session && inAuthGroup) {
-      // Tamari login file nu nam 'index' hoy to '/' lakho, athva '/login'
       router.replace('/'); 
-    } 
-    // Case 2: User Login CHHE ane Login page par ubho chhe -> Home par moklo
-    else if (session && (segments as string[]).length === 0) {
+    } else if (session && (segments as string[]).length === 0) {
       router.replace('/(tabs)/home');
     }
   }, [session, initialized, segments]);
 
-  // Jya sudhi check thay tya sudhi Loading Circle farse
   if (!initialized) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -72,13 +63,44 @@ export default function RootLayout() {
       </View>
     );
   }
+
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      {/* Ahiya tamari badhi screens Stack ma automatic avi jase */}
       <Stack.Screen name="index" /> 
       <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="settings/ai" options={{ headerShown: true, title: "AI Settings" }} />
-      {/* <Stack.Screen name="collectionDetail" /> */}
+      <Stack.Screen
+        name="settings/ai"
+        options={{
+          headerShown: true,
+          title: "AI Settings",
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            fontSize: 16,
+            fontWeight: "600",
+            color: "#111",
+          },
+          headerStyle: {
+            backgroundColor: "#f5f5f5",
+          },
+          headerShadowVisible: false,
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => router.back()}
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: 17,
+                backgroundColor: "#e5e5e5",
+                alignItems: "center",
+                justifyContent: "center",
+                marginLeft: 4,
+              }}
+            >
+              <Ionicons name="chevron-back" size={18} color="#111" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
     </Stack>
   ); 
 }

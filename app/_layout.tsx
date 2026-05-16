@@ -1,5 +1,5 @@
-import { Session } from "@supabase/supabase-js";
 import { Ionicons } from "@expo/vector-icons";
+import { Session } from "@supabase/supabase-js";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, TouchableOpacity, View } from "react-native";
@@ -68,6 +68,25 @@ export default function RootLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" /> 
       <Stack.Screen name="(tabs)" />
+      <Stack.Screen
+        name="settings/index"
+        options={{
+          // headerShown: true,
+          title: "Settings",
+          headerTitleAlign: "center",
+          headerTitleStyle: { fontSize: 16, fontWeight: "600", color: "#111" },
+          headerStyle: { backgroundColor: "#f5f5f5" },
+          // headerShadowVisible: false,
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => router.back()}
+              style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: "#e5e5e5", alignItems: "center", justifyContent: "center", marginLeft: 4 }}
+            >
+              <Ionicons name="chevron-back" size={18} color="#111" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
       <Stack.Screen
         name="settings/ai"
         options={{

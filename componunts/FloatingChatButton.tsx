@@ -522,16 +522,12 @@ export default function FloatingChatButton() {
                     onSubmitEditing={handleSend}
                   />
                   <TouchableOpacity
-                    onPress={input.trim() ? handleSend : undefined}
+                    onPress={handleSend}
                     disabled={loading}
                     style={{ marginLeft: 6 }}
                     activeOpacity={0.8}
                   >
-                    {input.trim() ? (
-                      <AI7 width={36} height={36} />
-                    ) : (
-                      <AI6 width={36} height={36} />
-                    )}
+                    <AI7 width={36} height={36} />
                   </TouchableOpacity>
                 </View>
               </View>

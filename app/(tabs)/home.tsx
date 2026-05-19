@@ -1,53 +1,82 @@
-import { useHealthkitAuthorization, useStatisticsForQuantity } from "@kingstinct/react-native-healthkit";
-import { useFocusEffect } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Image, Platform, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  useHealthkitAuthorization,
+  useStatisticsForQuantity,
+} from "@kingstinct/react-native-healthkit";
+import { useFocusEffect } from "@react-navigation/native";
+import { useRouter } from "expo-router";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import {
+  Image,
+  ImageBackground,
+  Platform,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { fetchGoogleFitSteps } from "../../lib/googleFitService";
-import { todoEvents } from '../../lib/todoEvents';
-import { getTodayLog, updateDailyLog } from '../../lib/TrackerService';
-import { CardProps, HomeModalData, HomeModalType, TaskItem, TimeData } from '../../types';
+import { todoEvents } from "../../lib/todoEvents";
+import { getTodayLog, updateDailyLog } from "../../lib/TrackerService";
+import {
+  CardProps,
+  HomeModalData,
+  HomeModalType,
+  TaskItem,
+  TimeData,
+} from "../../types";
 
-import MeditationModal from '../../componunts/Modals/MeditationModel';
-import SleepModal from '../../componunts/Modals/SleepModel';
-import StepPickerModal from '../../componunts/Modals/StepModel';
-import TaskModal from '../../componunts/Modals/TodoModel';
-import WaterTrackerModal from '../../componunts/Modals/WaterModel';
-import WorkoutModal from '../../componunts/Modals/WorkoutModel';
-import ScoreChart from '../../componunts/Score';
-import FloatingChatButton from '../../componunts/FloatingChatButton';
+import { ActivityRings } from "../../componunts/ActivityRings";
+import { ConfettiOverlay } from "../../componunts/Confetti";
+import FloatingChatButton from "../../componunts/FloatingChatButton";
+import MeditationModal from "../../componunts/Modals/MeditationModel";
+import SleepModal from "../../componunts/Modals/SleepModel";
+import StepPickerModal from "../../componunts/Modals/StepModel";
+import TaskModal from "../../componunts/Modals/TodoModel";
+import WaterTrackerModal from "../../componunts/Modals/WaterModel";
+import WorkoutModal from "../../componunts/Modals/WorkoutModel";
+import { WeeklyCalendar } from "../../componunts/WeeklyCalendar";
+import { getWeeklyScores } from "../../lib/TrackerService";
 
-import A1 from '../../assets/photo/home/A1.svg';
-import A2 from '../../assets/photo/home/A2.svg';
-import C1 from '../../assets/photo/home/C1.svg';
-import C2 from '../../assets/photo/home/C2.svg';
-import I10 from '../../assets/photo/home/I10.svg';
-import I11 from '../../assets/photo/home/I11.svg';
-import I13 from '../../assets/photo/home/I13.svg';
-import I14 from '../../assets/photo/home/I14.svg';
-import I16 from '../../assets/photo/home/I16.svg';
-import I6 from '../../assets/photo/home/I6.svg';
-import I7 from '../../assets/photo/home/I7.svg';
-import I8 from '../../assets/photo/home/I8.svg';
-import I9 from '../../assets/photo/home/I9.svg';
-import L1 from '../../assets/photo/home/L1.svg';
+import C1 from "../../assets/photo/home/C1.svg";
+import C2 from "../../assets/photo/home/C2.svg";
 
-const p1 = require('../../assets/photo/home/p1.png');
-const p2 = require('../../assets/photo/home/p2.png');
-const p3 = require('../../assets/photo/home/p3.png');
-const p4 = require('../../assets/photo/home/p4.png');
-const p5 = require('../../assets/photo/home/p5.png');
-const p6 = require('../../assets/photo/home/p6.png');
-const p7 = require('../../assets/photo/home/p7.png');
-const p8 = require('../../assets/photo/home/p8.png');
+//import card icon
+import CC1 from "../../assets/2.0/home icon/C1.svg";
+import CC2 from "../../assets/2.0/home icon/C2.svg";
+import CC3 from "../../assets/2.0/home icon/C3.svg";
+import CC4 from "../../assets/2.0/home icon/C4.svg";
+import CC5 from "../../assets/2.0/home icon/C5.svg";
+import CC6 from "../../assets/2.0/home icon/C6.svg";
 
-const CardContainer = ({ children, onPress, heightClass = "h-auto", className = "" }: CardProps) => (
+//TITLE ICON
+import I1 from "../../assets/2.0/home icon/I1.svg";
+
+//CARD BG
+const b1 = require("../../assets/2.0/home bg/b1.png");
+const b2 = require("../../assets/2.0/home bg/b2.png");
+const b4 = require("../../assets/2.0/home bg/b4.png");
+const b5 = require("../../assets/2.0/home bg/b5.png");
+const b31 = require("../../assets/2.0/home bg/b31.png");
+const b32 = require("../../assets/2.0/home bg/b32.png");
+const b34 = require("../../assets/2.0/home bg/b34.png");
+const b35 = require("../../assets/2.0/home bg/b35.png");
+const b36 = require("../../assets/2.0/home bg/b36.png");
+const b37 = require("../../assets/2.0/home bg/b37.png");
+
+const CardContainer = ({
+  children,
+  onPress,
+  heightClass = "h-auto",
+  className = "",
+}: CardProps) => (
   <TouchableOpacity
     onPress={onPress}
     activeOpacity={0.9}
     disabled={!onPress}
-    className={`w-full rounded-3xl overflow-hidden border-4 border-white relative ${heightClass} ${className}`}
+    className={`w-full rounded-3xl overflow-hidden relative ${heightClass} ${className}`}
+    style={{ borderWidth: 1, borderColor: "rgba(255,255,255,0.13)" }}
   >
     {children}
   </TouchableOpacity>
@@ -57,13 +86,27 @@ export default function HomeScreen() {
   const router = useRouter();
   const [currentScore, setCurrentScore] = useState(0);
   const [activeModal, setActiveModal] = useState<HomeModalType>(null);
+  const [weeklyScores, setWeeklyScores] = useState<
+    { date: string; score: number }[]
+  >([]);
 
-  const [meditationData, setMeditationData] = useState('10m');
+  // Ring progress states
+  const [redProgress, setRedProgress] = useState(0); // workout + steps
+  const [blueProgress, setBlueProgress] = useState(0); // meditation + water
+  const [greenProgress, setGreenProgress] = useState(0); // todo + sleep
+
+  const [meditationData, setMeditationData] = useState("10m");
   const [waterData, setWaterData] = useState(1.5);
-  const [stepData, setStepData] = useState('200');
-  const [sleepData, setSleepData] = useState<TimeData>({ hour: '08', minute: '24' });
+  const [stepData, setStepData] = useState("200");
+  const [sleepData, setSleepData] = useState<TimeData>({
+    hour: "08",
+    minute: "24",
+  });
   const [todoTasks, setTodoTasks] = useState<TaskItem[]>([]);
-  const [workoutData, setWorkoutData] = useState<TimeData>({ hour: '00', minute: '30' });
+  const [workoutData, setWorkoutData] = useState<TimeData>({
+    hour: "00",
+    minute: "30",
+  });
 
   const [isMeditationDone, setIsMeditationDone] = useState(false);
   const [isWaterDone, setIsWaterDone] = useState(false);
@@ -72,32 +115,218 @@ export default function HomeScreen() {
   const [isSleepDone, setIsSleepDone] = useState(false);
   const [isWorkoutDone, setIsWorkoutDone] = useState(false);
 
+  // ── Confetti ──────────────────────────────────────────────────────────────
+  const [confetti, setConfetti] = useState<"mini" | "big" | null>(null);
+  const handleConfettiDone = useCallback(() => setConfetti(null), []);
+
+  // Goals
+  const workoutGoalMins = 45;
+  const stepsGoal = 8000;
+  const meditationGoalMins = 20;
+  const waterGoal = 3.5;
+  const sleepGoalHours = 8;
+
+  const workoutMinsNow =
+    parseInt(workoutData.hour || "0") * 60 +
+    parseInt(workoutData.minute || "0");
+  const stepsNow = parseInt(stepData || "0");
+  const meditationMinsNow = parseInt(meditationData || "0");
+  const sleepHoursNow =
+    parseInt(sleepData.hour || "0") + parseInt(sleepData.minute || "0") / 60;
+  const todosDoneNow = todoTasks.filter(
+    (t) => t.isDone && t.text?.trim() !== "",
+  ).length;
+  const todosTotalNow = todoTasks.filter((t) => t.text?.trim() !== "").length;
+
+  // 🔴 Red = Workout + Steps  |  🔵 Blue = Water + Meditation  |  🟢 Green = Tasks only
+  const workoutOk = isWorkoutDone && workoutMinsNow >= workoutGoalMins;
+  const stepsOk = isStepDone && stepsNow >= stepsGoal;
+  const meditationOk =
+    isMeditationDone && meditationMinsNow >= meditationGoalMins;
+  const waterOk = isWaterDone && waterData >= waterGoal;
+  const sleepOk = isSleepDone && sleepHoursNow >= sleepGoalHours; // score ma only, ring nahi
+  const todosOk =
+    isTodoDone && todosTotalNow > 0 && todosDoneNow >= todosTotalNow;
+  const redOk = redProgress >= 1;
+  const blueOk = blueProgress >= 1;
+  const greenOk = greenProgress >= 1;
+  const allRingsOk = redOk && blueOk && greenOk;
+  const score100 = currentScore >= 100;
+
+  const prevConfettiRef = useRef({
+    workoutOk,
+    stepsOk,
+    meditationOk,
+    waterOk,
+    sleepOk,
+    todosOk,
+    redOk,
+    blueOk,
+    greenOk,
+    allRingsOk,
+    score100,
+  });
+  const firstRenderConfetti = useRef(true);
+
+  useEffect(() => {
+    if (firstRenderConfetti.current) {
+      firstRenderConfetti.current = false;
+      prevConfettiRef.current = {
+        workoutOk,
+        stepsOk,
+        meditationOk,
+        waterOk,
+        sleepOk,
+        todosOk,
+        redOk,
+        blueOk,
+        greenOk,
+        allRingsOk,
+        score100,
+      };
+      return;
+    }
+    const p = prevConfettiRef.current;
+    const bigTrigger =
+      (!p.allRingsOk && allRingsOk) || (!p.score100 && score100);
+    const miniTrigger =
+      (!p.workoutOk && workoutOk) ||
+      (!p.stepsOk && stepsOk) ||
+      (!p.meditationOk && meditationOk) ||
+      (!p.waterOk && waterOk) ||
+      (!p.sleepOk && sleepOk) ||
+      (!p.todosOk && todosOk) ||
+      (!p.redOk && redOk) ||
+      (!p.blueOk && blueOk) ||
+      (!p.greenOk && greenOk);
+
+    if (bigTrigger) {
+      setConfetti("big");
+    } else if (miniTrigger) {
+      setConfetti("mini");
+    }
+    prevConfettiRef.current = {
+      workoutOk,
+      stepsOk,
+      meditationOk,
+      waterOk,
+      sleepOk,
+      todosOk,
+      redOk,
+      blueOk,
+      greenOk,
+      allRingsOk,
+      score100,
+    };
+  }, [
+    workoutOk,
+    stepsOk,
+    meditationOk,
+    waterOk,
+    sleepOk,
+    todosOk,
+    redOk,
+    blueOk,
+    greenOk,
+    allRingsOk,
+    score100,
+  ]);
+  // ──────────────────────────────────────────────────────────────────────────
+
   const isSyncingSteps = useRef(false);
   const lastStepSyncTime = useRef<number>(0);
 
   // refreshAll ને ref માં રાખો — stale closure problem નહીં
-  const refreshAllRef = useRef<() => Promise<void>>(undefined as unknown as () => Promise<void>);
+  const refreshAllRef = useRef<() => Promise<void>>(
+    undefined as unknown as () => Promise<void>,
+  );
 
-  const [, requestAuthorization] =
-    useHealthkitAuthorization({ toRead: ["HKQuantityTypeIdentifierStepCount"] });
+  const [, requestAuthorization] = useHealthkitAuthorization({
+    toRead: ["HKQuantityTypeIdentifierStepCount"],
+  });
 
   const stepStats = useStatisticsForQuantity(
     "HKQuantityTypeIdentifierStepCount",
     ["cumulativeSum"],
     new Date(new Date().setHours(0, 0, 0, 0)),
-    new Date()
+    new Date(),
+  );
+
+  // ── Ring recalculate helper — Apple app style, instant update ────────────
+  const recalcRings = useCallback(
+    (
+      wData: TimeData,
+      sData: string,
+      mData: string,
+      wtrData: number,
+      tData: TaskItem[],
+    ) => {
+      const wMins =
+        parseInt(wData.hour || "0") * 60 + parseInt(wData.minute || "0");
+      const steps = parseInt(sData || "0");
+      const mMins = parseInt(mData || "0");
+      const todoDone = tData.filter(
+        (t) => t.isDone && t.text?.trim() !== "",
+      ).length;
+      const todoTotal = tData.filter((t) => t.text?.trim() !== "").length;
+
+      // 🔴 Workout + Steps
+      setRedProgress((Math.min(wMins / 45, 1) + Math.min(steps / 8000, 1)) / 2);
+      // 🔵 Water + Meditation
+      setBlueProgress(
+        (Math.min(wtrData / 3.5, 1) + Math.min(mMins / 20, 1)) / 2,
+      );
+      // 🟢 Tasks only
+      setGreenProgress(todoTotal > 0 ? todoDone / todoTotal : 0);
+    },
+    [],
   );
 
   const handleSave = async (type: HomeModalType, value: HomeModalData) => {
-    if (type === 'meditation' && typeof value === 'string') { setMeditationData(value); setIsMeditationDone(true); }
-    if (type === 'water' && typeof value === 'number') { setWaterData(value); setIsWaterDone(true); }
-    if (type === 'todo' && Array.isArray(value)) { setTodoTasks(value); setIsTodoDone(true); }
-    if (type === 'step' && typeof value === 'string') { setStepData(value); setIsStepDone(true); }
-    if (type === 'sleep' && typeof value === 'object' && 'hour' in value) { setSleepData(value as TimeData); setIsSleepDone(true); }
-    if (type === 'workout' && typeof value === 'object' && 'hour' in value) { setWorkoutData(value as TimeData); setIsWorkoutDone(true); }
+    // 1. Local state update + latest values track karva
+    let newWorkout = workoutData;
+    let newSteps = stepData;
+    let newMeditation = meditationData;
+    let newWater = waterData;
+    let newTodos = todoTasks;
+
+    if (type === "meditation" && typeof value === "string") {
+      setMeditationData(value);
+      setIsMeditationDone(true);
+      newMeditation = value;
+    }
+    if (type === "water" && typeof value === "number") {
+      setWaterData(value);
+      setIsWaterDone(true);
+      newWater = value;
+    }
+    if (type === "todo" && Array.isArray(value)) {
+      setTodoTasks(value);
+      setIsTodoDone(true);
+      newTodos = value;
+    }
+    if (type === "step" && typeof value === "string") {
+      setStepData(value);
+      setIsStepDone(true);
+      newSteps = value;
+    }
+    if (type === "sleep" && typeof value === "object" && "hour" in value) {
+      setSleepData(value as TimeData);
+      setIsSleepDone(true);
+      // sleep ring ma nathi — recalc nathi karvo
+    }
+    if (type === "workout" && typeof value === "object" && "hour" in value) {
+      setWorkoutData(value as TimeData);
+      setIsWorkoutDone(true);
+      newWorkout = value as TimeData;
+    }
+
+    // 2. Rings instantly recalculate (Apple app style — no Supabase wait)
+    recalcRings(newWorkout, newSteps, newMeditation, newWater, newTodos);
 
     setActiveModal(null);
 
+    // 3. Supabase save + score update
     if (type) {
       const result = await updateDailyLog(type, value);
       if (result.success && result.newScore !== undefined) {
@@ -106,7 +335,7 @@ export default function HomeScreen() {
     }
   };
 
-const autoSyncSteps = useCallback(async () => {
+  const autoSyncSteps = useCallback(async () => {
     if (isSyncingSteps.current) return;
     const now = Date.now();
     if (now - lastStepSyncTime.current < 600000) return;
@@ -114,33 +343,51 @@ const autoSyncSteps = useCallback(async () => {
     lastStepSyncTime.current = now;
     try {
       let steps: number | null = null;
-      if (Platform.OS === "android") { 
-        steps = await fetchGoogleFitSteps(); 
+      if (Platform.OS === "android") {
+        steps = await fetchGoogleFitSteps();
       }
       // iOS mate autoSync ma koi save nahi — stepStats useEffect handle karshe
       if (steps !== null && steps !== undefined && Platform.OS === "android") {
         setStepData(steps.toString());
         setIsStepDone(true);
+        recalcRings(
+          workoutData,
+          steps.toString(),
+          meditationData,
+          waterData,
+          todoTasks,
+        );
         const result = await updateDailyLog("step", steps.toString());
-        if (result.success && result.newScore !== undefined) setCurrentScore(result.newScore);
+        if (result.success && result.newScore !== undefined)
+          setCurrentScore(result.newScore);
       }
     } catch (error) {
-    } finally { isSyncingSteps.current = false; }
+    } finally {
+      isSyncingSteps.current = false;
+    }
   }, []);
 
   const handleStepPress = async () => {
     try {
       let steps: number | null = null;
-      if (Platform.OS === "android") { steps = await fetchGoogleFitSteps(); }
-      else if (Platform.OS === "ios") {
-    const qty = stepStats?.sumQuantity;
-    steps = Math.round(typeof qty === 'number' ? qty : (qty as any)?.quantity ?? 0);
-  }
+      if (Platform.OS === "android") {
+        steps = await fetchGoogleFitSteps();
+      } else if (Platform.OS === "ios") {
+        const qty = stepStats?.sumQuantity;
+        steps = Math.round(
+          typeof qty === "number" ? qty : ((qty as any)?.quantity ?? 0),
+        );
+      }
       if (steps !== null && steps !== undefined) {
-        setStepData(steps.toString()); setIsStepDone(true);
+        setStepData(steps.toString());
+        setIsStepDone(true);
         await handleSave("step", steps.toString());
-      } else { setActiveModal("step"); }
-    } catch (error) { setActiveModal("step"); }
+      } else {
+        setActiveModal("step");
+      }
+    } catch (error) {
+      setActiveModal("step");
+    }
   };
 
   // ✅ refreshAll — Supabase માંથી fresh data fetch કરી બધા states update કરે
@@ -155,7 +402,9 @@ const autoSyncSteps = useCallback(async () => {
       // Todo
       const tasks: TaskItem[] = data.todo_list ?? [];
       setTodoTasks(tasks);
-      setIsTodoDone(tasks.filter((t: TaskItem) => t.text.trim() !== '').length > 0);
+      setIsTodoDone(
+        tasks.filter((t: TaskItem) => t.text.trim() !== "").length > 0,
+      );
 
       // Meditation
       if (data.meditation_time != null) {
@@ -187,7 +436,40 @@ const autoSyncSteps = useCallback(async () => {
         setIsStepDone(true);
       }
 
-    } catch (e) { console.log('[HOME] refreshAll error:', e); }
+      // Ring progress calculate karo
+      const workoutH = parseInt(data.workout_time?.hour || "0");
+      const workoutM = parseInt(data.workout_time?.minute || "0");
+      const workoutMins = workoutH * 60 + workoutM;
+      const stepsVal = parseInt(data.step_count?.toString() || "0");
+      const meditationMins = parseInt(data.meditation_time || "0");
+      const waterVal = data.water_intake || 0;
+      const sleepH = parseInt(data.sleep_data?.hour || "0");
+      const sleepM = parseInt(data.sleep_data?.minute || "0");
+      const sleepHours = sleepH + sleepM / 60;
+      const todosDone = (data.todo_list || []).filter(
+        (t: TaskItem) => t.isDone,
+      ).length;
+      const todosTotal = (data.todo_list || []).filter(
+        (t: TaskItem) => t.text?.trim() !== "",
+      ).length;
+
+      // 🔴 Red  = Workout + Steps
+      // 🔵 Blue = Water + Meditation
+      // 🟢 Green = Tasks only  (sleep score ma che, ring ma nahi)
+      setRedProgress(
+        (Math.min(workoutMins / 45, 1) + Math.min(stepsVal / 8000, 1)) / 2,
+      );
+      setBlueProgress(
+        (Math.min(waterVal / 3.5, 1) + Math.min(meditationMins / 20, 1)) / 2,
+      );
+      setGreenProgress(todosTotal > 0 ? todosDone / todosTotal : 0);
+
+      // Weekly scores fetch karo
+      const weekly = await getWeeklyScores();
+      setWeeklyScores(weekly);
+    } catch (e) {
+      console.log("[HOME] refreshAll error:", e);
+    }
   }, []);
 
   // ref ને always latest refreshAll point karavo
@@ -195,7 +477,12 @@ const autoSyncSteps = useCallback(async () => {
     refreshAllRef.current = refreshAll;
   }, [refreshAll]);
 
-  useFocusEffect(useCallback(() => { refreshAll(); autoSyncSteps(); }, [refreshAll, autoSyncSteps]));
+  useFocusEffect(
+    useCallback(() => {
+      refreshAll();
+      autoSyncSteps();
+    }, [refreshAll, autoSyncSteps]),
+  );
 
   // todoEvents subscribe — turant refreshAll call karo, no delay
   useEffect(() => {
@@ -208,173 +495,393 @@ const autoSyncSteps = useCallback(async () => {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => { autoSyncSteps(); }, 600000);
+    const interval = setInterval(() => {
+      autoSyncSteps();
+    }, 600000);
     return () => clearInterval(interval);
   }, [autoSyncSteps]);
 
- const lastSyncedSteps = useRef<number>(0);
+  const lastSyncedSteps = useRef<number>(0);
 
-useEffect(() => {
-  if (Platform.OS !== "ios") return;
-  const qty = stepStats?.sumQuantity;
-  const steps = Math.round(typeof qty === 'number' ? qty : (qty as any)?.quantity ?? 0);
-  if (steps > 0 && steps !== lastSyncedSteps.current) {
-    lastSyncedSteps.current = steps;
-    setStepData(steps.toString());
-    setIsStepDone(true);
-    // Thodi delay rakho — refreshAll sathe conflict na thay
-    setTimeout(() => {
-      updateDailyLog("step", steps.toString()).then(result => {
-        if (result.success && result.newScore !== undefined) setCurrentScore(result.newScore);
-      });
-    }, 500);
-  }
-}, [stepStats?.sumQuantity]);
+  useEffect(() => {
+    if (Platform.OS !== "ios") return;
+    const qty = stepStats?.sumQuantity;
+    const steps = Math.round(
+      typeof qty === "number" ? qty : ((qty as any)?.quantity ?? 0),
+    );
+    if (steps > 0 && steps !== lastSyncedSteps.current) {
+      lastSyncedSteps.current = steps;
+      setStepData(steps.toString());
+      setIsStepDone(true);
+      recalcRings(
+        workoutData,
+        steps.toString(),
+        meditationData,
+        waterData,
+        todoTasks,
+      );
+      setTimeout(() => {
+        updateDailyLog("step", steps.toString()).then((result) => {
+          if (result.success && result.newScore !== undefined)
+            setCurrentScore(result.newScore);
+        });
+      }, 500);
+    }
+  }, [stepStats?.sumQuantity]);
+
+  const homeBg = require("../../assets/photo/login/2.0/home.png");
 
   return (
     <>
-    <SafeAreaView className="flex-1 bg-[#F1F1F1]">
-      <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
+      <ImageBackground source={homeBg} resizeMode="cover" style={{ flex: 1 }}>
+        <SafeAreaView className="flex-1 bg-transparent">
+          <StatusBar
+            barStyle="light-content"
+            translucent
+            backgroundColor="transparent"
+          />
 
-      <View className="flex-row justify-between items-center px-5 py-4">
-        <L1 width={30} height={30} />
-        <View className="flex-row items-center gap-3">
-          <TouchableOpacity className="w-12 h-12 items-center justify-center rounded-full" onPress={() => router.push('/wallet')}>
-            <A2 height={30} width={30} />
-          </TouchableOpacity>
-          <TouchableOpacity className="w-12 h-12 items-center justify-center rounded-full" onPress={() => router.push('/settings')}>
-            <A1 height={30} width={30} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <ScrollView className="flex-1" contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 110 }} showsVerticalScrollIndicator={false}>
-
-        <View className="flex-row items-center gap-2 mb-4">
-          <I6 />
-          <Text className="text-lg font-semibold text-[#888]">Superhuman Score</Text>
-        </View>
-        <ScoreChart score={currentScore} />
-
-        <View className="flex-row items-center gap-2 mb-4 mt-6">
-          <I7 />
-          <Text className="text-lg font-semibold text-[#888]">Superhuman Elements</Text>
-        </View>
-
-        <View className="flex-row justify-between gap-3">
-          <View className="flex-1 gap-3">
-            <CardContainer onPress={() => setActiveModal('meditation')} heightClass="h-28" className=''>
-              <Image source={p1} className="absolute w-full h-full" resizeMode="cover" />
-              <View className="p-4 h-full flex-row items-center gap-4">
-                {!isMeditationDone ? (
-                  <><I8 /><Text className="text-[#333] font-medium text-sm">Mind clear. Soul{'\n'}light.</Text></>
-                ) : (
-                  <><I8 height={45} width={45} /><View className="w-[2px] h-10 bg-gray-200" /><View>
-                    <View className="bg-[#E6F4D7] px-2 py-0.5 rounded-full self-start mb-1"><Text className="text-[#6B8E23] text-[10px] font-bold">Meditation</Text></View>
-                    <Text className="text-[#333] text-2xl font-black">{meditationData}</Text>
-                  </View></>
-                )}
-              </View>
-            </CardContainer>
-
-            <CardContainer onPress={() => setActiveModal('workout')} heightClass="h-24">
-              <Image source={p8} className="absolute w-full h-full" resizeMode="cover" />
-              <View className="p-4 h-full flex-row items-center gap-4">
-                {!isWorkoutDone ? (
-                  <><I16 height={40} width={40} /><Text className="text-[#333] font-medium text-sm">Strength built in{'\n'}Stillness.</Text></>
-                ) : (
-                  <><I16 height={40} width={40} /><View className="w-[2px] h-10 bg-gray-200" /><View>
-                    <View className="bg-[#DFE3FF] px-2 py-0.5 rounded-full self-start mb-1"><Text className="text-[#1E33BD] text-[8px] font-bold">Workout</Text></View>
-                    <Text className="text-[#333] text-2xl font-black">{workoutData.hour}:{workoutData.minute}</Text>
-                  </View></>
-                )}
-              </View>
-            </CardContainer>
-
-            <CardContainer onPress={() => setActiveModal('water')} heightClass="h-56">
-              {!isWaterDone ? (
-                <><Image source={p3} className="absolute w-full h-full" resizeMode="cover" />
-                <View className="p-4 items-center justify-between h-full py-6">
-                  <I10 height={50} width={50} />
-                  <Text className="text-[#333] text-center font-medium text-sm">Water brings life,health,{'\n'} and happiness.</Text>
-                </View></>
-              ) : (
-                <><Image source={p6} className="absolute w-full h-full" resizeMode="cover" />
-                <View className="p-4 items-center justify-center h-full py-6 gap-3">
-                  <View className="items-center">
-                    <Text className="text-[#333] text-center font-medium text-[10px] leading-3 mb-2">Water brings life,health,{'\n'} and happiness.</Text>
-                    <Text className="text-[#333] text-3xl font-black">{waterData} ltr</Text>
+          <ScrollView
+            className="flex-1"
+            contentContainerStyle={{
+              paddingHorizontal: 16,
+              paddingBottom: 110,
+            }}
+            showsVerticalScrollIndicator={false}
+          >
+            {/* Weekly Calendar + Activity Rings */}
+            <View style={{ marginBottom: 8 }}>
+              <View style={{ padding: 16, gap: 16 }}>
+                {/* Weekly Calendar */}
+                <WeeklyCalendar
+                  weeklyScores={weeklyScores}
+                  todayScore={currentScore}
+                />
+                {/* Activity Rings */}
+                <View style={{ alignItems: "center", gap: 8 }}>
+                  <ActivityRings
+                    red={redProgress}
+                    blue={blueProgress}
+                    green={greenProgress}
+                    score={currentScore}
+                    size={240}
+                  />
+                  <View style={{ flexDirection: "row", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                      <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: "#FF375F" }} />
+                      <Text style={{ color: "#FFFFFF", fontSize: 11 }}>Move & Workout</Text>
+                    </View>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                      <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: "#0A84FF" }} />
+                      <Text style={{ color: "#FFFFFF", fontSize: 11 }}>Mindful & Hydrate</Text>
+                    </View>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                      <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: "#30D158" }} />
+                      <Text style={{ color: "#FFFFFF", fontSize: 11 }}>Task Done</Text>
+                    </View>
                   </View>
-                  <I14 width={60} height={60} />
-                </View></>
-              )}
-            </CardContainer>
-          </View>
-
-          <View className="flex-1 gap-3">
-            <CardContainer onPress={handleStepPress} heightClass="h-24">
-              <Image source={p2} className="absolute w-full h-full" resizeMode="cover" />
-              <View className="p-4 h-full flex-row items-center gap-4">
-                {!isStepDone ? (
-                  <><I9 height={40} width={40} /><Text className="flex-1 text-[#333] font-medium text-sm">Mindful steps,{'\n'}peaceful path.</Text></>
-                ) : (
-                  <><I9 height={40} width={40} /><View className="w-[2px] h-10 bg-gray-200" /><View>
-                    <View className="bg-[#FFF5D6] px-2 py-0.5 rounded-full self-start mb-1"><Text className="text-[#CEA021] text-[10px] font-bold">Steps</Text></View>
-                    <Text className="text-[#333] text-2xl font-black">{stepData}</Text>
-                  </View></>
-                )}
+                </View>
               </View>
-            </CardContainer>
+            </View>
 
-            <CardContainer onPress={() => setActiveModal('todo')} heightClass="h-56" className='items-center justify-center'>
-              {!isTodoDone ? (
-                <><Image source={p4} className="absolute w-full h-full" resizeMode="cover" />
-                <View className="p-4 items-center justify-between h-full">
-                  <I11 height={50} width={50} />
-                  <Text className="text-[#333] text-center font-medium text-sm mb-2">Write a small to-do list for Superhuman Work.</Text>
-                </View></>
-              ) : (
-                <><Image source={p7} className="absolute w-full h-full" resizeMode="cover" />
-                <View className="p-4 items-start">
-                  <Text className='text-[#333] text-1xl font-black mt-4'>Things to do today</Text>
-                  <View className='items-center justify-start mb-4 mt-4'>
-                    {todoTasks.filter(t => t.text !== '').slice(0, 5).map((item, index) => (
-                      <View key={index} className='flex-row items-center gap-2 mt-2'>
-                        {item.isDone ? <C2 width={18} height={18} /> : <C1 height={18} width={18} />}
-                        <Text numberOfLines={1} className={`text-[13px] font-semibold flex-1 ${item.isDone ? 'text-[#bbb9b9] line-through' : 'text-[#333]'}`}>{item.text}</Text>
+            <View className="flex-row items-center gap-2 mb-4 mt-6">
+              <I1 />
+              <Text className="text-lg font-semibold text-white">
+                Superhuman Elements
+              </Text>
+            </View>
+
+            <View className="flex-row justify-between gap-3">
+              <View className="flex-1 gap-3">
+                <CardContainer
+                  onPress={() => setActiveModal("meditation")}
+                  heightClass="h-28"
+                  className=""
+                >
+                  <Image
+                    source={b31}
+                    className="absolute w-full h-full"
+                    resizeMode="cover"
+                  />
+                  <View className="p-4 h-full flex-row items-center gap-4">
+                    {!isMeditationDone ? (
+                      <>
+                        <CC1 height={45} width={45} />
+                        <View className="w-[1px] h-8 bg-[#E5E5EA]" />
+                        <Text className="text-white font-medium text-sm">
+                          Mind clear. Soul{"\n"}light.
+                        </Text>
+                      </>
+                    ) : (
+                      <>
+                        <CC1 height={45} width={45} />
+                        <View className="w-[1px] h-8 bg-[#E5E5EA]" />
+                        <View>
+                          <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1">
+                            <Text className="text-[#0A84FF] text-[10px] font-bold">
+                              Meditation
+                            </Text>
+                          </View>
+                          <Text className="text-white text-2xl font-black">
+                            {meditationData}
+                          </Text>
+                        </View>
+                      </>
+                    )}
+                  </View>
+                </CardContainer>
+
+                <CardContainer
+                  onPress={() => setActiveModal("workout")}
+                  heightClass="h-24"
+                >
+                  <Image
+                    source={b32}
+                    className="absolute w-full h-full"
+                    resizeMode="cover"
+                  />
+                  <View className="p-4 h-full flex-row items-center gap-4">
+                    {!isWorkoutDone ? (
+                      <>
+                        <CC2 height={45} width={45} />
+                        <View className="w-[1px] h-8 bg-[#E5E5EA]" />
+                        <Text className="text-white font-medium text-sm">
+                          Strength built in{"\n"}Stillness.
+                        </Text>
+                      </>
+                    ) : (
+                      <>
+                        <CC2 height={45} width={45} />
+                        <View className="w-[1px] h-8 bg-[#E5E5EA]" />
+                        <View>
+                          <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1">
+                            <Text className="text-[#FF375F] text-[8px] font-bold">
+                              Workout
+                            </Text>
+                          </View>
+                          <Text className="text-white text-2xl font-black">
+                            {workoutData.hour}h {workoutData.minute}m
+                          </Text>
+                        </View>
+                      </>
+                    )}
+                  </View>
+                </CardContainer>
+
+                <CardContainer
+                  onPress={() => setActiveModal("water")}
+                  heightClass="h-56"
+                >
+                  {!isWaterDone ? (
+                    <>
+                      <Image
+                        source={b34}
+                        className="absolute w-full h-full"
+                        resizeMode="cover"
+                      />
+                      <View className="p-4 items-center justify-between h-full py-6">
+                        <CC3 height={50} width={50} />
+                        <Text className="text-white text-center font-medium text-sm">
+                          Water brings life,health,{"\n"} and happiness.
+                        </Text>
                       </View>
-                    ))}
-                  </View>
-                </View></>
-              )}
-            </CardContainer>
-
-            <CardContainer onPress={() => setActiveModal('sleep')} heightClass="h-28">
-              <Image source={p5} className="absolute w-full h-full" resizeMode="cover" />
-              <View className="p-4 h-full flex-row items-center gap-4">
-                {!isSleepDone ? (
-                  <><I13 height={40} width={40} /><Text className="text-[#333] font-medium text-sm">Quiet mind.{'\n'}Deep Sleep.</Text></>
-                ) : (
-                  <><I13 height={40} width={40} /><View className="w-[2px] h-10 bg-gray-200" /><View>
-                    <View className="bg-[#F2F2F7] px-2 py-0.5 rounded-full self-start mb-1"><Text className="text-[#333] text-[10px] font-bold">Sleep</Text></View>
-                    <Text className="text-[#333] text-2xl font-black">{sleepData.hour}:{sleepData.minute}</Text>
-                  </View></>
-                )}
+                    </>
+                  ) : (
+                    <>
+                      <Image
+                        source={b4}
+                        className="absolute w-full h-full"
+                        resizeMode="cover"
+                      />
+                      <View className="p-4 items-center justify-center h-full py-6 gap-3">
+                        <View className="items-center">
+                          <Text className="text-white text-center font-medium text-[10px] leading-3 mb-2">
+                            Water brings life,health,{"\n"} and happiness.
+                          </Text>
+                          <Text className="text-white text-3xl font-black">
+                            {waterData}ltr
+                          </Text>
+                        </View>
+                        <CC3 width={60} height={60} />
+                      </View>
+                    </>
+                  )}
+                </CardContainer>
               </View>
-            </CardContainer>
-          </View>
-        </View>
 
-      </ScrollView>
+              <View className="flex-1 gap-3">
+                <CardContainer onPress={handleStepPress} heightClass="h-24">
+                  <Image
+                    source={b35}
+                    className="absolute w-full h-full"
+                    resizeMode="cover"
+                  />
+                  <View className="p-4 h-full flex-row items-center gap-4">
+                    {!isStepDone ? (
+                      <>
+                        <CC4 height={45} width={45} />
+                        <View className="w-[1px] h-8 bg-[#E5E5EA]" />
+                        <Text className="flex-1 text-white font-medium text-sm">
+                          Mindful steps,{"\n"}peaceful path.
+                        </Text>
+                      </>
+                    ) : (
+                      <>
+                        <CC4 height={45} width={45} />
+                        <View className="w-[1px] h-8 bg-[#E5E5EA]" />
+                        <View>
+                          <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1">
+                            <Text className="text-[#FF375F] text-[10px] font-bold">
+                              Steps
+                            </Text>
+                          </View>
+                          <Text className="text-white text-2xl font-black">
+                            {stepData}
+                          </Text>
+                        </View>
+                      </>
+                    )}
+                  </View>
+                </CardContainer>
 
-      <MeditationModal isVisible={activeModal === 'meditation'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('meditation', val)} initialValue={meditationData} />
-      <WaterTrackerModal isVisible={activeModal === 'water'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('water', val)} initialValue={waterData} />
-      <TaskModal isVisible={activeModal === 'todo'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('todo', val)} initialTasks={todoTasks} />
-      <StepPickerModal isVisible={activeModal === 'step'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('step', val)} initialValue={stepData} />
-      <SleepModal isVisible={activeModal === 'sleep'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('sleep', val)} initialValue={sleepData} />
-      <WorkoutModal isVisible={activeModal === 'workout'} onClose={() => setActiveModal(null)} onSave={(val) => handleSave('workout', val)} initialValue={workoutData} />
-    </SafeAreaView>
-    <FloatingChatButton />
+                <CardContainer
+                  onPress={() => setActiveModal("todo")}
+                  heightClass="h-56"
+                  className="items-center justify-center"
+                >
+                  {!isTodoDone ? (
+                    <>
+                      <Image
+                        source={b36}
+                        className="absolute w-full h-full"
+                        resizeMode="cover"
+                      />
+                      <View className="p-4 items-center justify-between h-full">
+                        <CC5 height={50} width={50} />
+                        <Text className="text-white text-center font-medium text-sm mb-2">
+                          Write a small to-do list for Superhuman Work.
+                        </Text>
+                      </View>
+                    </>
+                  ) : (
+                    <>
+                      <Image
+                        source={b5}
+                        className="absolute w-full h-full"
+                        resizeMode="cover"
+                      />
+                      <View className="p-4 items-start">
+                        <Text className="text-white text-1xl font-black mt-4">
+                          Things to do today
+                        </Text>
+                        <View className="items-center justify-start mb-4 mt-4">
+                          {todoTasks
+                            .filter((t) => t.text !== "")
+                            .slice(0, 5)
+                            .map((item, index) => (
+                              <View
+                                key={index}
+                                className="flex-row items-center gap-2 mt-2"
+                              >
+                                {item.isDone ? (
+                                  <C2 width={18} height={18} />
+                                ) : (
+                                  <C1 height={18} width={18} />
+                                )}
+                                <Text
+                                  numberOfLines={1}
+                                  className={`text-[13px] font-semibold flex-1 ${item.isDone ? "text-[#bbb9b9] line-through" : "text-white"}`}
+                                >
+                                  {item.text}
+                                </Text>
+                              </View>
+                            ))}
+                        </View>
+                      </View>
+                    </>
+                  )}
+                </CardContainer>
+
+                <CardContainer
+                  onPress={() => setActiveModal("sleep")}
+                  heightClass="h-28"
+                >
+                  <Image
+                    source={b37}
+                    className="absolute w-full h-full"
+                    resizeMode="cover"
+                  />
+                  <View className="p-4 h-full flex-row items-center gap-4">
+                    {!isSleepDone ? (
+                      <>
+                        <CC6 height={45} width={45} />
+                        <View className="w-[1px] h-8 bg-[#E5E5EA]" />
+                        <Text className="text-white font-medium text-sm">
+                          Quiet mind.{"\n"}Deep Sleep.
+                        </Text>
+                      </>
+                    ) : (
+                      <>
+                        <CC6 height={45} width={45} />
+                        <View className="w-[1px] h-8 bg-[#E5E5EA]" />
+                        <View>
+                          <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1">
+                            <Text className="text-[#FF8D28] text-[10px] font-bold">
+                              Sleep
+                            </Text>
+                          </View>
+                          <Text className="text-white text-2xl font-black">
+                            {sleepData.hour}h {sleepData.minute}m
+                          </Text>
+                        </View>
+                      </>
+                    )}
+                  </View>
+                </CardContainer>
+              </View>
+            </View>
+          </ScrollView>
+
+          <MeditationModal
+            isVisible={activeModal === "meditation"}
+            onClose={() => setActiveModal(null)}
+            onSave={(val) => handleSave("meditation", val)}
+            initialValue={meditationData}
+          />
+          <WaterTrackerModal
+            isVisible={activeModal === "water"}
+            onClose={() => setActiveModal(null)}
+            onSave={(val) => handleSave("water", val)}
+            initialValue={waterData}
+          />
+          <TaskModal
+            isVisible={activeModal === "todo"}
+            onClose={() => setActiveModal(null)}
+            onSave={(val) => handleSave("todo", val)}
+            initialTasks={todoTasks}
+          />
+          <StepPickerModal
+            isVisible={activeModal === "step"}
+            onClose={() => setActiveModal(null)}
+            onSave={(val) => handleSave("step", val)}
+            initialValue={stepData}
+          />
+          <SleepModal
+            isVisible={activeModal === "sleep"}
+            onClose={() => setActiveModal(null)}
+            onSave={(val) => handleSave("sleep", val)}
+            initialValue={sleepData}
+          />
+          <WorkoutModal
+            isVisible={activeModal === "workout"}
+            onClose={() => setActiveModal(null)}
+            onSave={(val) => handleSave("workout", val)}
+            initialValue={workoutData}
+          />
+        </SafeAreaView>
+      </ImageBackground>
+      <ConfettiOverlay type={confetti} onComplete={handleConfettiDone} />
+      <FloatingChatButton />
     </>
   );
 }

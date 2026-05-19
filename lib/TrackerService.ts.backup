@@ -145,36 +145,6 @@ export const updateDailyLog = async (type: string, value: any) => {
   }
 };
 
-// --- FETCH WEEKLY SCORES (7 days na alag alag score) ---
-export const getWeeklyScores = async (): Promise<{ date: string; score: number }[]> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return [];
-
-  // Aaj thi 6 din pehla — total 7 days
-  const days: { date: string; score: number }[] = [];
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    days.push({ date: d.toISOString().split('T')[0], score: 0 });
-  }
-
-  const { data } = await supabase
-    .from('daily_logs')
-    .select('date, score')
-    .eq('user_id', user.id)
-    .gte('date', days[0].date)
-    .lte('date', days[6].date);
-
-  if (data) {
-    data.forEach((row: { date: string; score: number }) => {
-      const idx = days.findIndex(d => d.date === row.date);
-      if (idx !== -1) days[idx].score = row.score ?? 0;
-    });
-  }
-
-  return days;
-};
-
 // --- FETCH DATA ---
 export const getTodayLog = async () => {
     const { data: { user } } = await supabase.auth.getUser();

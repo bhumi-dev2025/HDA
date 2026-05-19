@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
-import { Plus, Heart, Trash2,User } from 'lucide-react-native';
+import { Plus, Heart, Trash2 } from 'lucide-react-native';
 import { StatusBar } from 'expo-status-bar';
 import { supabase } from '../../lib/supabase';
-import * as Clipboard from 'expo-clipboard'; // Clipboard import
+import * as Clipboard from 'expo-clipboard';
+import { useRouter } from 'expo-router';
 
 // Assets Imports
-import I5 from '../../assets/photo/home/I5.svg'
+import A1 from '../../assets/photo/home/A1.svg';
+import A2 from '../../assets/photo/home/A2.svg';
 import P1 from '../../assets/photo/profile/P1.svg'
 import P2 from '../../assets/photo/profile/P2.svg'
 import P4 from '../../assets/photo/profile/P4.svg'
@@ -21,6 +23,7 @@ import { getUserSkills, saveUserSkills } from '../../lib/SkillService';
 import { getUserPortfolios, saveUserPortfolio, deleteUserPortfolio, PortfolioItem } from '../../lib/PortfolioService';
 
 const ProfileScreen = () => {
+  const router = useRouter();
   const p1 = require('../../assets/photo/profile/p1.png');
   const defaultImage = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1000&auto=format&fit=crop';
 
@@ -75,22 +78,17 @@ const ProfileScreen = () => {
     }
   }
 
-  // --- Main Logic: Handle Link Press ---
   const handleMainLinkPress = async () => {
-    // Jo portfolio nathi to modal khulse
     if (portfolios.length === 0) {
       setShowPortfolio(true);
       return;
     }
 
-    // Jo portfolio che to pehli item ni link copy thase
     const linkToCopy = portfolios[0].link;
     await Clipboard.setStringAsync(linkToCopy);
     
-    // Copied state set karo
     setIsCopied(true);
     
-    // 2 second pachi pachu normal thy jase
     setTimeout(() => {
       setIsCopied(false);
     }, 2000);
@@ -103,31 +101,29 @@ const ProfileScreen = () => {
       {/* Header Image */}
       <View className="relative w-full h-64">
         <Image source={p1} className="w-full h-full object-cover" />
-        <View className="absolute top-12 right-5 bg-white h-8 w-14 p-1 rounded-full flex-row items-center justify-between">
-          <I5 height={20} width={20}></I5>
-          <Text className="font-bold text-sm text-center">1.2</Text>
+        {/* Wallet + Settings buttons — top right */}
+        <View className="absolute top-12 right-5 flex-row items-center gap-2">
+          <TouchableOpacity className="w-10 h-10 items-center justify-center rounded-full bg-white/80" onPress={() => router.push('/wallet')}>
+            <A2 height={22} width={22} />
+          </TouchableOpacity>
+          <TouchableOpacity className="w-10 h-10 items-center justify-center rounded-full bg-white/80" onPress={() => router.push('/settings')}>
+            <A1 height={22} width={22} />
+          </TouchableOpacity>
         </View>
       </View>
 
       {/* Profile Content Container */}
       <View className="bg-white rounded-t-[40px] -mt-16 p-4 pt-16 relative flex-1">
 
-        {/* Avatar - થોડું ઉપર ખેંચ્યું */}
+        {/* Avatar */}
         <View className="absolute -top-16 left-0 right-0 items-center z-10">
           <View className="p-1 rounded-full border-2 border-dashed border-red-300">
             <View className="p-1 bg-white rounded-full">
-              {avatarUrl?(
-                <Image
-                source={{ uri: avatarUrl }}
-                className="w-24 h-24 rounded-full"
-              />
-              ):(
-                <Image
-                source={{ uri: defaultImage }}
-                className="w-24 h-24 rounded-full"
-              />
+              {avatarUrl ? (
+                <Image source={{ uri: avatarUrl }} className="w-24 h-24 rounded-full" />
+              ) : (
+                <Image source={{ uri: defaultImage }} className="w-24 h-24 rounded-full" />
               )}
-              
             </View>
           </View>
           <TouchableOpacity className="absolute bottom-[-10px] bg-red-400 p-1 rounded-full border-4 border-white">
@@ -188,17 +184,15 @@ const ProfileScreen = () => {
             </View>
           </View>
 
-          {/* --- PORTFOLIO SECTION (Fixed UI) --- */}
+          {/* --- PORTFOLIO SECTION --- */}
           <View className="space-y-4 p-4">
             <View className="flex-row items-center space-x-2 gap-2 mb-2">
               <P4 /><Text className="text-lg font-bold text-gray-400">Portfolio</Text>
             </View>
 
             <View className="flex-col gap-4">
-              {/* Portfolio Items - Card Style Restored */}
               {portfolios.map((item) => (
                 <View key={item.id} className="w-full bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden relative">
-                  {/* Delete Button */}
                   <TouchableOpacity
                     onPress={() => handleDeletePortfolio(item.id)}
                     className="absolute top-2 right-2 z-10 bg-white/90 p-2 rounded-full shadow-sm"
@@ -206,7 +200,6 @@ const ProfileScreen = () => {
                     <Trash2 size={16} color="#ef4444" />
                   </TouchableOpacity>
 
-                  {/* Image height adjusted to match design */}
                   <Image
                     source={{ uri: item.image_url || 'https://via.placeholder.com/300' }}
                     className="w-full h-36 bg-gray-100"
@@ -223,7 +216,6 @@ const ProfileScreen = () => {
                 </View>
               ))}
 
-              {/* Add Portfolio Button */}
               {portfolios.length === 0 && (
               <TouchableOpacity
                 onPress={() => setShowPortfolio(true)}

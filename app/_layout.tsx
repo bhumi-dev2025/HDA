@@ -1,8 +1,10 @@
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 import { Session } from "@supabase/supabase-js";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, TouchableOpacity, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "../global.css";
 import { supabase } from "../lib/supabase";
 
@@ -65,7 +67,9 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <BottomSheetModalProvider>
+        <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" /> 
       <Stack.Screen name="(tabs)" />
       <Stack.Screen
@@ -120,6 +124,8 @@ export default function RootLayout() {
           ),
         }}
       />
-    </Stack>
+      </Stack>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   ); 
 }

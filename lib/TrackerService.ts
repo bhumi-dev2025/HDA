@@ -68,10 +68,11 @@ const calculateScore = (data: DailyData) => {
   // F. To-Do Score (20 Pts)
   let todoScore = 0;
   if (data.todos && data.todos.length > 0) {
-    const total = data.todos.length;
-    const completed = data.todos.filter(t => t.isDone).length;
+    const realTasks = data.todos.filter(t => t.text?.trim() !== '');
+    const total = realTasks.length;
+    const completed = realTasks.filter(t => t.isDone).length;
     // Formula: (% Completed) * 20
-    todoScore = (completed / total) * WEIGHTS.todo;
+    if (total > 0) todoScore = (completed / total) * WEIGHTS.todo;
   }
 
   // Final Sum

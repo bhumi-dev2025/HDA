@@ -1,6 +1,8 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
+
+const calendarBg = require("../assets/2.0/home bg/b1.png");
 
 function ScoreRing({
   score,
@@ -75,7 +77,12 @@ export function WeeklyCalendar({
   });
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={calendarBg}
+      resizeMode="cover"
+      style={styles.container}
+      imageStyle={{ borderRadius: 18 }}
+    >
       {DAY_LABELS.map((label, i) => {
         const isToday = i === todayIdx;
         const isFuture = i > todayIdx;
@@ -91,22 +98,22 @@ export function WeeklyCalendar({
               isFuture && styles.future,
             ]}
           >
+            <ScoreRing score={score} future={isFuture} />
             <Text style={[styles.label, isToday && styles.todayLabel]}>
               {label}
             </Text>
-            <ScoreRing score={score} future={isFuture} />
           </View>
         );
       })}
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    backgroundColor: "#1C1C1E",
     borderRadius: 18,
+    overflow: "hidden",
     padding: 10,
     justifyContent: "space-between",
   },
@@ -118,8 +125,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     flex: 1,
   },
-  today: { backgroundColor: "#2C2C2E" },
-  future: { opacity: 0.2 },
+  today: { backgroundColor: "#656565", borderRadius: 16 },
+  future: { opacity: 0.4 },
   label: { color: "#636366", fontSize: 11, fontWeight: "600" },
   todayLabel: { color: "#FFFFFF" },
   center: { alignItems: "center", justifyContent: "center" },

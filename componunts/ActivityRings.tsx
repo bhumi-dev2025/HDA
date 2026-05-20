@@ -7,26 +7,33 @@ import Animated, {
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-function Ring({ progress, color, radius, strokeWidth, size, delay = 0 }: {
+function Ring({ progress, color, radius, strokeWidth, size, delay = 0, animKey = 0 }: {
   progress: number; color: string; radius: number;
-  strokeWidth: number; size: number; delay?: number;
+  strokeWidth: number; size: number; delay?: number; animKey?: number;
 }) {
   const circumference = 2 * Math.PI * radius;
   const animProgress = useSharedValue(0);
   const center = size / 2;
   const isFirst = useRef(true);
+  const prevAnimKey = useRef(animKey);
 
   useEffect(() => {
     const target = Math.min(progress, 1);
-    if (isFirst.current) {
+    const keyChanged = prevAnimKey.current !== animKey;
+    prevAnimKey.current = animKey;
+
+    if (isFirst.current || keyChanged) {
+      // First mount OR animKey changed (user saved data) → restart from 0
       isFirst.current = false;
+      animProgress.value = 0;
       animProgress.value = withDelay(delay, withTiming(target, {
         duration: 1200, easing: Easing.out(Easing.cubic),
       }));
     } else {
+      // Same session progress update
       animProgress.value = withTiming(target, { duration: 600, easing: Easing.out(Easing.cubic) });
     }
-  }, [progress]);
+  }, [progress, animKey]);
 
   const animatedProps = useAnimatedProps(() => ({
     strokeDashoffset: circumference * (1 - animProgress.value),
@@ -47,8 +54,8 @@ function Ring({ progress, color, radius, strokeWidth, size, delay = 0 }: {
   );
 }
 
-export function ActivityRings({ red, blue, green, score, size = 220 }: {
-  red: number; blue: number; green: number; score: number; size?: number;
+export function ActivityRings({ red, blue, green, score, size = 220, animKey = 0 }: {
+  red: number; blue: number; green: number; score: number; size?: number; animKey?: number;
 }) {
   const sw = 22;
   const gap = 8;
@@ -59,9 +66,9 @@ export function ActivityRings({ red, blue, green, score, size = 220 }: {
   return (
     <View style={{ width: size, height: size }}>
       <Svg width={size} height={size}>
-        <Ring progress={red}   color="#FF375F" radius={outerR} strokeWidth={sw} size={size} delay={0}   />
-        <Ring progress={blue}  color="#0A84FF" radius={midR}   strokeWidth={sw} size={size} delay={150} />
-        <Ring progress={green} color="#30D158" radius={innerR} strokeWidth={sw} size={size} delay={300} />
+        <Ring progress={red}   color="#FF375F" radius={outerR} strokeWidth={sw} size={size} delay={0}   animKey={animKey} />
+        <Ring progress={blue}  color="#0A84FF" radius={midR}   strokeWidth={sw} size={size} delay={150} animKey={animKey} />
+        <Ring progress={green} color="#30D158" radius={innerR} strokeWidth={sw} size={size} delay={300} animKey={animKey} />
       </Svg>
       <View style={[StyleSheet.absoluteFill, styles.center]} pointerEvents="none">
         <Text style={styles.score}>{score}</Text>

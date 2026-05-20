@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -25,10 +25,15 @@ import AI5 from '../assets/photo/home/AI5.svg';
 import AI6 from '../assets/photo/home/AI6.svg';
 import AI7 from '../assets/photo/home/AI7.svg';
 import { GeminiResponse, getStoredApiKey, sendMessage } from "../lib/gemini";
+import { chatEvents } from "../lib/chatEvents";
 import { todoEvents } from "../lib/todoEvents";
 import { addTasksToDailyLog, removeTasksFromDailyLog } from "../lib/todoService";
 import { getTodayLog, updateDailyLog } from "../lib/TrackerService";
 import ChatBubble from "./ChatBubble";
+
+export type FloatingChatButtonHandle = {
+  open: () => void;
+};
 
 
 const CHAT_HISTORY_KEY = "chat_history";
@@ -42,7 +47,7 @@ type Message = {
 
 type ActiveTab = "todo" | "health";
 
-export default function FloatingChatButton() {
+export default forwardRef<FloatingChatButtonHandle>(function FloatingChatButton(_, ref) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -55,6 +60,17 @@ export default function FloatingChatButton() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  // Ref expose — tab bar thi open kari shakay
+  useImperativeHandle(ref, () => ({
+    open: () => setIsOpen(true),
+  }));
+
+  // chatEvents subscribe — tab bar AI button thi open thay
+  useEffect(() => {
+    const unsub = chatEvents.subscribe(() => setIsOpen(true));
+    return unsub;
+  }, []);
 
   useEffect(() => {
     const onShow = (e: any) => {
@@ -289,21 +305,6 @@ export default function FloatingChatButton() {
 
   return (
     <>
-      <Animated.View style={{
-        position: "absolute", bottom: BUTTON_BOTTOM, right: 20,
-        zIndex: 999, transform: [{ scale: scaleAnim }],
-      }}>
-        <TouchableOpacity
-          onPress={handleButtonPress}
-          activeOpacity={0.9}
-          style={{ width: 60, height: 60, borderRadius: 18, alignItems: "center", justifyContent: "center" }}
-        >
-          <View style={{ borderRadius: 16, overflow: "hidden" }}>
-            <AI1 width={48} height={48} />
-          </View>
-        </TouchableOpacity>
-      </Animated.View>
-
       <Modal visible={isOpen} transparent animationType="slide" onRequestClose={() => setIsOpen(false)}>
         <View style={{ flex: 1, justifyContent: "flex-end" }}>
 
@@ -538,4 +539,4 @@ export default function FloatingChatButton() {
       </Modal>
     </>
   );
-}
+});

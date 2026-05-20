@@ -2,6 +2,7 @@ import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import React, { FC } from "react";
 import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { chatEvents } from "../lib/chatEvents";
 import { TabButton } from "./tab-button";
 
 import ALUMNI from "../assets/2.0/home icon/ALUMNI.svg";
@@ -70,7 +71,11 @@ export const CustomTabBar: FC<BottomTabBarProps> = ({ state, navigation }) => {
       </ImageBackground>
 
       {/* AI Circle Button */}
-      <TouchableOpacity style={styles.plusButton} activeOpacity={0.8}>
+      <TouchableOpacity
+        style={styles.plusButton}
+        activeOpacity={0.8}
+        onPress={() => chatEvents.emit()}
+      >
         <ImageBackground
           source={CIRCLE_BG}
           style={styles.plusButtonBg}

@@ -3,6 +3,7 @@ import {
   useStatisticsForQuantity,
 } from "@kingstinct/react-native-healthkit";
 import { useFocusEffect } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -29,7 +30,10 @@ import {
 
 import { ActivityRings } from "../../componunts/ActivityRings";
 import { ConfettiOverlay } from "../../componunts/Confetti";
-import FloatingChatButton from "../../componunts/FloatingChatButton";
+import FloatingChatButton, {
+  FloatingChatButtonHandle,
+} from "../../componunts/FloatingChatButton";
+import { MeditationBottomSheet } from "../../componunts/Modals/MeditationBottomSheet";
 import MeditationModal from "../../componunts/Modals/MeditationModel";
 import SleepModal from "../../componunts/Modals/SleepModel";
 import StepPickerModal from "../../componunts/Modals/StepModel";
@@ -71,21 +75,31 @@ const CardContainer = ({
   heightClass = "h-auto",
   className = "",
 }: CardProps) => (
-  <TouchableOpacity
-    onPress={onPress}
-    activeOpacity={0.9}
-    disabled={!onPress}
-    className={`w-full rounded-3xl overflow-hidden relative ${heightClass} ${className}`}
-    style={{ borderWidth: 1, borderColor: "rgba(255,255,255,0.13)" }}
+  <LinearGradient
+    colors={["rgba(255,255,255,0.18)", "rgba(0,0,0,0.18)"]}
+    start={{ x: 0, y: 0 }}
+    end={{ x: 1, y: 1 }}
+    style={{ borderRadius: 24, padding: 1 }}
+    className={`w-full ${heightClass}`}
   >
-    {children}
-  </TouchableOpacity>
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.9}
+      disabled={!onPress}
+      className={`w-full rounded-3xl overflow-hidden relative flex-1 ${className}`}
+    >
+      {children}
+    </TouchableOpacity>
+  </LinearGradient>
 );
 
 export default function HomeScreen() {
   const router = useRouter();
+  const chatRef = useRef<FloatingChatButtonHandle>(null);
+  const [demoModal, setDemoModal] = useState(false);
   const [currentScore, setCurrentScore] = useState(0);
   const [activeModal, setActiveModal] = useState<HomeModalType>(null);
+  const [animKey, setAnimKey] = useState(0);
   const [weeklyScores, setWeeklyScores] = useState<
     { date: string; score: number }[]
   >([]);
@@ -95,9 +109,9 @@ export default function HomeScreen() {
   const [blueProgress, setBlueProgress] = useState(0); // meditation + water
   const [greenProgress, setGreenProgress] = useState(0); // todo + sleep
 
-  const [meditationData, setMeditationData] = useState("10m");
-  const [waterData, setWaterData] = useState(1.5);
-  const [stepData, setStepData] = useState("200");
+  const [meditationData, setMeditationData] = useState("0");
+  const [waterData, setWaterData] = useState(0);
+  const [stepData, setStepData] = useState("0");
   const [sleepData, setSleepData] = useState<TimeData>({
     hour: "08",
     minute: "24",
@@ -105,7 +119,7 @@ export default function HomeScreen() {
   const [todoTasks, setTodoTasks] = useState<TaskItem[]>([]);
   const [workoutData, setWorkoutData] = useState<TimeData>({
     hour: "00",
-    minute: "30",
+    minute: "00",
   });
 
   const [isMeditationDone, setIsMeditationDone] = useState(false);
@@ -323,7 +337,7 @@ export default function HomeScreen() {
 
     // 2. Rings instantly recalculate (Apple app style — no Supabase wait)
     recalcRings(newWorkout, newSteps, newMeditation, newWater, newTodos);
-
+    setAnimKey((k) => k + 1);
     setActiveModal(null);
 
     // 3. Supabase save + score update
@@ -394,7 +408,13 @@ export default function HomeScreen() {
   const refreshAll = useCallback(async () => {
     try {
       const data = await getTodayLog();
-      if (!data) return;
+      if (!data) {
+        setRedProgress(0);
+        setBlueProgress(0);
+        setGreenProgress(0);
+        setAnimKey((k) => k + 1);
+        return;
+      }
 
       // Score
       if (data.score != null) setCurrentScore(data.score);
@@ -464,6 +484,8 @@ export default function HomeScreen() {
       );
       setGreenProgress(todosTotal > 0 ? todosDone / todosTotal : 0);
 
+      setAnimKey((k) => k + 1);
+
       // Weekly scores fetch karo
       const weekly = await getWeeklyScores();
       setWeeklyScores(weekly);
@@ -530,6 +552,7 @@ export default function HomeScreen() {
   }, [stepStats?.sumQuantity]);
 
   const homeBg = require("../../assets/photo/login/2.0/home.png");
+  const ringbg = require("../../assets/2.0/home bg/b2.png");
 
   return (
     <>
@@ -550,37 +573,114 @@ export default function HomeScreen() {
             showsVerticalScrollIndicator={false}
           >
             {/* Weekly Calendar + Activity Rings */}
-            <View style={{ marginBottom: 8 }}>
-              <View style={{ padding: 16, gap: 16 }}>
+            <View>
+              <View style={{ gap: 16 }}>
                 {/* Weekly Calendar */}
-                <WeeklyCalendar
-                  weeklyScores={weeklyScores}
-                  todayScore={currentScore}
-                />
-                {/* Activity Rings */}
-                <View style={{ alignItems: "center", gap: 8 }}>
-                  <ActivityRings
-                    red={redProgress}
-                    blue={blueProgress}
-                    green={greenProgress}
-                    score={currentScore}
-                    size={240}
+                <LinearGradient
+                  colors={["rgba(255,255,255,0.18)", "rgba(0,0,0,0.18)"]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={{ borderRadius: 20, padding: 1 }}
+                >
+                  <WeeklyCalendar
+                    weeklyScores={weeklyScores}
+                    todayScore={currentScore}
                   />
-                  <View style={{ flexDirection: "row", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-                      <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: "#FF375F" }} />
-                      <Text style={{ color: "#FFFFFF", fontSize: 11 }}>Move & Workout</Text>
+                </LinearGradient>
+                {/* Activity Rings */}
+                <LinearGradient
+                  colors={["rgba(255,255,255,0.18)", "rgba(0,0,0,0.18)"]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={{ borderRadius: 26, padding: 1 }}
+                >
+                  <ImageBackground
+                    source={ringbg}
+                    resizeMode="cover"
+                    style={{
+                      alignItems: "center",
+                      gap: 8,
+                      borderRadius: 24,
+                      overflow: "hidden",
+                      padding: 16,
+                    }}
+                  >
+                    <ActivityRings
+                      red={redProgress}
+                      blue={blueProgress}
+                      green={greenProgress}
+                      score={currentScore}
+                      size={240}
+                      animKey={animKey}
+                    />
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        gap: 16,
+                        flexWrap: "wrap",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          gap: 4,
+                        }}
+                      >
+                        <View
+                          style={{
+                            width: 8,
+                            height: 8,
+                            borderRadius: 4,
+                            backgroundColor: "#FF375F",
+                          }}
+                        />
+                        <Text style={{ color: "#FFFFFF", fontSize: 11 }}>
+                          Move & Workout
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          gap: 4,
+                        }}
+                      >
+                        <View
+                          style={{
+                            width: 8,
+                            height: 8,
+                            borderRadius: 4,
+                            backgroundColor: "#0A84FF",
+                          }}
+                        />
+                        <Text style={{ color: "#FFFFFF", fontSize: 11 }}>
+                          Mindful & Hydrate
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          gap: 4,
+                        }}
+                      >
+                        <View
+                          style={{
+                            width: 8,
+                            height: 8,
+                            borderRadius: 4,
+                            backgroundColor: "#30D158",
+                          }}
+                        />
+                        <Text style={{ color: "#FFFFFF", fontSize: 11 }}>
+                          Task Done
+                        </Text>
+                      </View>
                     </View>
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-                      <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: "#0A84FF" }} />
-                      <Text style={{ color: "#FFFFFF", fontSize: 11 }}>Mindful & Hydrate</Text>
-                    </View>
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-                      <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: "#30D158" }} />
-                      <Text style={{ color: "#FFFFFF", fontSize: 11 }}>Task Done</Text>
-                    </View>
-                  </View>
-                </View>
+                  </ImageBackground>
+                </LinearGradient>
               </View>
             </View>
 
@@ -594,7 +694,7 @@ export default function HomeScreen() {
             <View className="flex-row justify-between gap-3">
               <View className="flex-1 gap-3">
                 <CardContainer
-                  onPress={() => setActiveModal("meditation")}
+                  onPress={() => setDemoModal(true)}
                   heightClass="h-28"
                   className=""
                 >
@@ -617,13 +717,13 @@ export default function HomeScreen() {
                         <CC1 height={45} width={45} />
                         <View className="w-[1px] h-8 bg-[#E5E5EA]" />
                         <View>
-                          <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1">
-                            <Text className="text-[#0A84FF] text-[10px] font-bold">
-                              Meditation
-                            </Text>
-                          </View>
+                          {/* <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1"> */}
+                          <Text className="text-[#CCCCCC] text-[12px] font-bold">
+                            Meditation
+                          </Text>
+                          {/* </View> */}
                           <Text className="text-white text-2xl font-black">
-                            {meditationData}
+                            {meditationData}m
                           </Text>
                         </View>
                       </>
@@ -654,11 +754,11 @@ export default function HomeScreen() {
                         <CC2 height={45} width={45} />
                         <View className="w-[1px] h-8 bg-[#E5E5EA]" />
                         <View>
-                          <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1">
-                            <Text className="text-[#FF375F] text-[8px] font-bold">
-                              Workout
-                            </Text>
-                          </View>
+                          {/* <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1"> */}
+                          <Text className="text-[#CCCCCC] text-[12px] font-bold">
+                            Workout
+                          </Text>
+                          {/* </View> */}
                           <Text className="text-white text-2xl font-black">
                             {workoutData.hour}h {workoutData.minute}m
                           </Text>
@@ -730,11 +830,11 @@ export default function HomeScreen() {
                         <CC4 height={45} width={45} />
                         <View className="w-[1px] h-8 bg-[#E5E5EA]" />
                         <View>
-                          <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1">
-                            <Text className="text-[#FF375F] text-[10px] font-bold">
-                              Steps
-                            </Text>
-                          </View>
+                          {/* <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1"> */}
+                          <Text className="text-[#CCCCCC] text-[12px] font-bold">
+                            Steps
+                          </Text>
+                          {/* </View> */}
                           <Text className="text-white text-2xl font-black">
                             {stepData}
                           </Text>
@@ -825,11 +925,11 @@ export default function HomeScreen() {
                         <CC6 height={45} width={45} />
                         <View className="w-[1px] h-8 bg-[#E5E5EA]" />
                         <View>
-                          <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1">
-                            <Text className="text-[#FF8D28] text-[10px] font-bold">
-                              Sleep
-                            </Text>
-                          </View>
+                          {/* <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1"> */}
+                          <Text className="text-[#CCCCCC] text-[12px] font-bold">
+                            Sleep
+                          </Text>
+                          {/* </View> */}
                           <Text className="text-white text-2xl font-black">
                             {sleepData.hour}h {sleepData.minute}m
                           </Text>
@@ -881,7 +981,15 @@ export default function HomeScreen() {
         </SafeAreaView>
       </ImageBackground>
       <ConfettiOverlay type={confetti} onComplete={handleConfettiDone} />
-      <FloatingChatButton />
+      <FloatingChatButton ref={chatRef} />
+
+      {/* ── Meditation Bottom Sheet ── */}
+      <MeditationBottomSheet
+        isVisible={demoModal}
+        onClose={() => setDemoModal(false)}
+        onSave={(val) => handleSave("meditation", val)}
+        initialValue={meditationData}
+      />
     </>
   );
 }

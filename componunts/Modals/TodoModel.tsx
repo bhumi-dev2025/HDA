@@ -39,9 +39,12 @@ const TaskModal: React.FC<TaskModalProps> = ({isVisible, onClose, onSave, initia
   }, []);
 
   const toggleTask = (index: number) => {
-    const newTasks = [...tasks];
-    newTasks[index].isDone = !newTasks[index].isDone;
-    setTasks(newTasks);
+    setTasks(prev => {
+      const newTasks = prev.map((t, i) =>
+        i === index ? { ...t, isDone: !t.isDone } : t
+      );
+      return newTasks;
+    });
   };
 
   const updateTaskText = (index: number, val: string) => {
@@ -80,6 +83,7 @@ const TaskModal: React.FC<TaskModalProps> = ({isVisible, onClose, onSave, initia
             <View className="flex-row items-center justify-center mb-5">
               <TouchableOpacity
                 onPress={() => onSave(tasks)}
+                // tasks ref not needed — functional update above ensures latest state
                 className="bg-black w-full py-5 rounded-2xl items-center mt-auto"
               >
                 <Text className="text-white font-bold text-lg">Save</Text>

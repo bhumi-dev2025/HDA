@@ -1,86 +1,68 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TextInput } from 'react-native';
+import { View, Text, ScrollView, TextInput, ImageBackground } from 'react-native';
+
+const homeBg = require('../../assets/photo/login/2.0/home.png');
 
 export default function HealthDetailsScreen() {
-  // 1. Badha field mate State manage kariye
   const [dob, setDob] = useState('');
   const [sex, setSex] = useState('');
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
 
   return (
-    <ScrollView className="flex-1 bg-[#FAFAFA] p-6">
-      
-      {/* --- Header Section --- */}
-      <Text className="text-xl font-bold text-black mb-2">
+    <ImageBackground source={homeBg} resizeMode="cover" style={{ flex: 1 }}>
+    <ScrollView className="flex-1 p-6" contentContainerStyle={{ paddingTop: 80 }}>
+
+      <Text className="text-xl font-bold text-white mb-2">
         Personalize Fitness and Health
       </Text>
-      
-      <Text className="text-left text-base text-gray-400 mb-6 leading-5">
+      <Text className="text-left text-base text-[#636366] mb-6 leading-5">
         This information ensures Fitness and Health data are{'\n'}as accurate as possible. These details are not shared{'\n'}with others.
       </Text>
 
-      {/* --- Form Container (White Box) --- */}
-      {/* Ahiya ek j container banavyu che jethi badhu sathe group thai sake */}
-      <View className="bg-white rounded-2xl overflow-hidden">
-        
-        {/* Field 1: Date of Birth */}
+      <View style={{ backgroundColor: 'rgba(255,255,255,0.06)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden' }}>
+
         <View className="flex-row items-center justify-between p-4">
-          <Text className="text-lg text-black font-medium">Date of Birth</Text>
-          <TextInput 
-            value={dob}
-            onChangeText={setDob}
-            placeholder="DD Mon YYYY"
-            placeholderTextColor="#C7C7CC"
-            className="text-right text-gray-500 text-base flex-1 ml-4"
+          <Text className="text-lg text-white font-medium">Date of Birth</Text>
+          <TextInput
+            value={dob} onChangeText={setDob}
+            placeholder="DD Mon YYYY" placeholderTextColor="#636366"
+            style={{ color: '#AFAFAF', textAlign: 'right', fontSize: 16, flex: 1, marginLeft: 16 }}
           />
         </View>
-        <View className="h-[2px] bg-gray-100 mx-1" />
+        <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.07)', marginHorizontal: 8 }} />
 
-        {/* Field 2: Sex */}
         <View className="flex-row items-center justify-between p-4">
-          <Text className="text-lg text-black font-medium">Sex</Text>
-          <TextInput 
-            value={sex}
-            onChangeText={setSex}
-            placeholder="male/female"
-            placeholderTextColor="#C7C7CC"
-            className="text-right text-gray-500 text-base flex-1 ml-4"
+          <Text className="text-lg text-white font-medium">Sex</Text>
+          <TextInput
+            value={sex} onChangeText={setSex}
+            placeholder="male/female" placeholderTextColor="#636366"
+            style={{ color: '#AFAFAF', textAlign: 'right', fontSize: 16, flex: 1, marginLeft: 16 }}
           />
         </View>
-        <View className="h-[2px] bg-gray-100 mx-1" />
+        <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.07)', marginHorizontal: 8 }} />
 
-
-        {/* Field 3: Height */}
         <View className="flex-row items-center justify-between p-4">
-          <Text className="text-lg text-black font-medium">Height</Text>
-          <TextInput 
-            value={height}
-            onChangeText={setHeight}
-            placeholder="in cm"
-            placeholderTextColor="#C7C7CC"
-            // keyboardType="numeric" // Numbers only
-            className="text-right text-gray-500 text-base flex-1 ml-4"
+          <Text className="text-lg text-white font-medium">Height</Text>
+          <TextInput
+            value={height} onChangeText={setHeight}
+            placeholder="in cm" placeholderTextColor="#636366"
+            style={{ color: '#AFAFAF', textAlign: 'right', fontSize: 16, flex: 1, marginLeft: 16 }}
           />
         </View>
-        <View className="h-[2px] bg-gray-100 mx-1" />
+        <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.07)', marginHorizontal: 8 }} />
 
-
-        {/* Field 4: Weight */}
         <View className="flex-row items-center justify-between p-4">
-          <Text className="text-lg text-black font-medium">Weight</Text>
-          <TextInput 
-            value={weight}
-            onChangeText={setWeight}
-            placeholder="in kg"
-            placeholderTextColor="#C7C7CC"
-            // keyboardType="numeric" // Numbers only
-            className="text-right text-gray-500 text-base flex-1 ml-4"
+          <Text className="text-lg text-white font-medium">Weight</Text>
+          <TextInput
+            value={weight} onChangeText={setWeight}
+            placeholder="in kg" placeholderTextColor="#636366"
+            style={{ color: '#AFAFAF', textAlign: 'right', fontSize: 16, flex: 1, marginLeft: 16 }}
           />
         </View>
 
       </View>
-
     </ScrollView>
+    </ImageBackground>
   );
 }

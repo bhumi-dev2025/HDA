@@ -8,6 +8,7 @@ import {
   Linking,
   Alert,
   Modal,
+  ImageBackground,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../../lib/supabase";
@@ -17,6 +18,8 @@ import { Plus, Trash2 } from "lucide-react-native";
 import AddLinkModal from "../AddLink";
 import AddCollectionModal from "../AddCollection";
 import AddCollectionImagesModal from "../AddCollectionImagesModal";
+
+const homeBg = require("../../assets/photo/login/2.0/home.png");
 
 const ADMIN_EMAIL = [
   "simplebhumidev@gmail.com",
@@ -166,10 +169,8 @@ export default function Explore() {
               <View className="relative ">
 
                 {/* Outer soft circle */}
-                <View className="w-[80px] h-[80px] rounded-full bg-gray-200 items-center justify-center">
-
-                  {/* Inner circle */}
-                  <View className="w-[70px] h-[70px] rounded-full bg-gray-300">
+                <View className="w-[80px] h-[80px] rounded-full items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
+                  <View className="w-[70px] h-[70px] rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
                     <Image
                       source={{
                         uri: adminAvatar ||
@@ -178,17 +179,16 @@ export default function Explore() {
                       className="w-[68px] h-[68px] rounded-full"
                     />
                   </View>
-
                 </View>
 
                 {/* Floating + */}
-                <View className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-white items-center justify-center shadow-md">
-                  <Plus size={20} color="#111" />
+                <View className="absolute bottom-0 right-0 w-8 h-8 rounded-full items-center justify-center shadow-md" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
+                  <Plus size={20} color="#FFFFFF" />
                 </View>
 
               </View>
 
-              <Text className="text-xs mt-2 text-gray-600">
+              <Text className="text-xs mt-2 text-[#636366]">
                 Create New
               </Text>
             </TouchableOpacity>
@@ -241,22 +241,20 @@ export default function Explore() {
                 }}
               >
 
-                {/* White gap */}
-                <View className="w-[74px] h-[74px] rounded-full bg-white items-center justify-center">
-
+                {/* Dark gap */}
+                <View className="w-[74px] h-[74px] rounded-full items-center justify-center" style={{ backgroundColor: '#19181B' }}>
                   {/* Profile Image */}
                   <Image
                     source={{ uri: item.cover_url }}
                     className="w-[68px] h-[68px] rounded-full"
                   />
-
                 </View>
 
               </LinearGradient>
             </TouchableOpacity>
 
             <Text
-              className="text-xs mt-2 text-black text-center w-20"
+              className="text-xs mt-2 text-[#AFAFAF] text-center w-20"
               numberOfLines={1}
             >
               {item.title}
@@ -270,11 +268,13 @@ export default function Explore() {
   // RENDER
   // ===========================
   return (
-    <SafeAreaView className="flex-1 bg-[#F9FAFC]">
+    <View style={{ flex: 1, backgroundColor: '#000' }}>
+    <ImageBackground source={homeBg} resizeMode="cover" style={{ flex: 1 }}>
+    <SafeAreaView className="flex-1">
       <View className="flex-1 p-6">
 
         <View className="flex-row justify-center items-center mb-6">
-          <Text className="text-2xl font-extrabold text-slate-900">
+          <Text className="text-2xl font-extrabold text-white">
             Alumni Posts
           </Text>
         </View>
@@ -290,7 +290,7 @@ export default function Explore() {
                   setSelectedPost(item.id);
                 }
               }}>
-              <View className="bg-white rounded-2xl overflow-hidden mb-5 shadow-sm p-2">
+              <View style={{ backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: 16, overflow: 'hidden', marginBottom: 20, borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)', padding: 8 }}>
 
                 {/* TOP IMAGE */}
                 <Image
@@ -300,26 +300,21 @@ export default function Explore() {
                 />
 
                 {/* BOTTOM SECTION */}
-                <View className="px-4 py-4 bg-white">
-
+                <View className="px-4 py-4">
                   <View className="flex-row items-center">
-
-                    {/* LOGO */}
                     <Image
                       source={{ uri: item.logo }}
-                      className="w-10 h-10 rounded-full bg-gray-200"
+                      className="w-10 h-10 rounded-full"
+                      style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
                     />
-
-                    {/* DESCRIPTION */}
                     <Text
-                      className="ml-3 text-sm text-[#8E8E93] flex-1"
+                      className="ml-3 text-sm flex-1"
+                      style={{ color: '#AFAFAF' }}
                       numberOfLines={2}
                     >
                       {item.description}
                     </Text>
-
                   </View>
-
                 </View>
 
               </View>
@@ -355,80 +350,57 @@ export default function Explore() {
       {/* Modal same as before */}
       <Modal visible={menuVisible} transparent animationType="slide">
         <TouchableOpacity
-          className="flex-1 bg-black/40 justify-end"
+          className="flex-1 bg-black/60 justify-end"
           activeOpacity={1}
           onPress={() => setMenuVisible(false)}
         >
-          <View className="bg-white p-6 rounded-t-3xl">
+          <View style={{ backgroundColor: '#19181B', padding: 24, borderTopLeftRadius: 24, borderTopRightRadius: 24, borderTopWidth: 1, borderColor: 'rgba(255,255,255,0.08)' }}>
 
-            <Text className="text-lg font-bold mb-6 text-center">
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#FFFFFF', textAlign: 'center', marginBottom: 24 }}>
               Manage Collection
             </Text>
 
             <TouchableOpacity
-              className="py-4"
+              style={{ paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.07)' }}
               onPress={() => {
                 setMenuVisible(false);
                 setEditingCollectionId(selectedCollection?.id);
                 setAddCollectionVisible(true);
               }}
             >
-              <Text className="text-base font-semibold">
-                Update Collection
-              </Text>
+              <Text style={{ fontSize: 15, fontWeight: '600', color: '#FFFFFF' }}>Update Collection</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              className="py-4"
+              style={{ paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.07)' }}
               onPress={() => {
                 setMenuVisible(false);
                 setAddImagesVisible(true);
               }}
             >
-              <Text className="text-base font-semibold">
-                Add Image
-              </Text>
+              <Text style={{ fontSize: 15, fontWeight: '600', color: '#FFFFFF' }}>Add Image</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              className="py-4"
+              style={{ paddingVertical: 16 }}
               onPress={() => {
                 if (!selectedCollection?.id) return;
-
-                Alert.alert(
-                  "Delete Collection",
-                  "Are you sure you want to delete this collection?",
-                  [
-                    {
-                      text: "Cancel",
-                      style: "cancel",
+                Alert.alert("Delete Collection", "Are you sure?", [
+                  { text: "Cancel", style: "cancel" },
+                  {
+                    text: "Delete", style: "destructive",
+                    onPress: async () => {
+                      const { error } = await supabase.from("collections").delete().eq("id", selectedCollection.id);
+                      if (error) { Alert.alert("Error", "Something went wrong."); return; }
+                      setMenuVisible(false);
+                      setSelectedCollection(null);
+                      fetchCollections();
                     },
-                    {
-                      text: "Delete",
-                      style: "destructive",
-                      onPress: async () => {
-                        const { error } = await supabase
-                          .from("collections")
-                          .delete()
-                          .eq("id", selectedCollection.id);
-
-                        if (error) {
-                          Alert.alert("Error", "Something went wrong.");
-                          return;
-                        }
-
-                        setMenuVisible(false);
-                        setSelectedCollection(null);
-                        fetchCollections(); // 🔥 refresh list
-                      },
-                    },
-                  ]
-                );
+                  },
+                ]);
               }}
             >
-              <Text className="text-red-500 font-semibold">
-                Delete Collection
-              </Text>
+              <Text style={{ fontSize: 15, fontWeight: '600', color: '#FF453A' }}>Delete Collection</Text>
             </TouchableOpacity>
 
           </View>
@@ -452,5 +424,7 @@ export default function Explore() {
         onClose={() => setAddImagesVisible(false)}
       />
     </SafeAreaView>
+    </ImageBackground>
+    </View>
   );
 }

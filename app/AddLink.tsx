@@ -6,16 +6,19 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Image,
+  ImageBackground,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
   Keyboard,
-   useWindowDimensions
+  useWindowDimensions
 } from "react-native";
 import Modal from "react-native-modal";
 import * as Clipboard from "expo-clipboard";
 import { getLinkPreview } from "link-preview-js";
 import { supabase } from "../lib/supabase";
+
+const buttonBg = require("../assets/2.0/model/button.png");
 
 interface Props {
   visible: boolean;
@@ -132,112 +135,82 @@ export default function AddLinkModal({ visible, onClose }: Props) {
     >
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
-        className="bg-white rounded-t-3xl"
         style={{
-  height:
-    Platform.OS === "android"
-      ? isKeyboardOpen
-        ? "85%"
-        : "60%"
-      : "78%",
-}}
+          backgroundColor: '#19181B',
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
+          height: Platform.OS === "android" ? isKeyboardOpen ? "85%" : "60%" : "78%",
+        }}
       >
         {/* Drag Indicator */}
-        <View className="w-12 h-1.5 bg-gray-300 rounded-full self-center mt-3 mb-4" />
+        <View style={{ width: 48, height: 6, backgroundColor: '#636366', borderRadius: 3, alignSelf: 'center', marginTop: 12, marginBottom: 16 }} />
 
-        <Text className="text-lg font-semibold text-center mb-4">
+        <Text style={{ fontSize: 18, fontWeight: '600', color: '#FFFFFF', textAlign: 'center', marginBottom: 16 }}>
           Add Feeds
         </Text>
 
-        <View className="px-6 flex-1">
+        <View style={{ paddingHorizontal: 24, flex: 1 }}>
 
           {/* INPUT WITH PASTE */}
-          <View className="flex-row items-center border border-gray-300 rounded-xl px-3 h-12 mb-5">
+          <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', borderRadius: 12, paddingHorizontal: 12, height: 48, marginBottom: 20, backgroundColor: 'rgba(255,255,255,0.06)' }}>
             <TextInput
-              placeholder="Enter portfolio link"
-              placeholderTextColor={'#AEAEB2'}
+              placeholder="Enter link"
+              placeholderTextColor="#636366"
               value={url}
               onChangeText={(text) => {
                 setUrl(text);
-
-                if (text.trim() === "") {
-                  setPreviewData(null);
-                } else {
-                  handleFetch(text);
-                }
+                if (text.trim() === "") setPreviewData(null);
+                else handleFetch(text);
               }}
               autoCapitalize="none"
-              className="flex-1 text-sm"
+              style={{ flex: 1, fontSize: 14, color: '#FFFFFF' }}
             />
-
             <TouchableOpacity onPress={handlePaste}>
-              <Text className="text-sm font-semibold text-black">
-                PASTE
-              </Text>
+              <Text style={{ fontSize: 13, fontWeight: '700', color: '#636366' }}>PASTE</Text>
             </TouchableOpacity>
           </View>
 
           <ScrollView showsVerticalScrollIndicator={false}>
 
-            {loading && <ActivityIndicator size="large" />}
+            {loading && <ActivityIndicator size="large" color="#FFFFFF" />}
 
-            {/* SAME CARD AS EXPLORE */}
+            {/* PREVIEW CARD */}
             {previewData && (
-              <View className="bg-white rounded-2xl overflow-hidden shadow-sm p-2 mb-5">
-
+              <View style={{ backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)', padding: 8, marginBottom: 20 }}>
                 <Image
-                  source={{
-                    uri:
-                      previewData.images?.[0] ||
-                      previewData.image,
-                  }}
-                  className="w-full h-52 rounded-t-2xl"
+                  source={{ uri: previewData.images?.[0] || previewData.image }}
+                  style={{ width: '100%', height: 208, borderRadius: 12 }}
                   resizeMode="cover"
                 />
-
-                <View className="px-4 py-4 bg-white">
-                  <View className="flex-row items-center">
+                <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
-                      source={{
-                        uri: `https://www.google.com/s2/favicons?domain=${getDomain(
-                          formatUrl(url)
-                        )}&sz=64`,
-                      }}
-                      className="w-10 h-10 rounded-full bg-gray-200"
+                      source={{ uri: `https://www.google.com/s2/favicons?domain=${getDomain(formatUrl(url))}&sz=64` }}
+                      style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.1)' }}
                     />
-
-                    <Text
-                      className="ml-3 text-sm text-[#8E8E93] flex-1"
-                      numberOfLines={2}
-                    >
-                      {previewData.description ||
-                        previewData.title}
+                    <Text style={{ marginLeft: 12, fontSize: 13, color: '#AFAFAF', flex: 1 }} numberOfLines={2}>
+                      {previewData.description || previewData.title}
                     </Text>
                   </View>
                 </View>
-
               </View>
             )}
           </ScrollView>
         </View>
 
-        {/* FIXED SAVE BUTTON */}
-        <View
-  style={{
-    paddingBottom: keyboardHeight > 0 ? keyboardHeight + 40 : 30,
-    paddingHorizontal: 24,
-    paddingTop: 10,
-  }}
->
-  <TouchableOpacity
-    onPress={handleSave}
-    className="bg-black h-14 rounded-2xl items-center justify-center"
-  >
-    <Text className="text-white text-base font-semibold">
-      Save
-    </Text>
-  </TouchableOpacity>
-</View>
+        {/* SAVE BUTTON */}
+        <View style={{ paddingBottom: keyboardHeight > 0 ? keyboardHeight + 40 : 30, paddingHorizontal: 24, paddingTop: 10 }}>
+          <TouchableOpacity onPress={handleSave} activeOpacity={0.85} style={{ height: 56, borderRadius: 18, overflow: 'hidden' }}>
+            <ImageBackground
+              source={buttonBg}
+              style={{ width: '100%', height: 56, alignItems: 'center', justifyContent: 'center' }}
+              imageStyle={{ borderRadius: 18 }}
+              resizeMode="cover"
+            >
+              <Text style={{ color: '#FFFFFF', fontSize: 17, fontWeight: '600', letterSpacing: 0.3 }}>Save</Text>
+            </ImageBackground>
+          </TouchableOpacity>
+        </View>
 
       </KeyboardAvoidingView>
     </Modal>

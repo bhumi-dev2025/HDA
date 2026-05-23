@@ -60,6 +60,14 @@ function ScoreRing({
 
 const DAY_LABELS = ["S", "M", "T", "W", "T", "F", "S"];
 
+// UTC ni bajaye local date use karo (India IST fix)
+function getLocalDateStr(date = new Date()): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
 export function WeeklyCalendar({
   weeklyScores,
   todayScore,
@@ -67,13 +75,17 @@ export function WeeklyCalendar({
   weeklyScores: { date: string; score: number }[];
   todayScore: number;
 }) {
-  const todayIdx = new Date().getDay();
+  const today = new Date();
+  const todayStr = getLocalDateStr(today);
 
-  // date → dayIndex map
-  const scoreMap: Record<number, number> = {};
+  // This week ni Sunday (local date based)
+  const weekStart = new Date(today);
+  weekStart.setDate(today.getDate() - today.getDay());
+
+  // date string → score map
+  const scoreByDate: Record<string, number> = {};
   weeklyScores.forEach((item) => {
-    const dayIdx = new Date(item.date + "T00:00:00").getDay();
-    scoreMap[dayIdx] = item.score ?? 0;
+    scoreByDate[item.date] = item.score ?? 0;
   });
 
   return (
@@ -84,9 +96,18 @@ export function WeeklyCalendar({
       imageStyle={{ borderRadius: 18 }}
     >
       {DAY_LABELS.map((label, i) => {
-        const isToday = i === todayIdx;
-        const isFuture = i > todayIdx;
-        const score = isToday ? todayScore : isFuture ? 0 : (scoreMap[i] ?? 0);
+        // i=0 → Sunday of this week, i=6 → Saturday
+        const d = new Date(weekStart);
+        d.setDate(weekStart.getDate() + i);
+        const dateStr = getLocalDateStr(d);
+
+        const isToday = dateStr === todayStr;
+        const isFuture = !isToday && dateStr > todayStr;
+        const score = isToday
+          ? todayScore
+          : isFuture
+            ? 0
+            : (scoreByDate[dateStr] ?? 0);
 
         return (
           <View

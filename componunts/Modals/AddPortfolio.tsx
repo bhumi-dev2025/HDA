@@ -13,13 +13,15 @@ import {
   PanResponder,
   Animated,
   Dimensions,
-  Pressable
+  Pressable,
+  ImageBackground
 } from 'react-native';
 import { getLinkPreview } from 'link-preview-js';
 import * as Clipboard from 'expo-clipboard';
 import {PortfolioModalProps} from '../../types'
 
 const { height } = Dimensions.get('window');
+const buttonBg = require('../../assets/2.0/model/button.png');
 
 export const AddPortfolioModal:React.FC<PortfolioModalProps> = ({ isVisible, onClose, onSave }: PortfolioModalProps) => {
   const [link, setLink] = useState('');
@@ -154,23 +156,23 @@ export const AddPortfolioModal:React.FC<PortfolioModalProps> = ({ isVisible, onC
             // iOS margin fix
             marginBottom: Platform.OS === 'ios' ? keyboardHeight : 0 
           }}
-          className="bg-white rounded-t-[40px] w-full max-h-[80%] shadow-2xl overflow-hidden mt-20"
+          className="bg-[#19181B] rounded-t-[40px] w-full max-h-[80%] shadow-2xl overflow-hidden mt-20"
         >
           
           {/* --- 3. DRAG HANDLE --- */}
           {/* Only this area is draggable */}
           <View 
             {...panResponder.panHandlers} 
-            className="w-full h-14 items-center justify-center bg-white z-50 absolute top-0 border-b border-transparent"
+            className="w-full h-14 items-center justify-center bg-[#19181B] z-50 absolute top-0 border-b border-transparent"
           >
-            <View className="w-12 h-1.5 bg-gray-300 rounded-full" />
+            <View className="w-12 h-1.5 bg-[#636366] rounded-full" />
           </View>
           {/* ---------------------- */}
 
           {/* 4. Content Area */}
           <View className="pt-14 pb-8 px-6 h-full">
              
-            <Text className="text-xl font-bold text-center text-gray-900 mb-6">
+            <Text className="text-xl font-bold text-center text-white mb-6">
               Add Portfolio
             </Text>
 
@@ -181,43 +183,43 @@ export const AddPortfolioModal:React.FC<PortfolioModalProps> = ({ isVisible, onC
                 keyboardShouldPersistTaps="handled"
             >
                 {/* Input Field */}
-                <View className="flex-row items-center border border-gray-200 rounded-xl px-4 py-3 mb-6 bg-white w-full">
+                <View className="flex-row items-center border border-[#3F3F3F] rounded-xl px-4 py-3 mb-6 bg-[#2B2B2B] w-full">
                     <TextInput 
-                        className="flex-1 text-base text-gray-800 p-2 no-underline"
+                        className="flex-1 text-base text-white p-2 no-underline"
                         placeholder="Paste link (https://...)"
-                        placeholderTextColor="#9CA3AF"
+                        placeholderTextColor="#636366"
                         value={link}
                         onChangeText={handleLinkChange} 
                         autoCapitalize="none"
                     />
                     {link.length === 0 && (
                         <TouchableOpacity onPress={handlePaste}>
-                            <Text className="text-gray-400 text-xs font-bold ml-2">PASTE</Text>
+                            <Text className="text-[#636366] text-xs font-bold ml-2">PASTE</Text>
                         </TouchableOpacity>
                     )}
-                    {loading && <ActivityIndicator size="small" color="#000" />}
+                    {loading && <ActivityIndicator size="small" color="#FFFFFF" />}
                 </View>
 
                 {/* Preview Section */}
                 {(previewData || link.length > 10) && (
-                <View className="w-full bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-6">
+                <View className="w-full bg-[#1C1C1E] rounded-2xl border border-[#3F3F3F] overflow-hidden mb-6">
                     <Image 
                         source={{ uri: previewImageUri || 'https://via.placeholder.com/300' }} 
-                        className="w-full h-36 bg-gray-100"
+                        className="w-full h-36 bg-[#2B2B2B]"
                         resizeMode="cover"
                     />
-                    <View className="p-4 bg-[#FAFAFA]">
+                    <View className="p-4 bg-[#19181B]">
                         <View className="flex-row items-center mb-1">
                             {previewData?.favicons?.[0] ? (
                                 <Image source={{ uri: previewData.favicons[0] }} className="w-5 h-5 rounded-full mr-2" />
                             ) : (
-                                <View className="w-5 h-5 rounded-full bg-gray-200 mr-2 items-center justify-center"><Text className="text-[10px]">📑</Text></View>
+                                <View className="w-5 h-5 rounded-full bg-[#2B2B2B] mr-2 items-center justify-center"><Text className="text-[10px]">📑</Text></View>
                             )}
-                            <Text className="text-gray-900 font-bold text-base" numberOfLines={1}>
+                            <Text className="text-white font-bold text-base" numberOfLines={1}>
                                 {previewData?.siteName || getDomainName(link)}
                             </Text>
                         </View>
-                        <Text className="text-gray-900 font-semibold text-sm mt-1" numberOfLines={2}>
+                        <Text className="text-[#AFAFAF] font-semibold text-sm mt-1" numberOfLines={2}>
                              {previewData?.title || previewData?.description || 'Portfolio Link' || link}
                         </Text>
                     </View>
@@ -226,13 +228,19 @@ export const AddPortfolioModal:React.FC<PortfolioModalProps> = ({ isVisible, onC
             </ScrollView>
 
             <TouchableOpacity
-                disabled={link.length === 0} // લિંક ખાલી હોય તો બટન ડિસેબલ
-                className={`w-full p-4 rounded-2xl items-center mt-2 mb-2 ${
-                    link.length > 0 ? 'bg-black' : 'bg-gray-300' // કલર ચેન્જ લોજીક
-                }`}
+                disabled={link.length === 0}
                 onPress={handlePressSave}
+                activeOpacity={0.85}
+                style={{ width: '100%', marginTop: 8, marginBottom: 8, opacity: link.length === 0 ? 0.4 : 1 }}
             >
-                <Text className="text-white font-bold text-lg">Save</Text>
+              <ImageBackground
+                source={buttonBg}
+                style={{ width: '100%', height: 56, alignItems: 'center', justifyContent: 'center', borderRadius: 18, overflow: 'hidden' }}
+                imageStyle={{ borderRadius: 18 }}
+                resizeMode="cover"
+              >
+                <Text style={{ color: '#FFFFFF', fontSize: 17, fontWeight: '600', letterSpacing: 0.3 }}>Save</Text>
+              </ImageBackground>
             </TouchableOpacity>
 
           </View>

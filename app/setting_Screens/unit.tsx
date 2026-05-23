@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { ChevronLeft, Check } from 'lucide-react-native';
+import { View, Text, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
+import { Check } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// આ ટાઈપ્સ છે જે આપણે નીચે વાપરીશું
-type UnitOption = string;
+const homeBg = require('../../assets/photo/login/2.0/home.png');
 
+type UnitOption = string;
 interface UnitSectionProps {
   title: string;
   options: UnitOption[];
@@ -13,39 +13,32 @@ interface UnitSectionProps {
   onSelect: (option: UnitOption) => void;
 }
 
-// 1. Reusable Section Component
-// આ કમ્પોનન્ટ લિસ્ટ અને હેડિંગને રેન્ડર કરશે
 const UnitSection: React.FC<UnitSectionProps> = ({ title, options, selected, onSelect }) => {
   return (
-    <View className="mb-6">
-      {/* Section Title */}
-      <Text className="text-base font-bold text-black mb-3 ml-1">
+    <View style={{ marginBottom: 24 }}>
+      <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 10, marginLeft: 4 }}>
         {title}
       </Text>
-      
-      {/* Options Container */}
-      <View className="bg-white rounded-2xl overflow-hidden">
+      <View style={{ backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)' }}>
         {options.map((option, index) => {
           const isSelected = selected === option;
           const isLast = index === options.length - 1;
-
           return (
             <TouchableOpacity
               key={option}
               onPress={() => onSelect(option)}
               activeOpacity={0.7}
-              className={`flex-row justify-between items-center p-4 ${
-                !isLast ? 'border-b border-gray-100' : ''
-              }`}
+              style={{
+                flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                padding: 16,
+                borderBottomWidth: isLast ? 0 : 1,
+                borderBottomColor: 'rgba(255,255,255,0.07)',
+              }}
             >
-              <Text className="text-base text-gray-900 font-medium">
+              <Text style={{ fontSize: 15, color: isSelected ? '#FFFFFF' : '#AFAFAF', fontWeight: isSelected ? '600' : '400' }}>
                 {option}
               </Text>
-              
-              {/* Checkmark Icon only if selected */}
-              {isSelected && (
-                <Check size={20} color="black" strokeWidth={2.5} />
-              )}
+              {isSelected && <Check size={20} color="#FFFFFF" strokeWidth={2.5} />}
             </TouchableOpacity>
           );
         })}
@@ -54,51 +47,23 @@ const UnitSection: React.FC<UnitSectionProps> = ({ title, options, selected, onS
   );
 };
 
-// 2. Main Screen Component
 export default function UnitOfMeasureScreen() {
-  // State variables for each category
   const [meditationUnit, setMeditationUnit] = useState<string>('Minutes');
   const [stepsUnit, setStepsUnit] = useState<string>('Steps');
   const [waterUnit, setWaterUnit] = useState<string>('Liter');
   const [sleepUnit, setSleepUnit] = useState<string>('Hours');
 
   return (
-    <SafeAreaView className="flex-1 bg-[#FAFAFA] p-6">
-        {/* Scrollable Content */}
-        <ScrollView showsVerticalScrollIndicator={false}>
-          
-          <UnitSection
-            title="Meditation Units"
-            options={['Minutes', 'Hours']}
-            selected={meditationUnit}
-            onSelect={setMeditationUnit}
-          />
-
-          <UnitSection
-            title="Steps Units"
-            options={['Steps', 'Kilometers']}
-            selected={stepsUnit}
-            onSelect={setStepsUnit}
-          />
-
-          <UnitSection
-            title="Water Units"
-            options={['Liter', 'Bottle or Glass']}
-            selected={waterUnit}
-            onSelect={setWaterUnit}
-          />
-
-          <UnitSection
-            title="Sleep Time Units"
-            options={['Minutes', 'Hours']}
-            selected={sleepUnit}
-            onSelect={setSleepUnit}
-          />
-
-          {/* Extra space at bottom */}
-          <View className="h-10" />
-          
-        </ScrollView>
+    <ImageBackground source={homeBg} resizeMode="cover" style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, paddingHorizontal: 24, paddingTop: 64 }}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <UnitSection title="Meditation Units" options={['Minutes', 'Hours']} selected={meditationUnit} onSelect={setMeditationUnit} />
+        <UnitSection title="Steps Units" options={['Steps', 'Kilometers']} selected={stepsUnit} onSelect={setStepsUnit} />
+        <UnitSection title="Water Units" options={['Liter', 'Bottle or Glass']} selected={waterUnit} onSelect={setWaterUnit} />
+        <UnitSection title="Sleep Time Units" options={['Minutes', 'Hours']} selected={sleepUnit} onSelect={setSleepUnit} />
+        <View style={{ height: 40 }} />
+      </ScrollView>
     </SafeAreaView>
+    </ImageBackground>
   );
 }

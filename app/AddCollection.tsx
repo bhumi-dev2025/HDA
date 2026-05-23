@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  ImageBackground,
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
@@ -16,6 +17,8 @@ import Modal from "react-native-modal";
 import * as ImagePicker from "expo-image-picker";
 import { supabase } from "../lib/supabase";
 import { Trash2 } from "lucide-react-native";
+
+const buttonBg = require("../assets/2.0/model/button.png");
 
 interface Props {
   visible: boolean;
@@ -164,39 +167,39 @@ export default function AddCollectionModal({
     >
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
-        className="bg-white rounded-t-3xl"
         style={{
+          backgroundColor: '#19181B',
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
           height:
             Platform.OS === "android"
-              ? isKeyboardOpen
-                ? "85%"
-                : "70%"
+              ? isKeyboardOpen ? "85%" : "70%"
               : "75%",
         }}
       >
-        <View className="w-12 h-1.5 bg-gray-300 rounded-full self-center mt-3 mb-4" />
+        <View style={{ width: 48, height: 6, backgroundColor: '#636366', borderRadius: 3, alignSelf: 'center', marginTop: 12, marginBottom: 16 }} />
 
-        <Text className="text-lg font-semibold text-center mb-5">
+        <Text style={{ fontSize: 18, fontWeight: '600', color: '#FFFFFF', textAlign: 'center', marginBottom: 20 }}>
           {collectionId ? "Edit Collection" : "Add Collection"}
         </Text>
 
-        <View className="px-6 flex-1">
+        <View style={{ paddingHorizontal: 24, flex: 1 }}>
 
           {/* Title */}
           <TextInput
             placeholder="Enter Name"
-            placeholderTextColor="#AEAEB2"
+            placeholderTextColor="#636366"
             value={title}
             onChangeText={setTitle}
-            className="border border-gray-300 rounded-xl px-4 h-12 mb-5"
+            style={{ borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', borderRadius: 12, paddingHorizontal: 16, height: 48, marginBottom: 20, color: '#FFFFFF', backgroundColor: 'rgba(255,255,255,0.06)' }}
           />
 
           {/* Add Image Button */}
           <TouchableOpacity
             onPress={pickImage}
-            className="border border-dashed border-gray-300 rounded-xl h-24 items-center justify-center mb-4"
+            style={{ borderWidth: 1, borderColor: 'rgba(255,255,255,0.15)', borderStyle: 'dashed', borderRadius: 12, height: 96, alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}
           >
-            <Text className="text-gray-400">Select Image</Text>
+            <Text style={{ color: '#636366' }}>Select Image</Text>
           </TouchableOpacity>
 
           {/* GRID PREVIEW */}
@@ -205,14 +208,11 @@ export default function AddCollectionModal({
             keyExtractor={(_, index) => index.toString()}
             numColumns={3}
             renderItem={({ item }) => (
-              <View className="m-1">
-                <Image
-                  source={{ uri: item.uri }}
-                  className="w-24 h-24 rounded-lg"
-                />
+              <View style={{ margin: 4 }}>
+                <Image source={{ uri: item.uri }} style={{ width: 96, height: 96, borderRadius: 8 }} />
                 <TouchableOpacity
                   onPress={deleteImage}
-                  className="absolute top-1 right-1 bg-red-500 rounded-full p-1"
+                  style={{ position: 'absolute', top: 4, right: 4, backgroundColor: '#FF453A', borderRadius: 50, padding: 4 }}
                 >
                   <Trash2 size={14} color="white" />
                 </TouchableOpacity>
@@ -230,15 +230,21 @@ export default function AddCollectionModal({
         >
           <TouchableOpacity
             onPress={handleSave}
-            className="bg-black h-14 rounded-2xl items-center justify-center"
+            activeOpacity={0.85}
+            style={{ height: 56, borderRadius: 18, overflow: 'hidden' }}
           >
-            {loading ? (
-              <ActivityIndicator color="white" />
-            ) : (
-              <Text className="text-white text-base font-semibold">
-                Save
-              </Text>
-            )}
+            <ImageBackground
+              source={buttonBg}
+              style={{ width: '100%', height: 56, alignItems: 'center', justifyContent: 'center' }}
+              imageStyle={{ borderRadius: 18 }}
+              resizeMode="cover"
+            >
+              {loading ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text style={{ color: '#FFFFFF', fontSize: 17, fontWeight: '600', letterSpacing: 0.3 }}>Save</Text>
+              )}
+            </ImageBackground>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

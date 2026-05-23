@@ -14,21 +14,36 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 
-const modalBg = require("../assets/2.0/model/bg.png");
+const modalBg = require("../../../assets/2.0/model/bg.png");
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
-function BlurBackdrop({ animatedIndex, close }: BottomSheetBackdropProps & { close: () => void }) {
+function BlurBackdrop({
+  animatedIndex,
+  close,
+}: BottomSheetBackdropProps & { close: () => void }) {
   const rPressableStyle = useAnimatedStyle(() => ({
     pointerEvents: animatedIndex.get() >= 0 ? "auto" : "none",
   }));
   const animatedIntensity = useAnimatedProps(() => ({
-    intensity: interpolate(animatedIndex.get(), [-1, 0], [0, 28], Extrapolation.CLAMP),
+    intensity: interpolate(
+      animatedIndex.get(),
+      [-1, 0],
+      [0, 28],
+      Extrapolation.CLAMP,
+    ),
   }));
   return (
-    <AnimatedPressable style={[StyleSheet.absoluteFill, rPressableStyle]} onPress={close}>
-      <AnimatedBlurView animatedProps={animatedIntensity} tint="dark" style={StyleSheet.absoluteFill} />
+    <AnimatedPressable
+      style={[StyleSheet.absoluteFill, rPressableStyle]}
+      onPress={close}
+    >
+      <AnimatedBlurView
+        animatedProps={animatedIntensity}
+        tint="dark"
+        style={StyleSheet.absoluteFill}
+      />
     </AnimatedPressable>
   );
 }
@@ -58,22 +73,19 @@ export function AppBottomSheet({
     }
   }, [isVisible]);
 
-  const renderBackdrop = useCallback(
-    (props: BottomSheetBackdropProps) => {
-      if (Platform.OS === "android") {
-        return (
-          <BottomSheetBackdrop
-            {...props}
-            appearsOnIndex={0}
-            disappearsOnIndex={-1}
-            opacity={0.6}
-          />
-        );
-      }
-      return <BlurBackdrop {...props} close={() => ref.current?.dismiss()} />;
-    },
-    []
-  );
+  const renderBackdrop = useCallback((props: BottomSheetBackdropProps) => {
+    if (Platform.OS === "android") {
+      return (
+        <BottomSheetBackdrop
+          {...props}
+          appearsOnIndex={0}
+          disappearsOnIndex={-1}
+          opacity={0.6}
+        />
+      );
+    }
+    return <BlurBackdrop {...props} close={() => ref.current?.dismiss()} />;
+  }, []);
 
   return (
     <BottomSheetModal
@@ -85,6 +97,9 @@ export function AppBottomSheet({
       handleStyle={styles.handleStyle}
       backgroundStyle={styles.backgroundStyle}
       onDismiss={onClose}
+      keyboardBehavior="extend"
+      keyboardBlurBehavior="restore"
+      android_keyboardInputMode="adjustResize"
     >
       <BottomSheetView style={styles.container}>
         <ImageBackground

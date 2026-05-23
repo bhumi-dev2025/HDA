@@ -8,33 +8,33 @@ type Props = {
 export default function ChatBubble({ role, text }: Props) {
   const isUser = role === "user";
 
-  // ─── System bubble — Green (todo success) ────────────────────────────────
+  // ─── System bubble — Green ────────────────────────────────────────────────
   if (role === "system") {
     const lines = text.split("\n");
     const header = lines[0];
     const taskLines = lines.slice(1);
     return (
-      <View className="my-2 mx-4">
-        <View className="bg-green-50 border border-green-200 rounded-2xl px-4 py-3">
-          <View className="flex-row items-center mb-1">
-            <Text className="text-green-600 text-base mr-2">✅</Text>
-            <Text className="text-green-700 text-sm font-semibold flex-1">{header}</Text>
+      <View style={{ marginVertical: 8, marginHorizontal: 16 }}>
+        <View style={{ backgroundColor: 'rgba(48,209,88,0.1)', borderWidth: 1, borderColor: 'rgba(48,209,88,0.25)', borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
+            <Text style={{ fontSize: 15, marginRight: 8 }}>✅</Text>
+            <Text style={{ color: '#30D158', fontSize: 13, fontWeight: '600', flex: 1 }}>{header}</Text>
           </View>
           {taskLines.map((line, i) => (
-            <Text key={i} className="text-green-600 text-sm ml-7">{line}</Text>
+            <Text key={i} style={{ color: '#30D158', fontSize: 13, marginLeft: 28 }}>{line}</Text>
           ))}
         </View>
       </View>
     );
   }
 
-  // ─── Error bubble — Red (limit exceeded / not found) ─────────────────────
+  // ─── Error bubble — Red ───────────────────────────────────────────────────
   if (role === "error") {
     return (
-      <View className="my-2 mx-4">
-        <View className="bg-red-50 border border-red-200 rounded-2xl px-4 py-3 flex-row items-start">
-          <Text className="text-red-500 text-base mr-2">⚠️</Text>
-          <Text className="text-red-600 text-sm flex-1">{text}</Text>
+      <View style={{ marginVertical: 8, marginHorizontal: 16 }}>
+        <View style={{ backgroundColor: 'rgba(255,69,58,0.1)', borderWidth: 1, borderColor: 'rgba(255,69,58,0.25)', borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, flexDirection: 'row', alignItems: 'flex-start' }}>
+          <Text style={{ fontSize: 15, marginRight: 8 }}>⚠️</Text>
+          <Text style={{ color: '#FF453A', fontSize: 13, flex: 1 }}>{text}</Text>
         </View>
       </View>
     );
@@ -42,17 +42,20 @@ export default function ChatBubble({ role, text }: Props) {
 
   // ─── Normal chat bubble ───────────────────────────────────────────────────
   return (
-    <View className={`my-1 mx-3 max-w-[80%] ${isUser ? "self-end" : "self-start"}`}>
-      <View
-        className={`rounded-2xl px-4 py-3 ${
-          isUser ? "bg-blue-500 rounded-br-sm" : "bg-gray-100 rounded-bl-sm"
-        }`}
-      >
-        <Text className={`text-base ${isUser ? "text-white" : "text-gray-900"}`}>
-          {text}
-        </Text>
+    <View style={{ marginVertical: 4, marginHorizontal: 12, maxWidth: '80%', alignSelf: isUser ? 'flex-end' : 'flex-start' }}>
+      <View style={{
+        borderRadius: 18,
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+        backgroundColor: isUser ? '#0A84FF' : 'rgba(255,255,255,0.1)',
+        borderBottomRightRadius: isUser ? 4 : 18,
+        borderBottomLeftRadius: isUser ? 18 : 4,
+        borderWidth: isUser ? 0 : 1,
+        borderColor: 'rgba(255,255,255,0.08)',
+      }}>
+        <Text style={{ fontSize: 15, color: '#FFFFFF' }}>{text}</Text>
       </View>
-      <Text className={`text-xs mt-1 text-gray-400 ${isUser ? "text-right" : "text-left"}`}>
+      <Text style={{ fontSize: 11, marginTop: 4, color: '#636366', textAlign: isUser ? 'right' : 'left' }}>
         {isUser ? "You" : "Gemini"}
       </Text>
     </View>

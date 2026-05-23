@@ -1,5 +1,5 @@
 import React, { useRef, useCallback } from 'react';
-import { View, Text, ScrollView, TouchableOpacity,Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert, ImageBackground } from 'react-native';
 import { Heart, ChevronLeft } from 'lucide-react-native';
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -7,8 +7,9 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import DeleteAccountModal from '../../componunts/Modals/DeleteModal';
-
 import { supabase } from '../../lib/supabase';
+
+const homeBg = require('../../assets/photo/login/2.0/home.png');
 
 export default function ManageAccountScreen() {
   const router = useRouter();
@@ -54,82 +55,66 @@ export default function ManageAccountScreen() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <BottomSheetModalProvider>
-        
-        <SafeAreaView className="flex-1 bg-[#FAFAFA]">
+        <View style={{ flex: 1, backgroundColor: '#000' }}>
+        <ImageBackground source={homeBg} resizeMode="cover" style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
           
-          {/* Header Section */}
-          <View className="flex-row items-center justify-between px-6 pt-4 pb-2">
-            <TouchableOpacity 
-              onPress={() => router.back()} 
-              style={{
-                backgroundColor: '#F1F1F1',
-                padding: 8,
-                borderRadius: 50,
-                marginLeft: 0,
-              }}
+          {/* Header */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 24, paddingTop: 16, paddingBottom: 8 }}>
+            <TouchableOpacity
+              onPress={() => router.back()}
+              style={{ backgroundColor: 'rgba(255,255,255,0.08)', padding: 8, borderRadius: 50 }}
             >
-              <ChevronLeft size={24} color="black" />
+              <ChevronLeft size={24} color="#FFFFFF" />
             </TouchableOpacity>
-            
-            <Text className="text-xl font-bold text-black absolute left-0 right-0 text-center -z-10">
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#FFFFFF', position: 'absolute', left: 0, right: 0, textAlign: 'center', zIndex: -1 }}>
               Manage Account
             </Text>
-            
-            <View className="w-8" />
-          </View> 
+            <View style={{ width: 40 }} />
+          </View>
 
-          <ScrollView className="flex-1 px-6 mt-8" showsVerticalScrollIndicator={false}>
+          <ScrollView style={{ flex: 1, paddingHorizontal: 24, marginTop: 24 }} showsVerticalScrollIndicator={false}>
             
-            <Text className="text-xl font-bold text-black mb-2">
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 8 }}>
               Why are you leaving?
             </Text>
-            
-            <Text className="text-left text-base text-gray-400 mb-6 leading-5">
+            <Text style={{ color: '#636366', fontSize: 15, lineHeight: 22, marginBottom: 24 }}>
               Helping us improve by telling us why you want to delete your account.
             </Text>
 
-            <View className="p-2">
-               {/* Options List */}
-               <View className='bg-white rounded-md p-5 mb-1'>
-                 <Text className='text-base font-medium'>To Expensive</Text>
-               </View> 
-               <View className='bg-white rounded-md p-5 mb-1'>
-                 <Text className='text-base font-medium'>Privacy concerns</Text>
-               </View> 
-               <View className='bg-white rounded-md p-5 mb-1'>
-                 <Text className='text-base font-medium'>No longer need it</Text>
-               </View> 
-               <View className='bg-white rounded-md p-5 mb-1'>
-                 <Text className='text-base font-medium'>Found alternative</Text>
-               </View> 
-               <View className='bg-white rounded-md p-5 mb-6'>
-                 <Text className='text-base font-medium'>Other</Text>
-               </View> 
-               
-               {/* 5. Delete Button પર onPress લગાવ્યું */}
-               <TouchableOpacity 
-                 className="bg-white rounded-md p-5 mb-60"
-                 onPress={handleOpenModal} // 🔥 અહી ક્લિક કરવાથી મોડલ ખુલશે
-               >
-                  <Text className="text-base font-medium text-red-600">Delete Account</Text>
-               </TouchableOpacity>
+            {/* Options */}
+            <View style={{ backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)', marginBottom: 12 }}>
+              {['To Expensive', 'Privacy concerns', 'No longer need it', 'Found alternative', 'Other'].map((item, index, arr) => (
+                <View key={item}>
+                  <TouchableOpacity style={{ padding: 18 }}>
+                    <Text style={{ color: '#FFFFFF', fontSize: 15, fontWeight: '500' }}>{item}</Text>
+                  </TouchableOpacity>
+                  {index < arr.length - 1 && <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.07)', marginHorizontal: 16 }} />}
+                </View>
+              ))}
             </View>
 
-            <View className='p-2 justify-center items-center'>
-              <Heart size={20} color="#FF4D4D" fill="#FF4D4D" className="mb-2" />
-                <Text className="text-sm font-semibold text-gray-400">Human Design Academy</Text>
-                <Text className="text-[10px] text-gray-300 mt-1">Designed by Simple Studio</Text>
+            {/* Delete Account */}
+            <View style={{ backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,0,0,0.15)', marginBottom: 40 }}>
+              <TouchableOpacity style={{ padding: 18 }} onPress={handleOpenModal}>
+                <Text style={{ color: '#FF453A', fontSize: 15, fontWeight: '600' }}>Delete Account</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Footer */}
+            <View style={{ alignItems: 'center', paddingBottom: 40 }}>
+              <Heart size={20} color="#FF4D4D" fill="#FF4D4D" />
+              <Text style={{ color: '#FFFFFF', fontSize: 12, fontWeight: 'bold', marginTop: 8 }}>Human Design Academy</Text>
+              <Text style={{ color: '#636366', fontSize: 10, marginTop: 4 }}>Designed by Simple Studio</Text>
             </View>
 
           </ScrollView>
 
-          {/* 6. છેલ્લે તમારું બનાવેલું મોડલ અહી મૂક્યું */}
-          <DeleteAccountModal 
-            ref={deleteModalRef} 
-            onConfirm={handleDeleteAction} 
-          />
+          <DeleteAccountModal ref={deleteModalRef} onConfirm={handleDeleteAction} />
 
         </SafeAreaView>
+        </ImageBackground>
+        </View>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );

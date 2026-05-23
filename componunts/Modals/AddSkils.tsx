@@ -1,26 +1,34 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { Search } from "lucide-react-native";
+import React, { useEffect, useRef, useState } from "react";
 import {
-  Modal,
-  View,
-  Text,
-  TextInput,
-  ScrollView,
-  Platform,
-  Keyboard,
-  TouchableOpacity,
-  PanResponder,
   Animated,
   Dimensions,
-  Pressable
-} from 'react-native';
-import { Search } from 'lucide-react-native';
-import { MASTER_SKILLS } from '../../constants/skillData'; 
-import {ExpertiseModalProps} from '../../types'
+  ImageBackground,
+  Keyboard,
+  Modal,
+  PanResponder,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { MASTER_SKILLS } from "../../constants/skillData";
+import { ExpertiseModalProps } from "../../types";
 
-const { height } = Dimensions.get('window');
-export const AddExpertiseModal:React.FC<ExpertiseModalProps> = ({ isVisible, onClose, onSave, initialSelectedSkills }: ExpertiseModalProps) => {
+const buttonBg = require("../../assets/2.0/model/button.png");
+
+const { height } = Dimensions.get("window");
+export const AddExpertiseModal: React.FC<ExpertiseModalProps> = ({
+  isVisible,
+  onClose,
+  onSave,
+  initialSelectedSkills,
+}: ExpertiseModalProps) => {
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   // --- Animation & Drag Logic Start ---
@@ -56,7 +64,7 @@ export const AddExpertiseModal:React.FC<ExpertiseModalProps> = ({ isVisible, onC
           }).start();
         }
       },
-    })
+    }),
   ).current;
   // --- Animation Logic End ---
 
@@ -67,9 +75,18 @@ export const AddExpertiseModal:React.FC<ExpertiseModalProps> = ({ isVisible, onC
 
   // કીબોર્ડ હેન્ડલિંગ
   useEffect(() => {
-    const show = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow', (e) => setKeyboardHeight(e.endCoordinates.height));
-    const hide = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide', () => setKeyboardHeight(0));
-    return () => { show.remove(); hide.remove(); };
+    const show = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow",
+      (e) => setKeyboardHeight(e.endCoordinates.height),
+    );
+    const hide = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
+      () => setKeyboardHeight(0),
+    );
+    return () => {
+      show.remove();
+      hide.remove();
+    };
   }, []);
 
   const toggleSkill = (id: string) => {
@@ -93,36 +110,33 @@ export const AddExpertiseModal:React.FC<ExpertiseModalProps> = ({ isVisible, onC
       onRequestClose={onClose}
     >
       {/* 1. Backdrop (Black Overlay) */}
-      <Pressable 
-        className="absolute top-0 bottom-0 left-0 right-0 bg-black/40" 
-        onPress={onClose} 
+      <Pressable
+        className="absolute top-0 bottom-0 left-0 right-0 bg-black/40"
+        onPress={onClose}
       />
 
       {/* 2. Main Content Wrapper */}
       <View className="flex-1 justify-end" pointerEvents="box-none">
-        
-        <Animated.View 
-          style={{ 
+        <Animated.View
+          style={{
             transform: [{ translateY: panY }],
-            paddingBottom: Platform.OS === 'android' ? keyboardHeight : 0, 
-            marginBottom: Platform.OS === 'ios' ? keyboardHeight : 0 
+            paddingBottom: Platform.OS === "android" ? keyboardHeight : 0,
+            marginBottom: Platform.OS === "ios" ? keyboardHeight : 0,
           }}
-          className="bg-white rounded-t-[40px] w-full max-h-[80%] min-h-[60%] shadow-2xl overflow-hidden flex-1 mt-20"
+          className="bg-[#19181B] rounded-t-[40px] w-full max-h-[80%] min-h-[60%] shadow-2xl overflow-hidden flex-1 mt-20"
         >
-          
           {/* --- 3. DRAG HANDLE (Swipe Area) --- */}
-          <View 
-            {...panResponder.panHandlers} 
-            className="w-full h-14 items-center justify-center bg-white z-50 absolute top-0 border-b border-transparent"
+          <View
+            {...panResponder.panHandlers}
+            className="w-full h-14 items-center justify-center bg-[#19181B] z-50 absolute top-0 border-b border-transparent"
           >
-            <View className="w-12 h-1.5 bg-gray-300 rounded-full" />
+            <View className="w-12 h-1.5 bg-[#636366] rounded-full" />
           </View>
           {/* ---------------------------------- */}
 
           {/* 4. Scrollable Content */}
           <View className="flex-1 pt-14 pb-8 px-6">
-            
-            <Text className="text-xl font-bold text-center text-gray-900 mb-6">
+            <Text className="text-xl font-bold text-center text-white mb-6">
               Add Expertise
             </Text>
 
@@ -133,20 +147,22 @@ export const AddExpertiseModal:React.FC<ExpertiseModalProps> = ({ isVisible, onC
               keyboardShouldPersistTaps="handled"
             >
               {/* Search Box */}
-              <View className="flex-row items-center bg-gray-100 rounded-lg px-4 py-3 mb-6">
-                <Search size={20} color="#9CA3AF" />
+              <View className="flex-row items-center bg-[#2B2B2B] rounded-lg px-4 py-3 mb-6">
+                <Search size={20} color="#636366" />
                 <TextInput
-                  className="flex-1 ml-3 text-base text-gray-800 p-0"
+                  className="flex-1 ml-3 text-base text-white p-0"
                   placeholder="Search"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor="#636366"
                   value={search}
                   onChangeText={setSearch}
                 />
               </View>
 
               {/* Skills List */}
-              <View className='flex-row flex-wrap gap-3 mb-8'>
-                {MASTER_SKILLS.filter(item => item.name.toLowerCase().includes(search.toLowerCase())).map((skill) => {
+              <View className="flex-row flex-wrap gap-3 mb-8">
+                {MASTER_SKILLS.filter((item) =>
+                  item.name.toLowerCase().includes(search.toLowerCase()),
+                ).map((skill) => {
                   const isSelected = selectedSkills.includes(skill.id);
                   const IconComponent = skill.icon;
 
@@ -155,17 +171,28 @@ export const AddExpertiseModal:React.FC<ExpertiseModalProps> = ({ isVisible, onC
                       key={skill.id}
                       onPress={() => toggleSkill(skill.id)}
                       className={`p-3 flex-row items-center justify-center self-start gap-2 border-2 rounded-xl ${
-                        isSelected ? 'bg-white border-black' : 'bg-white border-slate-100'
+                        isSelected
+                          ? "bg-[#2B2B2B] border-white"
+                          : "bg-[#2B2B2B] border-[#3F3F3F]"
                       }`}
                     >
-                      {skill.type === 'svg' ? (
+                      {skill.type === "svg" ? (
                         // @ts-ignore
-                        <IconComponent height={20} width={20} opacity={isSelected ? 1 : 0.5} />
+                        <IconComponent
+                          height={20}
+                          width={20}
+                          opacity={isSelected ? 1 : 0.4}
+                        />
                       ) : (
-                        <IconComponent size={20} color={isSelected ? "black" : "#9CA3AF"} />
+                        <IconComponent
+                          size={20}
+                          color={isSelected ? "#FFFFFF" : "#636366"}
+                        />
                       )}
-                      
-                      <Text className={`text-lg font-medium ${isSelected ? 'text-black' : 'text-slate-300'}`}>
+
+                      <Text
+                        className={`text-lg font-medium ${isSelected ? "text-white" : "text-[#636366]"}`}
+                      >
                         {skill.name}
                       </Text>
                     </TouchableOpacity>
@@ -176,14 +203,20 @@ export const AddExpertiseModal:React.FC<ExpertiseModalProps> = ({ isVisible, onC
 
             {/* Save Button */}
             <TouchableOpacity
-              className="bg-black w-full p-4 rounded-2xl items-center mt-2 shadow-lg"
               onPress={handleSave}
+              activeOpacity={0.85}
+              style={{ width: "100%", marginTop: 8 }}
             >
-              <Text className="text-white font-bold text-lg">Save</Text>
+              <ImageBackground
+                source={buttonBg}
+                style={{ width: "100%", height: 56, alignItems: "center", justifyContent: "center", borderRadius: 18, overflow: "hidden" }}
+                imageStyle={{ borderRadius: 18 }}
+                resizeMode="cover"
+              >
+                <Text style={{ color: "#FFFFFF", fontSize: 17, fontWeight: "600", letterSpacing: 0.3 }}>Save</Text>
+              </ImageBackground>
             </TouchableOpacity>
-          
           </View>
-
         </Animated.View>
       </View>
     </Modal>

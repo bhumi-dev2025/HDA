@@ -135,6 +135,11 @@ export default function LoginNew() {
   const handleGoogle = async () => {
     try {
       await GoogleSignin.hasPlayServices();
+
+      // Cache clear karo — jethhi account selection screen ave
+      try { await GoogleSignin.revokeAccess(); } catch (_) {}
+      try { await GoogleSignin.signOut(); } catch (_) {}
+
       const userInfo = await GoogleSignin.signIn();
       console.log('Google user:', userInfo);
     } catch (e) {

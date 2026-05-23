@@ -4,6 +4,7 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  ImageBackground,
   FlatList,
   ActivityIndicator,
   Alert,
@@ -12,6 +13,8 @@ import Modal from "react-native-modal";
 import * as ImagePicker from "expo-image-picker";
 import { supabase } from "../lib/supabase";
 import { Trash2 } from "lucide-react-native";
+
+const buttonBg = require("../assets/2.0/model/button.png");
 
 interface Props {
   visible: boolean;
@@ -118,22 +121,22 @@ export default function AddCollectionImagesModal({
       onSwipeComplete={onClose}
       style={{ justifyContent: "flex-end", margin: 0 }}
     >
-      <View className="bg-white rounded-t-3xl p-6 h-[85%]">
+      <View style={{ backgroundColor: '#19181B', borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 24, height: '85%' }}>
 
-        <View className="w-12 h-1.5 bg-gray-300 rounded-full self-center mb-4" />
+        <View style={{ width: 48, height: 6, backgroundColor: '#636366', borderRadius: 3, alignSelf: 'center', marginBottom: 16 }} />
 
-        <Text className="text-lg font-bold text-center mb-5">
+        <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#FFFFFF', textAlign: 'center', marginBottom: 20 }}>
           Add Image
         </Text>
 
         <TouchableOpacity
           onPress={pickImages}
-          className="border border-dashed border-gray-300 rounded-xl h-32 items-center justify-center mb-5"
+          style={{ borderWidth: 1, borderColor: 'rgba(255,255,255,0.15)', borderStyle: 'dashed', borderRadius: 12, height: 120, alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}
         >
-          <Text className="text-gray-400">Add Image</Text>
+          <Text style={{ color: '#636366' }}>Add Image</Text>
         </TouchableOpacity>
 
-        {loading && <ActivityIndicator size="large" color="black" />}
+        {loading && <ActivityIndicator size="large" color="#FFFFFF" />}
 
         <FlatList
           data={[...existingImages, ...newImages]}
@@ -141,21 +144,19 @@ export default function AddCollectionImagesModal({
           numColumns={3}
           renderItem={({ item, index }) => {
             const isNew = !item.id;
-
             return (
-              <View className="m-1">
+              <View style={{ margin: 4 }}>
                 <Image
                   source={{ uri: isNew ? item.uri : item.image_url }}
-                  className="w-28 h-28 rounded-lg"
+                  style={{ width: 112, height: 112, borderRadius: 8 }}
                 />
-
                 <TouchableOpacity
                   onPress={() =>
                     isNew
                       ? deleteNewImage(index - existingImages.length)
                       : deleteExistingImage(item.id, item.image_url)
                   }
-                  className="absolute top-1 right-1 bg-red-500 rounded-full p-1"
+                  style={{ position: 'absolute', top: 4, right: 4, backgroundColor: '#FF453A', borderRadius: 50, padding: 4 }}
                 >
                   <Trash2 size={14} color="white" />
                 </TouchableOpacity>
@@ -166,11 +167,17 @@ export default function AddCollectionImagesModal({
 
         <TouchableOpacity
           onPress={handleSave}
-          className="bg-black h-14 rounded-2xl items-center justify-center mt-5"
+          activeOpacity={0.85}
+          style={{ marginTop: 20, height: 56, borderRadius: 18, overflow: 'hidden' }}
         >
-          <Text className="text-white font-semibold">
-            Save
-          </Text>
+          <ImageBackground
+            source={buttonBg}
+            style={{ width: '100%', height: 56, alignItems: 'center', justifyContent: 'center' }}
+            imageStyle={{ borderRadius: 18 }}
+            resizeMode="cover"
+          >
+            <Text style={{ color: '#FFFFFF', fontSize: 17, fontWeight: '600', letterSpacing: 0.3 }}>Save</Text>
+          </ImageBackground>
         </TouchableOpacity>
 
       </View>

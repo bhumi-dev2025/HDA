@@ -1,6 +1,14 @@
 import { DailyData } from '../types';
 import { supabase } from './supabase';
 
+// UTC ni bajaye local date use karo (India IST fix)
+function getLocalDateStr(date = new Date()): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
 // --- NEW 6-ELEMENT SCORING ALGORITHM ---
 const calculateScore = (data: DailyData) => {
   
@@ -88,7 +96,7 @@ export const updateDailyLog = async (type: string, value: any) => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error("No user logged in");
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalDateStr();
 
     // 1. Fetch existing data
     const { data: currentData } = await supabase
@@ -156,7 +164,7 @@ export const getWeeklyScores = async (): Promise<{ date: string; score: number }
   for (let i = 6; i >= 0; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);
-    days.push({ date: d.toISOString().split('T')[0], score: 0 });
+    days.push({ date: getLocalDateStr(d), score: 0 });
   }
 
   const { data } = await supabase
@@ -181,7 +189,7 @@ export const getTodayLog = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return null;
     
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalDateStr();
 
     const { data, error } = await supabase
       .from('daily_logs')

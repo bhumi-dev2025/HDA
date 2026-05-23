@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
+  ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -21,6 +22,8 @@ import { GeminiResponse, getStoredApiKey, sendMessage } from "../../lib/gemini";
 import { todoEvents } from "../../lib/todoEvents";
 import { addTasksToDailyLog, removeTasksFromDailyLog } from "../../lib/todoService";
 import { getTodayLog, updateDailyLog } from "../../lib/TrackerService";
+
+const homeBg = require("../../assets/photo/login/2.0/home.png");
 
 const CHAT_HISTORY_KEY = "chat_history";
 const MAX_HISTORY = 20;
@@ -266,18 +269,18 @@ export default function ChatScreen() {
   const NoKeyBanner = () =>
     hasKey === false ? (
       <TouchableOpacity onPress={() => router.push("/settings/ai")}
-        className="mx-4 mt-3 bg-amber-50 border border-amber-300 rounded-xl px-4 py-3 flex-row items-center">
-        <Ionicons name="warning-outline" size={18} color="#d97706" />
-        <Text className="text-amber-700 text-sm ml-2 flex-1">No API key found. Tap to add your Gemini key in Settings.</Text>
-        <Ionicons name="chevron-forward" size={16} color="#d97706" />
+        style={{ margin: 16, marginTop: 12, backgroundColor: 'rgba(251,191,36,0.1)', borderWidth: 1, borderColor: 'rgba(251,191,36,0.3)', borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, flexDirection: 'row', alignItems: 'center' }}>
+        <Ionicons name="warning-outline" size={18} color="#fbbf24" />
+        <Text style={{ color: '#fbbf24', fontSize: 13, marginLeft: 8, flex: 1 }}>No API key found. Tap to add your Gemini key in Settings.</Text>
+        <Ionicons name="chevron-forward" size={16} color="#fbbf24" />
       </TouchableOpacity>
     ) : null;
 
   const EmptyState = () => (
-    <View className="flex-1 items-center justify-center px-8">
-      <Text className="text-5xl mb-4">✨</Text>
-      <Text className="text-xl font-bold text-gray-700 mb-2">Health Assistant</Text>
-      <Text className="text-gray-400 text-center text-sm leading-6">
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
+      <Text style={{ fontSize: 48, marginBottom: 16 }}>✨</Text>
+      <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 8 }}>Health Assistant</Text>
+      <Text style={{ color: '#636366', textAlign: 'center', fontSize: 14, lineHeight: 24 }}>
         Track your daily health by chatting!{"\n\n"}
         🧘 "Meditated for 20 mins"{"\n"}
         💧 "Drank 2 liters of water"{"\n"}
@@ -289,21 +292,22 @@ export default function ChatScreen() {
   );
 
   return (
+    <View style={{ flex: 1, backgroundColor: '#000' }}>
+    <ImageBackground source={homeBg} resizeMode="cover" style={{ flex: 1 }}>
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: 'white' }}
+      style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
     >
       <SafeAreaView
-        className="flex-1 bg-white"
+        style={{ flex: 1, paddingBottom: Platform.OS === "android" ? keyboardHeight : 0 }}
         edges={["top", "left", "right"]}
-        style={{ paddingBottom: Platform.OS === "android" ? keyboardHeight : 0 }}
       >
-        <View className="flex-row items-center justify-between px-4 py-3 border-b border-gray-100">
-          <Text className="text-lg font-bold text-gray-800">Health Assistant</Text>
+        {/* Header */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.07)' }}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#FFFFFF' }}>Health Assistant</Text>
           {messages.length > 0 && (
-            <TouchableOpacity onPress={clearHistory} className="p-2">
-              <Ionicons name="trash-outline" size={20} color="#9ca3af" />
+            <TouchableOpacity onPress={clearHistory} style={{ padding: 8 }}>
+              <Ionicons name="trash-outline" size={20} color="#636366" />
             </TouchableOpacity>
           )}
         </View>
@@ -327,25 +331,26 @@ export default function ChatScreen() {
         />
 
         {loading && (
-          <View className="flex-row items-center px-4 pb-2 self-start">
-            <View className="bg-gray-100 rounded-2xl px-4 py-3 flex-row items-center">
-              <ActivityIndicator size="small" color="#6b7280" />
-              <Text className="text-gray-500 text-sm ml-2">Thinking…</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingBottom: 8, alignSelf: 'flex-start' }}>
+            <View style={{ backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, flexDirection: 'row', alignItems: 'center' }}>
+              <ActivityIndicator size="small" color="#636366" />
+              <Text style={{ color: '#636366', fontSize: 14, marginLeft: 8 }}>Thinking…</Text>
             </View>
           </View>
         )}
 
-        <View
-          className="flex-row items-end px-3 border-t border-gray-100 bg-white"
-          style={{
-            paddingVertical: 12,
-            paddingBottom: Platform.OS === "android" ? 12 : 60 + insets.bottom + 12,
-          }}
-        >
+        {/* Input bar */}
+        <View style={{
+          flexDirection: 'row', alignItems: 'flex-end',
+          paddingHorizontal: 12, paddingVertical: 12,
+          paddingBottom: Platform.OS === "android" ? 12 : 60 + insets.bottom + 12,
+          borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.07)',
+          backgroundColor: 'rgba(0,0,0,0.3)',
+        }}>
           <TextInput
-            className="flex-1 bg-gray-100 rounded-2xl px-4 py-3 text-gray-800 text-base max-h-32"
+            style={{ flex: 1, backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 20, paddingHorizontal: 16, paddingVertical: 12, color: '#FFFFFF', fontSize: 15, maxHeight: 128, borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}
             placeholder="Meditation, water, sleep, workout, todos..."
-            placeholderTextColor="#9ca3af"
+            placeholderTextColor="#636366"
             value={input}
             onChangeText={setInput}
             multiline
@@ -355,12 +360,14 @@ export default function ChatScreen() {
           <TouchableOpacity
             onPress={handleSend}
             disabled={loading || !input.trim()}
-            className={`ml-2 mb-1 w-11 h-11 rounded-full items-center justify-center ${input.trim() && !loading ? "bg-blue-500" : "bg-gray-200"}`}
+            style={{ marginLeft: 8, marginBottom: 2, width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', backgroundColor: input.trim() && !loading ? '#0A84FF' : 'rgba(255,255,255,0.1)' }}
           >
-            <Ionicons name="arrow-up" size={20} color={input.trim() && !loading ? "white" : "#9ca3af"} />
+            <Ionicons name="arrow-up" size={20} color={input.trim() && !loading ? "white" : "#636366"} />
           </TouchableOpacity>
         </View>
       </SafeAreaView>
     </KeyboardAvoidingView>
+    </ImageBackground>
+    </View>
   );
 }

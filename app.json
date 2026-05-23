@@ -33,7 +33,7 @@
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.simple.humandesignacademy",
-      "softwareKeyboardLayoutMode": "resize",
+      "softwareKeyboardLayoutMode": "pan",
       "edgeToEdgeEnabled": true
     },
     "web": {

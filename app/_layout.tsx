@@ -49,9 +49,10 @@ export default function RootLayout() {
   useEffect(() => {
     if (!initialized) return;
 
-    const inAuthGroup = segments[0] === '(tabs)';
-    
-    if (!session && inAuthGroup) {
+    const protectedGroups = ['(tabs)', 'settings', 'setting_Screens', 'wallet'];
+    const inProtectedRoute = protectedGroups.some(g => segments[0] === g);
+
+    if (!session && inProtectedRoute) {
       router.replace('/'); 
     } else if (session && (segments as string[]).length === 0) {
       router.replace('/(tabs)/home');
@@ -93,36 +94,7 @@ export default function RootLayout() {
       />
       <Stack.Screen
         name="settings/ai"
-        options={{
-          headerShown: true,
-          title: "AI Settings",
-          headerTitleAlign: "center",
-          headerTitleStyle: {
-            fontSize: 16,
-            fontWeight: "600",
-            color: "#111",
-          },
-          headerStyle: {
-            backgroundColor: "#f5f5f5",
-          },
-          headerShadowVisible: false,
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => router.back()}
-              style={{
-                width: 34,
-                height: 34,
-                borderRadius: 17,
-                backgroundColor: "#e5e5e5",
-                alignItems: "center",
-                justifyContent: "center",
-                marginLeft: 4,
-              }}
-            >
-              <Ionicons name="chevron-back" size={18} color="#111" />
-            </TouchableOpacity>
-          ),
-        }}
+        options={{ headerShown: false }}
       />
       </Stack>
       </BottomSheetModalProvider>

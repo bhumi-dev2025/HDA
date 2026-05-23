@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import { View, Text, ScrollView, TouchableOpacity,ActivityIndicator,Alert,Image} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity,ActivityIndicator,Alert,Image, ImageBackground} from 'react-native';
 import { ChevronRight, Heart,User as UserIcon } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import L1 from '../../assets/photo/home/L1.svg'
@@ -9,7 +9,7 @@ import { Session } from '@supabase/supabase-js';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { ChevronLeft } from 'lucide-react-native';
 
-
+const homeBg = require('../../assets/photo/login/2.0/home.png');
 
 const Settingscreen = () => {
   const router = useRouter();
@@ -25,14 +25,10 @@ const Settingscreen = () => {
       async function getProfile() {
         try {
           setLoading(true);
-          // currunt session 
           const { data: { session }, error } = await supabase.auth.getSession();
-    
           if (error) throw error;
-    
           if (session) {
             setSession(session);
-            // Google login on metadeta set
             setAvatarUrl(session.user.user_metadata?.avatar_url || null);
             setUsername(session.user.user_metadata?.full_name || 'Human Design User');
           }
@@ -45,19 +41,11 @@ const Settingscreen = () => {
     
       const handleLogout = async () => {
         try {
-          // 1. પહેલા Google માંથી સાઇન આઉટ કરો (આનાથી એકાઉન્ટ સિલેક્શન ફરી આવશે)
           await GoogleSignin.signOut();
-    
-          // 2. પછી Supabase માંથી સાઇન આઉટ કરો
           const { error } = await supabase.auth.signOut();
-          console.log("user log out..");
           if (error) throw error;
-          
-          // 3. લોગિન સ્ક્રીન પર રીડાયરેક્ટ કરો
           router.replace('/'); 
         } catch (error: any) {
-          console.log("Logout Error:", error);
-          // જો ગૂગલ સાઇન આઉટમાં કોઈ એરર આવે તો પણ Supabase logout તો થવું જ જોઈએ
           await supabase.auth.signOut();
           router.replace('/');
         }
@@ -65,135 +53,112 @@ const Settingscreen = () => {
     
       if (loading) {
         return (
-          <View className="flex-1 justify-center items-center bg-[#F1F1F1]">
-            <ActivityIndicator size="large" color="#333" />
+          <View className="flex-1 justify-center items-center bg-black">
+            <ActivityIndicator size="large" color="#fff" />
           </View>
         );
       }
     
   return (
-    <SafeAreaView className="flex-1 bg-[#F2F2F2] p-4">
-      {/* --- Header --- */}
-      <View className="flex-row items-center justify-between px-6 pt-4 pb-2">
-        {/* Logo Placeholder (Black H) */}
-        {/* <L1></L1> */}
-        <TouchableOpacity 
+    <View className="flex-1 bg-black">
+      <ImageBackground
+        source={homeBg}
+        resizeMode="cover"
+        style={{ flex: 1 }}
+      >
+      <SafeAreaView className="flex-1">
+        {/* --- Header --- */}
+        <View className="flex-row items-center justify-between px-6 pt-4 pb-2">
+          <TouchableOpacity 
             onPress={() => router.back()} 
             style={{
-              backgroundColor: '#fff', // આછો ગ્રે કલર
+              backgroundColor: 'rgba(255,255,255,0.08)',
               padding: 8,
-              borderRadius: 50, // ગોળ કરવા માટે
-              marginLeft: 0, // ડાબી બાજુથી જગ્યા (જરૂર હોય તો વધારી શકાય)
+              borderRadius: 50,
             }}
           >
-            <ChevronLeft size={24} color="black" />
+            <ChevronLeft size={24} color="#FFFFFF" />
           </TouchableOpacity>
-        
-        <Text className="text-xl font-bold text-black absolute left-0 right-0 text-center -z-10">
-          Settings
-        </Text>
-        
-        {/* Right side spacer to keep title centered */}
-        <View className="w-8" />
-      </View>
+          
+          <Text className="text-xl font-bold text-white absolute left-0 right-0 text-center -z-10">
+            Settings
+          </Text>
+          
+          <View className="w-8" />
+        </View>
 
-      <ScrollView className="flex-1 px-4 mt-8" showsVerticalScrollIndicator={false}>
-        
-        {/* --- Profile Card --- */}
-        {/* <View className="bg-white rounded-md p-5 mb-8 flex-row items-center shadow-sm">
-          <View className="h-12 w-12 bg-[#E5E0D8] rounded-2xl items-center justify-center mr-4">
-            {avatarUrl ? (
-              <Image 
-                source={{ uri: avatarUrl }} 
-                className="w-12 h-12 rounded-2xl"
-                resizeMode="cover"
-              />
-            ) : (
-              <View className="w-12 h-12 rounded-2xl bg-[#E5E0D8] items-center justify-center">
-                <UserIcon size={24} color="#999" />
+        <ScrollView className="flex-1 px-4 mt-8" showsVerticalScrollIndicator={false}>
+
+          {/* --- Gemini AI --- */}
+          <View className="rounded-2xl overflow-hidden mb-4" style={{ backgroundColor: 'rgba(255,255,255,0.06)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)' }}>
+            <TouchableOpacity onPress={() => router.push('/settings/ai')} className="flex-row items-center justify-between p-5">
+              <View className="flex-row items-center gap-3">
+                <Text style={{ fontSize: 18 }}>✨</Text>
+                <Text className="text-base font-semibold text-white">Gemini AI</Text>
               </View>
-            )}
+              <ChevronRight size={20} color="#636366" />
+            </TouchableOpacity>
           </View>
-          <View className="flex-1">
-            <Text className="text-base font-semibold text-black">{username}</Text>
-            <Text className="text-sm text-gray-400">{session?.user.email}</Text>
+
+          {/* --- Notification --- */}
+          <View className="rounded-2xl overflow-hidden mb-4" style={{ backgroundColor: 'rgba(255,255,255,0.06)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)' }}>
+            <TouchableOpacity onPress={() => router.push('/setting_Screens/notifications')} className="flex-row items-center justify-between p-5">
+              <Text className="text-base font-semibold text-white">Notification</Text>
+              <ChevronRight size={20} color="#636366" />
+            </TouchableOpacity>
           </View>
-          <ChevronRight size={20} color="#D1D1D1" />
-        </View> */}
 
-        {/* --- AI Key --- */}
-        <View className="bg-white rounded-md overflow-hidden mb-6 shadow-sm">
-          <TouchableOpacity onPress={()=>router.push('/settings/ai')} className='flex-row items-center justify-between p-5'>
-            <View className="flex-row items-center gap-3">
-              <Text className="text-lg">✨</Text>
-              <Text className="text-base font-semibold text-black">Gemini AI Key</Text>
-            </View>
-            <ChevronRight size={20} color="#D1D1D1" />
-          </TouchableOpacity>
-        </View>
+          {/* --- Health/Goals/Unit/Privacy Group --- */}
+          <View className="rounded-2xl overflow-hidden mb-4" style={{ backgroundColor: 'rgba(255,255,255,0.06)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)' }}>
+            <TouchableOpacity onPress={() => router.push('/setting_Screens/health')} className="flex-row items-center justify-between p-5">
+              <Text className="text-base font-semibold text-white">Health Details</Text>
+              <ChevronRight size={20} color="#636366" />
+            </TouchableOpacity>
+            <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.07)', marginHorizontal: 16 }} />
+            <TouchableOpacity onPress={() => router.push('/setting_Screens/change')} className="flex-row items-center justify-between p-5">
+              <Text className="text-base font-semibold text-white">Change Goals</Text>
+              <ChevronRight size={20} color="#636366" />
+            </TouchableOpacity>
+            <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.07)', marginHorizontal: 16 }} />
+            <TouchableOpacity onPress={() => router.push('/setting_Screens/unit')} className="flex-row items-center justify-between p-5">
+              <Text className="text-base font-semibold text-white">Unit of Measure</Text>
+              <ChevronRight size={20} color="#636366" />
+            </TouchableOpacity>
+            <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.07)', marginHorizontal: 16 }} />
+            <TouchableOpacity className="flex-row items-center justify-between p-5">
+              <Text className="text-base font-semibold text-white">Privacy</Text>
+              <ChevronRight size={20} color="#636366" />
+            </TouchableOpacity>
+          </View>
 
-        {/* --- Menu Items Group --- */}
-        <View className="bg-white rounded-md overflow-hidden mb-6 shadow-sm">
-          <TouchableOpacity onPress={()=>router.push('/setting_Screens/notifications')} className='flex-row items-center justify-between p-5'>
-            <Text className="text-base font-semibold text-black">Notifications</Text>
-            <ChevronRight size={20} color="#D1D1D1" />
-          </TouchableOpacity>
-        </View>
+          {/* --- Help/Account/SignOut Group --- */}
+          <View className="rounded-2xl overflow-hidden mb-8" style={{ backgroundColor: 'rgba(255,255,255,0.06)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)' }}>
+            <TouchableOpacity className="flex-row items-center justify-between p-5">
+              <Text className="text-base font-semibold text-white">Help & Support</Text>
+              <ChevronRight size={20} color="#636366" />
+            </TouchableOpacity>
+            <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.07)', marginHorizontal: 16 }} />
+            <TouchableOpacity onPress={() => router.push('/setting_Screens/account')} className="flex-row items-center justify-between p-5">
+              <Text className="text-base font-semibold text-white">Manage Account</Text>
+              <ChevronRight size={20} color="#636366" />
+            </TouchableOpacity>
+            <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.07)', marginHorizontal: 16 }} />
+            <TouchableOpacity onPress={handleLogout} className="p-5">
+              <Text className="text-base font-semibold text-red-500">Sign out</Text>
+            </TouchableOpacity>
+          </View>
 
-        {/* --- Help & Support --- */}
-        <View className="bg-white rounded-md overflow-hidden mb-1 shadow-sm">
-          <TouchableOpacity onPress={()=>router.push('/setting_Screens/health')} className='flex-row items-center justify-between p-5'>
-            <Text className="text-base font-semibold text-black">Health Details</Text>
-            <ChevronRight size={20} color="#D1D1D1" />
-          </TouchableOpacity>
-        </View>
-        <View className="bg-white rounded-md overflow-hidden mb-1 shadow-sm">
-          <TouchableOpacity onPress={()=>router.push('/setting_Screens/change')} className='flex-row items-center justify-between p-5'>
-            <Text className="text-base font-semibold text-black">Change Goals</Text>
-            <ChevronRight size={20} color="#D1D1D1" />
-          </TouchableOpacity>
-        </View>
-        <View className="bg-white rounded-md overflow-hidden mb-1 shadow-sm">
-          <TouchableOpacity onPress={()=>router.push('/setting_Screens/unit')} className='flex-row items-center justify-between p-5'>
-            <Text className="text-base font-semibold text-black">Unit of Measure</Text>
-            <ChevronRight size={20} color="#D1D1D1" />
-          </TouchableOpacity>
-        </View>
-        <View className="bg-white rounded-md overflow-hidden mb-6 shadow-sm">
-          <TouchableOpacity className='flex-row items-center justify-between p-5'>
-            <Text className="text-base font-semibold text-black">Privacy</Text>
-            <ChevronRight size={20} color="#D1D1D1" />
-          </TouchableOpacity>
-        </View>
+          {/* --- Footer Branding --- */}
+          <View className="items-center pb-10">
+            <Heart size={20} color="#FF4D4D" fill="#FF4D4D" />
+            <Text className="text-xs font-bold text-white mt-2">Human Design Academy</Text>
+            <Text className="text-[10px] text-[#636366] mt-1">Designed by Simple Studio</Text>
+          </View>
 
-        <View className="bg-white rounded-md overflow-hidden mb-1 shadow-sm">
-          <TouchableOpacity className='flex-row items-center justify-between p-5'>
-            <Text className="text-base font-semibold text-black">Heelp & Support</Text>
-            <ChevronRight size={20} color="#D1D1D1" />
-          </TouchableOpacity>
-        </View>
-        <View className="bg-white rounded-md overflow-hidden mb-1 shadow-sm">
-          <TouchableOpacity  onPress={()=>router.push('/setting_Screens/account')} className='flex-row items-center justify-between p-5'>
-            <Text className="text-base font-semibold text-black">Manage Account</Text>
-            <ChevronRight size={20} color="#D1D1D1" />
-          </TouchableOpacity>
-        </View>
-        {/* --- Sign Out --- */}
-        <TouchableOpacity className="bg-white rounded-md p-5 mb-20" onPress={handleLogout}>
-          <Text className="text-base font-medium text-red-600">Sign Out</Text>
-        </TouchableOpacity>
-
-        {/* --- Footer Branding --- */}
-        <View className="items-center">
-          <Heart size={20} color="#FF4D4D" fill="#FF4D4D" className="mb-2" />
-          <Text className="text-xs font-semibold text-gray-400">Human Design Academy</Text>
-          <Text className="text-[10px] text-gray-300 mt-1">Designed by Simple Studio</Text>
-        </View>
-
-      </ScrollView>
-
-
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+      </ImageBackground>
+    </View>
   );
 }
 export default Settingscreen;

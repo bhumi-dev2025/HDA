@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Dimensions, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// નવી લાઈબ્રેરી ઈમ્પોર્ટ કરી
 import { RulerPicker } from 'react-native-ruler-picker';
 import * as Haptics from 'expo-haptics';
 import { Plus, Minus } from 'lucide-react-native';
 import CustomTimePicker from '../../componunts/TimePicker';
 import { useRouter } from 'expo-router';
+
 const { width } = Dimensions.get('window');
+const homeBg = require('../../assets/photo/login/2.0/home.png');
+const buttonBg = require('../../assets/2.0/model/button.png');
 
 export default function GoalWizard() {
   const router = useRouter();
@@ -57,11 +59,18 @@ export default function GoalWizard() {
             <TouchableOpacity
               key={time}
               onPress={() => setGoals({ ...goals, meditation: time })}
-              className={`w-[30%] bg-[#E5E5EA] py-4 mb-3 rounded-2xl border ${
-                            isActive? 'border-black' : 'border-gray-300'
-                          } items-center`}
+              style={{
+                width: '30%',
+                paddingVertical: 16,
+                marginBottom: 12,
+                borderRadius: 16,
+                alignItems: 'center',
+                backgroundColor: isActive ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)',
+                borderWidth: 1,
+                borderColor: isActive ? '#FFFFFF' : 'rgba(255,255,255,0.1)',
+              }}
             >
-              <Text className="font-bold text-gray-800">{time}</Text>
+              <Text style={{ fontWeight: 'bold', color: isActive ? '#FFFFFF' : '#636366' }}>{time}</Text>
             </TouchableOpacity>
           );
         })}
@@ -84,11 +93,11 @@ export default function GoalWizard() {
       <View className="items-center justify-center w-full mt-20">
         
         {/* લેબલ થોડું એડજસ્ટ કર્યું જેથી તે નંબરની નીચે બરાબર દેખાય */}
-        <Text className="absolute top-[1px] text-gray-400 z-10 font-medium">Steps</Text>
+        <Text className="absolute top-[1px] text-[#636366] z-10 font-medium">Steps</Text>
 
         <RulerPicker
             width={width - 40}
-            height={100} // Height વધારી જેથી બરાબર દેખાય
+            height={100}
             min={100}
             max={10000}
             step={10}
@@ -96,14 +105,14 @@ export default function GoalWizard() {
             onValueChange={handleRulerChange}
             unit=""
             fractionDigits={0}
-            indicatorColor="black"
-            shortStepColor="#AEAEB2"
-            longStepColor="#AEAEB2"
+            indicatorColor="#FFFFFF"
+            shortStepColor="#636366"
+            longStepColor="#AFAFAF"
             indicatorHeight={40}
             longStepHeight={50}
             shortStepHeight={20}
             valueTextStyle={{
-                color: 'black',
+                color: '#FFFFFF',
                 fontSize: 60,
                 fontWeight: 'bold',
             }}
@@ -158,38 +167,37 @@ export default function GoalWizard() {
     return (
         <View className="flex-row items-center justify-between w-full px-16 mt-20">
               
-              {/* MINUS BUTTON (Right Side as per your code) */}
               <TouchableOpacity 
                 activeOpacity={1}
                 onPressIn={() => setIsMinusPressed(true)}
                 onPressOut={() => setIsMinusPressed(false)}
                 onPress={decrement}
-                className={`w-20 h-20 rounded-2xl items-center justify-center border ${
-                  isMinusPressed ? 'bg-black border-black' : 'bg-white border-gray-200'
-                }`}
+                style={{
+                  width: 80, height: 80, borderRadius: 16, alignItems: 'center', justifyContent: 'center',
+                  backgroundColor: isMinusPressed ? '#FFFFFF' : 'rgba(255,255,255,0.08)',
+                  borderWidth: 1, borderColor: isMinusPressed ? '#FFFFFF' : 'rgba(255,255,255,0.15)',
+                }}
               >
-                <Minus color={isMinusPressed ? "white" : "black"} size={32} strokeWidth={3} />
-              </TouchableOpacity> 
-  
-              {/* Value Display */}
-              <View className="items-center">
-                <Text className="text-5xl font-bold text-black">{goals.water.toFixed(1)}</Text>
-                <Text className="text-gray-400 text-lg mt-1">Liters</Text>
-              </View>
-  
-             
+                <Minus color={isMinusPressed ? "black" : "white"} size={32} strokeWidth={3} />
+              </TouchableOpacity>
 
-              {/* PLUS BUTTON (Left Side as per your code) */}
+              <View className="items-center">
+                <Text style={{ fontSize: 48, fontWeight: 'bold', color: '#FFFFFF' }}>{goals.water.toFixed(1)}</Text>
+                <Text style={{ color: '#636366', fontSize: 18, marginTop: 4 }}>Liters</Text>
+              </View>
+
               <TouchableOpacity 
                 activeOpacity={1}
                 onPressIn={() => setIsPlusPressed(true)}
                 onPressOut={() => setIsPlusPressed(false)}
                 onPress={increment}
-                className={`w-20 h-20 rounded-2xl items-center justify-center border ${
-                  isPlusPressed ? 'bg-black border-black' : 'bg-white border-gray-200'
-                }`}
+                style={{
+                  width: 80, height: 80, borderRadius: 16, alignItems: 'center', justifyContent: 'center',
+                  backgroundColor: isPlusPressed ? '#FFFFFF' : 'rgba(255,255,255,0.08)',
+                  borderWidth: 1, borderColor: isPlusPressed ? '#FFFFFF' : 'rgba(255,255,255,0.15)',
+                }}
               >
-                <Plus color={isPlusPressed ? "white" : "black"} size={32} strokeWidth={3} />
+                <Plus color={isPlusPressed ? "black" : "white"} size={32} strokeWidth={3} />
               </TouchableOpacity>
   
         </View>
@@ -210,8 +218,7 @@ export default function GoalWizard() {
         
         {/* Main Display Text */}
         <View className="items-center">
-            <Text className="text-gray-400 font-bold text-xl">
-               {/* ડેટા બતાવવા માટે goals માંથી વેલ્યુ લીધી */}
+            <Text style={{ color: '#636366', fontWeight: 'bold', fontSize: 20 }}>
                {goals.sleepHours} h : {goals.sleepMinutes} m
             </Text>
         </View>
@@ -228,18 +235,18 @@ export default function GoalWizard() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#FAFAFA] p-6 justify-between">
-        {/* --- Title Section --- */}
+    <View style={{ flex: 1, backgroundColor: '#000' }}>
+    <ImageBackground source={homeBg} resizeMode="cover" style={{ flex: 1 }}>
+    <SafeAreaView className="flex-1 p-6 justify-between" style={{ paddingTop: 80 }}>
         <View>
-            <Text className="text-xl font-bold text-black mb-2">
-            {stepsConfig[currentStep].title}
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 8 }}>
+              {stepsConfig[currentStep].title}
             </Text>
-            <Text className="text-left text-base text-gray-400 mb-6 leading-5">
-            Set a goal based on how active you are, or how active{'\n'}you'd like to be, each day.
+            <Text style={{ color: '#636366', fontSize: 15, lineHeight: 22, marginBottom: 24 }}>
+              Set a goal based on how active you are, or how active{'\n'}you'd like to be, each day.
             </Text>
         </View>
 
-        {/* --- DYNAMIC BODY --- */}
         <View className="flex-1 justify-center items-center">
           {currentStep === 0 && renderMeditation()}
           {currentStep === 1 && renderSteps()}
@@ -247,16 +254,24 @@ export default function GoalWizard() {
           {currentStep === 3 && renderSleep()}
         </View>
 
-        {/* --- Bottom Button --- */}
         <TouchableOpacity
-          className="w-full h-14 bg-black rounded-xl justify-center items-center mb-4 shadow-lg"
           onPress={handleNext}
-          activeOpacity={0.8}
+          activeOpacity={0.85}
+          style={{ width: '100%', marginBottom: 8 }}
         >
-          <Text className="text-white text-lg font-bold">
-            {currentStep === stepsConfig.length - 1 ? 'Save Goals' : 'Change Goal'}
-          </Text>
+          <ImageBackground
+            source={buttonBg}
+            style={{ width: '100%', height: 56, alignItems: 'center', justifyContent: 'center', borderRadius: 18, overflow: 'hidden' }}
+            imageStyle={{ borderRadius: 18 }}
+            resizeMode="cover"
+          >
+            <Text style={{ color: '#FFFFFF', fontSize: 17, fontWeight: '600', letterSpacing: 0.3 }}>
+              {currentStep === stepsConfig.length - 1 ? 'Save Goals' : 'Change Goal'}
+            </Text>
+          </ImageBackground>
         </TouchableOpacity>
     </SafeAreaView>
+    </ImageBackground>
+    </View>
      );
 }

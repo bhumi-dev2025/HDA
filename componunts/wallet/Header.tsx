@@ -19,26 +19,25 @@ export const Header: React.FC<HeaderProps> = ({ onAddPress }) => {
         <TouchableOpacity 
             onPress={() => router.back()} 
             style={{
-              backgroundColor: '#fff',
+              backgroundColor: 'rgba(255,255,255,0.08)',
               padding: 8,
               borderRadius: 50,
             }}
           >
-            <ChevronLeft size={24} color="black" />
+            <ChevronLeft size={24} color="#FFFFFF" />
           </TouchableOpacity>
         
         {/* Center: Title */}
-        <Text className="text-2xl text-center font-bold text-black absolute left-0 right-0 -z-10">
+        <Text className="text-2xl text-center font-bold text-white absolute left-0 right-0 -z-10">
           Wallet
         </Text>
         
-        {/* Right: Add Button (અહી ફેરફાર કર્યો છે) */}
+        {/* Right: Add Button */}
         <TouchableOpacity 
-          // onPress={onAddPress}
           onPress={() => Alert.alert("Limit Reached", "You can only edit the existing 6 cards.")}
-          className="p-2 bg-white rounded-full opacity-50"
+          style={{ backgroundColor: 'rgba(255,255,255,0.08)', padding: 8, borderRadius: 50, opacity: 0.5 }}
         >
-           <PlusIcon className="w-6 h-6 text-black" />
+           <PlusIcon className="w-6 h-6 text-white" />
         </TouchableOpacity>
       </View>
   );

@@ -1,6 +1,6 @@
 // wallet/index.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Pressable, Alert, ActivityIndicator, Text } from 'react-native';
+import { View, Pressable, Alert, ActivityIndicator, Text, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as FileSystem from 'expo-file-system/legacy';
@@ -12,6 +12,7 @@ import { INITIAL_CARDS } from '../../constants/constant';
 import type { CardData } from '../../types';
 
 const STORAGE_KEY = 'wallet_cards_a';
+const homeBg = require('../../assets/photo/login/2.0/home.png');
 
 const index = () => {
   const [cards, setCards] = useState<CardData[]>([]);
@@ -171,15 +172,21 @@ const index = () => {
 
   if (isLoading) {
     return (
-      <SafeAreaView className="flex-1 justify-center items-center bg-[#F2F2F2]">
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text className="mt-2 text-gray-500">Loading Wallet...</Text>
-      </SafeAreaView>
+      <View style={{ flex: 1, backgroundColor: '#000' }}>
+        <ImageBackground source={homeBg} resizeMode="cover" style={{ flex: 1 }}>
+          <SafeAreaView className="flex-1 justify-center items-center">
+            <ActivityIndicator size="large" color="#FFFFFF" />
+            <Text className="mt-2 text-[#636366]">Loading Wallet...</Text>
+          </SafeAreaView>
+        </ImageBackground>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F2F2F2]">
+    <View style={{ flex: 1, backgroundColor: '#000' }}>
+    <ImageBackground source={homeBg} resizeMode="cover" style={{ flex: 1 }}>
+    <SafeAreaView className="flex-1">
       <Header onAddPress={() => {
           setEditingCard(null);
           setIsModalOpen(true);
@@ -213,6 +220,8 @@ const index = () => {
         />
       </View>
     </SafeAreaView>
+    </ImageBackground>
+    </View>
   );
 };
 

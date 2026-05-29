@@ -1,46 +1,40 @@
-import {
-    useHealthkitAuthorization,
-    useStatisticsForQuantity,
-} from "@kingstinct/react-native-healthkit";
+import { useHealthSteps } from "../../lib/useHealthSteps";
 import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-    Image,
-    ImageBackground,
-    Platform,
-    ScrollView,
-    StatusBar,
-    Text,
-    TouchableOpacity,
-    View,
+  Image,
+  ImageBackground,
+  Platform,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { fetchGoogleFitSteps } from "../../lib/googleFitService";
 import { todoEvents } from "../../lib/todoEvents";
 import { getTodayLog, updateDailyLog } from "../../lib/TrackerService";
 import {
-    CardProps,
-    HomeModalData,
-    HomeModalType,
-    TaskItem,
-    TimeData,
+  CardProps,
+  HomeModalData,
+  HomeModalType,
+  TaskItem,
+  TimeData,
 } from "../../types";
 
 import { ActivityRings } from "../../componunts/ActivityRings";
 import { ConfettiOverlay } from "../../componunts/Confetti";
-import AIChatBottomSheet, {
-    AIChatBottomSheetHandle,
-} from "../../componunts/AIChatBottomSheet";
+
 import MeditationModal from "../../componunts/Modals/MeditationModel";
 import { MeditationBottomSheet } from "../../componunts/Modals/modals2.0/MeditationBottomSheet";
-import SleepModal from "../../componunts/Modals/SleepModel";
 import { SleepBottomSheet } from "../../componunts/Modals/modals2.0/SleepBottomSheet";
 import { StepBottomSheet } from "../../componunts/Modals/modals2.0/StepBottomSheet";
-import TaskModal from "../../componunts/Modals/TodoModel";
 import { WaterBottomSheet } from "../../componunts/Modals/modals2.0/WaterBottomSheet";
 import { WorkoutBottomSheet } from "../../componunts/Modals/modals2.0/WorkoutBottomSheet";
+import TaskModal from "../../componunts/Modals/TodoModel";
 import { WeeklyCalendar } from "../../componunts/WeeklyCalendar";
 import { getWeeklyScores } from "../../lib/TrackerService";
 
@@ -96,7 +90,7 @@ const CardContainer = ({
 
 export default function HomeScreen() {
   const router = useRouter();
-  const chatRef = useRef<AIChatBottomSheetHandle>(null);
+
   const [demoModal, setDemoModal] = useState(false);
   const [currentScore, setCurrentScore] = useState(0);
   const [activeModal, setActiveModal] = useState<HomeModalType>(null);
@@ -188,8 +182,17 @@ export default function HomeScreen() {
     if (firstRenderConfetti.current) {
       firstRenderConfetti.current = false;
       prevConfettiRef.current = {
-        workoutOk, stepsOk, meditationOk, waterOk, sleepOk,
-        todosOk, redOk, blueOk, greenOk, allRingsOk, score100,
+        workoutOk,
+        stepsOk,
+        meditationOk,
+        waterOk,
+        sleepOk,
+        todosOk,
+        redOk,
+        blueOk,
+        greenOk,
+        allRingsOk,
+        score100,
       };
       return;
     }
@@ -197,8 +200,17 @@ export default function HomeScreen() {
     // refreshAll thi load thay tyare confetti na trigger thavvu joie
     if (isRefreshingRef.current) {
       prevConfettiRef.current = {
-        workoutOk, stepsOk, meditationOk, waterOk, sleepOk,
-        todosOk, redOk, blueOk, greenOk, allRingsOk, score100,
+        workoutOk,
+        stepsOk,
+        meditationOk,
+        waterOk,
+        sleepOk,
+        todosOk,
+        redOk,
+        blueOk,
+        greenOk,
+        allRingsOk,
+        score100,
       };
       return;
     }
@@ -257,16 +269,8 @@ export default function HomeScreen() {
     undefined as unknown as () => Promise<void>,
   );
 
-  const [, requestAuthorization] = useHealthkitAuthorization({
-    toRead: ["HKQuantityTypeIdentifierStepCount"],
-  });
-
-  const stepStats = useStatisticsForQuantity(
-    "HKQuantityTypeIdentifierStepCount",
-    ["cumulativeSum"],
-    new Date(new Date().setHours(0, 0, 0, 0)),
-    new Date(),
-  );
+  // HealthKit — iOS only (Android pe null)
+  const { requestAuthorization, stepStats } = useHealthSteps();
 
   // ── Ring recalculate helper — Apple app style, instant update ────────────
   const recalcRings = useCallback(
@@ -395,6 +399,7 @@ export default function HomeScreen() {
         );
       }
       if (steps !== null && steps !== undefined) {
+        lastSyncedSteps.current = steps; // useEffect double save rokva
         setStepData(steps.toString());
         setIsStepDone(true);
         await handleSave("step", steps.toString());
@@ -493,12 +498,13 @@ export default function HomeScreen() {
       setGreenProgress(todosTotal > 0 ? todosDone / todosTotal : 0);
 
       setAnimKey((k) => k + 1);
-
     } catch (e) {
       console.log("[HOME] refreshAll error:", e);
     } finally {
       // Thodi delay sathe reset — jethhi state update complete thay
-      setTimeout(() => { isRefreshingRef.current = false; }, 500);
+      setTimeout(() => {
+        isRefreshingRef.current = false;
+      }, 500);
     }
   }, []);
 
@@ -523,20 +529,32 @@ export default function HomeScreen() {
 
       const tasks: TaskItem[] = data.todo_list ?? [];
       setTodoTasks(tasks);
-      setIsTodoDone(tasks.filter((t: TaskItem) => t.text.trim() !== "").length > 0);
+      setIsTodoDone(
+        tasks.filter((t: TaskItem) => t.text.trim() !== "").length > 0,
+      );
 
       if (data.score != null) setCurrentScore(data.score);
 
       // Ring recalc — latest data sathe
-      const wMins = parseInt(data.workout_time?.hour || "0") * 60 + parseInt(data.workout_time?.minute || "0");
+      const wMins =
+        parseInt(data.workout_time?.hour || "0") * 60 +
+        parseInt(data.workout_time?.minute || "0");
       const stepsVal = parseInt(data.step_count?.toString() || "0");
       const mMins = parseInt(data.meditation_time || "0");
       const waterVal = data.water_intake || 0;
-      const todosDone = tasks.filter((t: TaskItem) => t.isDone && t.text?.trim() !== "").length;
-      const todosTotal = tasks.filter((t: TaskItem) => t.text?.trim() !== "").length;
+      const todosDone = tasks.filter(
+        (t: TaskItem) => t.isDone && t.text?.trim() !== "",
+      ).length;
+      const todosTotal = tasks.filter(
+        (t: TaskItem) => t.text?.trim() !== "",
+      ).length;
 
-      setRedProgress((Math.min(wMins / 45, 1) + Math.min(stepsVal / 8000, 1)) / 2);
-      setBlueProgress((Math.min(waterVal / 3.5, 1) + Math.min(mMins / 20, 1)) / 2);
+      setRedProgress(
+        (Math.min(wMins / 45, 1) + Math.min(stepsVal / 8000, 1)) / 2,
+      );
+      setBlueProgress(
+        (Math.min(waterVal / 3.5, 1) + Math.min(mMins / 20, 1)) / 2,
+      );
       setGreenProgress(todosTotal > 0 ? todosDone / todosTotal : 0);
       setAnimKey((k) => k + 1);
     });
@@ -997,31 +1015,23 @@ export default function HomeScreen() {
             isVisible={activeModal === "sleep"}
             onClose={() => setActiveModal(null)}
             onSave={(val) => {
-              // SleepBottomSheet {bedtime, wakeup} → TimeData {hour, minute} ma convert
-              const parseMins = (s: string) => {
-                const [time] = s.split(" ");
-                const [h, m] = time.split(":").map(Number);
-                return h * 60 + m;
-              };
-              const bedMins  = parseMins(val.bedtime);
-              const wakeMins = parseMins(val.wakeup);
-              let diff = wakeMins - bedMins;
-              if (diff < 0) diff += 12 * 60; // overnight
-              const hours = Math.floor(diff / 60);
-              const mins  = diff % 60;
               handleSave("sleep", {
-                hour:   String(hours).padStart(2, "0"),
-                minute: String(mins).padStart(2, "0"),
+                hour: String(val.hours).padStart(2, "0"),
+                minute: String(val.minutes).padStart(2, "0"),
+                bedH: val.bedH,
+                bedM: val.bedM,
+                wakeH: val.wakeH,
+                wakeM: val.wakeM,
               });
             }}
-            initialValue={
-              isSleepDone
-                ? {
-                    bedtime: `11:00 PM`,
-                    wakeup:  `${sleepData.hour === "00" ? "6" : parseInt(sleepData.hour)}:${sleepData.minute || "00"} AM`,
-                  }
-                : undefined
-            }
+            initialValue={isSleepDone ? {
+              hours: parseInt(sleepData.hour || "0"),
+              minutes: parseInt(sleepData.minute || "0"),
+              bedH: (sleepData as any).bedH,
+              bedM: (sleepData as any).bedM,
+              wakeH: (sleepData as any).wakeH,
+              wakeM: (sleepData as any).wakeM,
+            } : undefined}
           />
           <WorkoutBottomSheet
             isVisible={activeModal === "workout"}
@@ -1032,7 +1042,7 @@ export default function HomeScreen() {
         </SafeAreaView>
       </ImageBackground>
       <ConfettiOverlay type={confetti} onComplete={handleConfettiDone} />
-      <AIChatBottomSheet ref={chatRef} />
+
 
       {/* ── Meditation Bottom Sheet ── */}
       <MeditationBottomSheet

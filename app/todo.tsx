@@ -128,17 +128,19 @@ export default function TodoPage() {
           </View>
         ) : (
           <FlatList
-            data={tasks.filter((t) => t.text.trim() !== "")}
-            keyExtractor={(_, i) => String(i)}
+            data={tasks
+              .map((t, originalIndex) => ({ ...t, originalIndex }))
+              .filter((t) => t.text.trim() !== "")}
+            keyExtractor={(item) => String(item.originalIndex)}
             contentContainerStyle={s.listContent}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item, index }) => (
+            renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => openEdit(index)}
+                onPress={() => openEdit(item.originalIndex)}
                 activeOpacity={0.85}
                 style={s.taskCard}
               >
-                <TouchableOpacity onPress={() => toggleTask(index)} style={s.checkbox}>
+                <TouchableOpacity onPress={() => toggleTask(item.originalIndex)} style={s.checkbox}>
                   {item.isDone ? <C2 width={22} height={22} /> : <C1 width={22} height={22} />}
                 </TouchableOpacity>
                 <View style={s.taskInfo}>

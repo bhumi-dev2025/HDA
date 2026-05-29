@@ -1,8 +1,11 @@
 import { Tabs } from "expo-router";
+import { useRef } from "react";
 import { View } from "react-native";
 import { CustomTabBar } from "../../componunts/custom-tab-bar";
+import FloatingChatButton, { FloatingChatButtonHandle } from "../../componunts/FloatingChatButton";
 
 export default function TabLayout() {
+  const chatRef = useRef<FloatingChatButtonHandle>(null);
   return (
     <View style={{ flex: 1 }}>
       <Tabs
@@ -22,6 +25,7 @@ export default function TabLayout() {
           options={{ href: null }}
         />
       </Tabs>
+      <FloatingChatButton ref={chatRef} />
     </View>
   );
 }

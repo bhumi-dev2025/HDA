@@ -110,12 +110,14 @@ export const updateDailyLog = async (type: string, value: any) => {
     let updates: any = { 
       user_id: user.id, 
       date: today,
-      updated_at: new Date() 
     };
 
     if (currentData) {
         updates = { ...currentData };
     }
+
+    // updated_at LAST ma set karo — currentData spread pachi — nahi toh overwrite thay
+    updates.updated_at = new Date();
 
     // 3. Navi value update karo
     if (type === 'meditation') updates.meditation_time = value;

@@ -17,7 +17,12 @@ export interface TaskItem {
 
 export type TimeData = {
   hour: string;
-  minute: string; 
+  minute: string;
+  // Sleep mate — exact bedtime/wakeup restore karva
+  bedH?: number;
+  bedM?: number;
+  wakeH?: number;
+  wakeM?: number;
 };
 
 // TrackerService

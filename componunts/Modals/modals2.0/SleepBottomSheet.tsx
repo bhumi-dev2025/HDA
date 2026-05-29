@@ -96,7 +96,7 @@ const snapToStep = (a: number) => {
   return Math.round(a / step) * step;
 };
 
-type SleepData = { bedtime: string; wakeup: string };
+type SleepData = { hours: number; minutes: number; bedH?: number; bedM?: number; wakeH?: number; wakeM?: number };
 type Props = {
   isVisible: boolean;
   onClose: () => void;
@@ -110,33 +110,24 @@ export function SleepBottomSheet({
   onSave,
   initialValue,
 }: Props) {
-  const [sleepAngle, setSleepAngle] = useState(toAngle(11, 0));
+  const [sleepAngle, setSleepAngle] = useState(toAngle(0, 0));
   const [wakeAngle, setWakeAngle] = useState(toAngle(6, 30));
 
-  const svSleep = useSharedValue(toAngle(11, 0));
+  const svSleep = useSharedValue(toAngle(0, 0));
   const svWake = useSharedValue(toAngle(6, 30));
   const dragging = useSharedValue<number>(-1);
 
+  // initialValue thi exact angles restore karo
   useEffect(() => {
     if (!initialValue) return;
-    const parse = (s: string) => {
-      const [time, ap] = s.split(" ");
-      const [hStr, mStr] = time.split(":");
-      let h = parseInt(hStr);
-      const m = parseInt(mStr);
-      if (ap === "PM" && h !== 12) h += 12;
-      if (ap === "AM" && h === 12) h = 0;
-      return toAngle(h % 12, m);
-    };
-    if (initialValue.bedtime) {
-      const a = parse(initialValue.bedtime);
-      setSleepAngle(a);
-      svSleep.value = a;
-    }
-    if (initialValue.wakeup) {
-      const a = parse(initialValue.wakeup);
-      setWakeAngle(a);
-      svWake.value = a;
+    // bedH/wakeH saved hoy toh exact restore karo
+    if (initialValue.bedH !== undefined && initialValue.wakeH !== undefined) {
+      const sAngle = toAngle(initialValue.bedH % 12, initialValue.bedM ?? 0);
+      const wAngle = toAngle(initialValue.wakeH % 12, initialValue.wakeM ?? 0);
+      setSleepAngle(sAngle);
+      svSleep.value = sAngle;
+      setWakeAngle(wAngle);
+      svWake.value = wAngle;
     }
   }, [initialValue]);
 
@@ -193,9 +184,18 @@ export function SleepBottomSheet({
   const wakePt    = polar(wakeAngle,  RADIUS);
 
   const handleSave = () => {
+    const h = Math.floor(durationMins / 60);
+    const m = durationMins % 60;
+    // Exact bedtime + wakeup angles thi hours calculate karo
+    const bed = fromAngle(sleepAngle);
+    const wake = fromAngle(wakeAngle);
     onSave({
-      bedtime: fmtTime(sleepInfo.hours, sleepInfo.minutes, "PM"),
-      wakeup: fmtTime(wakeInfo.hours, wakeInfo.minutes, "AM"),
+      hours: h,
+      minutes: m,
+      bedH: bed.hours,
+      bedM: bed.minutes,
+      wakeH: wake.hours,
+      wakeM: wake.minutes,
     });
     onClose();
   };

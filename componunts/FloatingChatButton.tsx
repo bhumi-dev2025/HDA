@@ -140,7 +140,6 @@ export default forwardRef<FloatingChatButtonHandle>(function FloatingChatButton(
 
   const emitRefresh = () => {
     todoEvents.emit();
-    setTimeout(() => todoEvents.emit(), 2000);
   };
 
   const handleToolCall = async (functionName: string, args: Record<string, any>) => {

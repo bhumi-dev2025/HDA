@@ -3,7 +3,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { Session } from "@supabase/supabase-js";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
+import LottieView from "lottie-react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "../global.css";
 import { supabase } from "../lib/supabase";
@@ -12,6 +13,7 @@ import { supabase } from "../lib/supabase";
 export default function RootLayout() {
   const [session, setSession] = useState<Session | null>(null);
   const [initialized, setInitialized] = useState(false);
+  const [animationDone, setAnimationDone] = useState(false);
   const router = useRouter();
   const segments = useSegments();
 
@@ -46,23 +48,31 @@ export default function RootLayout() {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Banne ready hoy tyare j navigate karo — animation + session
   useEffect(() => {
-    if (!initialized) return;
+    if (!initialized || !animationDone) return;
 
     const protectedGroups = ['(tabs)', 'settings', 'setting_Screens', 'wallet'];
     const inProtectedRoute = protectedGroups.some(g => segments[0] === g);
 
     if (!session && inProtectedRoute) {
-      router.replace('/'); 
+      router.replace('/');
     } else if (session && (segments as string[]).length === 0) {
       router.replace('/(tabs)/home');
     }
-  }, [session, initialized, segments]);
+  }, [session, initialized, animationDone, segments]);
 
-  if (!initialized) {
+  if (!initialized || !animationDone) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
+      <View style={{ flex: 1, backgroundColor: '#000000' }}>
+        <LottieView
+          source={require('../assets/lottie/splashanimation.json')}
+          autoPlay
+          loop={false}
+          style={{ width: '100%', height: '100%' }}
+          resizeMode="cover"
+          onAnimationFinish={() => setAnimationDone(true)}
+        />
       </View>
     );
   }

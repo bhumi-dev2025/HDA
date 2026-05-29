@@ -1,6 +1,20 @@
-import React from 'react';
-import { TouchableOpacity, Image, View } from 'react-native';
-import Svg, { Path, G, Defs, Filter, FeFlood, FeColorMatrix, FeMorphology, FeOffset, FeGaussianBlur, FeBlend, RadialGradient, LinearGradient, Stop, ClipPath, Rect, Pattern } from 'react-native-svg';
+import React from "react";
+import { Image, TouchableOpacity, View } from "react-native";
+import Svg, {
+  Defs,
+  FeBlend,
+  FeColorMatrix,
+  FeFlood,
+  FeGaussianBlur,
+  FeMorphology,
+  FeOffset,
+  Filter,
+  G,
+  LinearGradient,
+  Path,
+  RadialGradient,
+  Stop
+} from "react-native-svg";
 
 interface PathButtonProps {
   icon: any;
@@ -11,41 +25,109 @@ interface PathButtonProps {
 const SIZE = 97;
 const ICON_SIZE = 36;
 
-export default function PathButton({ icon, onPress, locked = false }: PathButtonProps) {
+export default function PathButton({
+  icon,
+  onPress,
+  locked = false,
+}: PathButtonProps) {
   return (
     <TouchableOpacity
       onPress={locked ? undefined : onPress}
       activeOpacity={locked ? 1 : 0.75}
-      style={{ width: SIZE, height: 67, alignItems: 'center', justifyContent: 'center', opacity: locked ? 0.4 : 1 }}
+      style={{
+        width: SIZE,
+        height: 67,
+        alignItems: "center",
+        justifyContent: "center",
+        opacity: locked ? 0.4 : 1,
+      }}
     >
       {/* SVG Button Background */}
       <Svg width={SIZE} height={67} viewBox="0 0 97 67" fill="none">
         <Defs>
-          <Filter id="filter0_dd" x="0" y="0" width="96.8492" height="65.9612" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-            <FeFlood floodOpacity="0" result="BackgroundImageFix"/>
-            <FeColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-            <FeMorphology radius="2" operator="erode" in="SourceAlpha" result="effect1_dropShadow"/>
-            <FeOffset dy="4"/>
-            <FeGaussianBlur stdDeviation="3"/>
-            <FeColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0"/>
-            <FeBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
-            <FeColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-            <FeMorphology radius="3" operator="erode" in="SourceAlpha" result="effect2_dropShadow"/>
-            <FeOffset dy="10"/>
-            <FeGaussianBlur stdDeviation="7.5"/>
-            <FeColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
-            <FeBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow"/>
-            <FeBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow" result="shape"/>
+          <Filter
+            id="filter0_dd"
+            x="0"
+            y="0"
+            width="96.8492"
+            height="65.9612"
+            filterUnits="userSpaceOnUse"
+          >
+            <FeFlood floodOpacity="0" result="BackgroundImageFix" />
+            <FeColorMatrix
+              in="SourceAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+              result="hardAlpha"
+            />
+            <FeMorphology
+              radius="2"
+              operator="erode"
+              in="SourceAlpha"
+              result="effect1_dropShadow"
+            />
+            <FeOffset dy="4" />
+            <FeGaussianBlur stdDeviation="3" />
+            <FeColorMatrix
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0"
+            />
+            <FeBlend
+              mode="normal"
+              in2="BackgroundImageFix"
+              result="effect1_dropShadow"
+            />
+            <FeColorMatrix
+              in="SourceAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+              result="hardAlpha"
+            />
+            <FeMorphology
+              radius="3"
+              operator="erode"
+              in="SourceAlpha"
+              result="effect2_dropShadow"
+            />
+            <FeOffset dy="10" />
+            <FeGaussianBlur stdDeviation="7.5" />
+            <FeColorMatrix
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"
+            />
+            <FeBlend
+              mode="normal"
+              in2="effect1_dropShadow"
+              result="effect2_dropShadow"
+            />
+            <FeBlend
+              mode="normal"
+              in="SourceGraphic"
+              in2="effect2_dropShadow"
+              result="shape"
+            />
           </Filter>
-          <RadialGradient id="paint0_radial" cx="0" cy="0" r="1"
+          <RadialGradient
+            id="paint0_radial"
+            cx="0"
+            cy="0"
+            r="1"
             gradientTransform="matrix(0.210544 48.8626 -54.4063 0.403019 48.4246 -15.9439)"
-            gradientUnits="userSpaceOnUse">
-            <Stop stopColor="#656565"/>
-            <Stop offset="1" stopColor="#4B4B4B"/>
+            gradientUnits="userSpaceOnUse"
+          >
+            <Stop stopColor="#656565" />
+            <Stop offset="1" stopColor="#4B4B4B" />
           </RadialGradient>
-          <LinearGradient id="paint1_linear" x1="52.7442" y1="-1.37188" x2="52.7442" y2="43.9611" gradientUnits="userSpaceOnUse">
-            <Stop stopColor="white"/>
-            <Stop offset="1"/>
+          <LinearGradient
+            id="paint1_linear"
+            x1="52.7442"
+            y1="-1.37188"
+            x2="52.7442"
+            y2="43.9611"
+            gradientUnits="userSpaceOnUse"
+          >
+            <Stop stopColor="white" />
+            <Stop offset="1" />
           </LinearGradient>
         </Defs>
 
@@ -86,18 +168,24 @@ export default function PathButton({ icon, onPress, locked = false }: PathButton
       </Svg>
 
       {/* Icon on top — centered on the top face */}
-      <View style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: 44, // top face height
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
+      <View
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 44, // top face height
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <Image
           source={icon}
-          style={{ width: ICON_SIZE, height: ICON_SIZE, opacity: locked ? 0.3 : 1 }}
+          style={{
+            width: ICON_SIZE,
+            height: ICON_SIZE,
+            opacity: locked ? 0.3 : 1,
+          }}
           resizeMode="contain"
         />
       </View>

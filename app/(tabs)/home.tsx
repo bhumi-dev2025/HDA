@@ -30,9 +30,9 @@ import {
 
 import { ActivityRings } from "../../componunts/ActivityRings";
 import { ConfettiOverlay } from "../../componunts/Confetti";
-import FloatingChatButton, {
-    FloatingChatButtonHandle,
-} from "../../componunts/FloatingChatButton";
+import AIChatBottomSheet, {
+    AIChatBottomSheetHandle,
+} from "../../componunts/AIChatBottomSheet";
 import MeditationModal from "../../componunts/Modals/MeditationModel";
 import { MeditationBottomSheet } from "../../componunts/Modals/modals2.0/MeditationBottomSheet";
 import SleepModal from "../../componunts/Modals/SleepModel";
@@ -96,7 +96,7 @@ const CardContainer = ({
 
 export default function HomeScreen() {
   const router = useRouter();
-  const chatRef = useRef<FloatingChatButtonHandle>(null);
+  const chatRef = useRef<AIChatBottomSheetHandle>(null);
   const [demoModal, setDemoModal] = useState(false);
   const [currentScore, setCurrentScore] = useState(0);
   const [activeModal, setActiveModal] = useState<HomeModalType>(null);
@@ -1032,7 +1032,7 @@ export default function HomeScreen() {
         </SafeAreaView>
       </ImageBackground>
       <ConfettiOverlay type={confetti} onComplete={handleConfettiDone} />
-      <FloatingChatButton ref={chatRef} />
+      <AIChatBottomSheet ref={chatRef} />
 
       {/* ── Meditation Bottom Sheet ── */}
       <MeditationBottomSheet

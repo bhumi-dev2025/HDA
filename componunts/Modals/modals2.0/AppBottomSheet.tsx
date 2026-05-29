@@ -54,6 +54,7 @@ type Props = {
   children: React.ReactNode;
   snapPoints?: (string | number)[];
   enableDynamicSizing?: boolean;
+  keyboardBehavior?: "extend" | "fillParent" | "interactive";
 };
 
 export function AppBottomSheet({
@@ -62,6 +63,7 @@ export function AppBottomSheet({
   children,
   snapPoints,
   enableDynamicSizing = true,
+  keyboardBehavior = "extend",
 }: Props) {
   const ref = useRef<BottomSheetModal>(null);
 
@@ -97,9 +99,9 @@ export function AppBottomSheet({
       handleStyle={styles.handleStyle}
       backgroundStyle={styles.backgroundStyle}
       onDismiss={onClose}
-      keyboardBehavior="extend"
+      keyboardBehavior="interactive"
       keyboardBlurBehavior="restore"
-      android_keyboardInputMode="adjustResize"
+      android_keyboardInputMode="adjustPan"
     >
       <BottomSheetView style={styles.container}>
         <ImageBackground

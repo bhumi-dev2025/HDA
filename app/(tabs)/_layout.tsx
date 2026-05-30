@@ -18,12 +18,6 @@ export default function TabLayout() {
         <Tabs.Screen name="web" />
         <Tabs.Screen name="explore" />
         <Tabs.Screen name="profile" />
-
-        {/* Chat — Tab Bar માંથી hide */}
-        <Tabs.Screen
-          name="chat"
-          options={{ href: null }}
-        />
       </Tabs>
       <FloatingChatButton ref={chatRef} />
     </View>

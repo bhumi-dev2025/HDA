@@ -1,5 +1,6 @@
 import { Search } from "lucide-react-native";
 import React, { useEffect, useRef, useState } from "react";
+import { BlurView } from "expo-blur";
 import {
   Animated,
   Dimensions,
@@ -19,6 +20,7 @@ import { MASTER_SKILLS } from "../../constants/skillData";
 import { ExpertiseModalProps } from "../../types";
 
 const buttonBg = require("../../assets/2.0/model/button.png");
+const modalBg = require("../../assets/2.0/model/bg.png");
 
 const { height } = Dimensions.get("window");
 export const AddExpertiseModal: React.FC<ExpertiseModalProps> = ({
@@ -109,11 +111,17 @@ export const AddExpertiseModal: React.FC<ExpertiseModalProps> = ({
       visible={isVisible}
       onRequestClose={onClose}
     >
-      {/* 1. Backdrop (Black Overlay) */}
+      {/* 1. Backdrop — BlurView */}
       <Pressable
-        className="absolute top-0 bottom-0 left-0 right-0 bg-black/40"
+        className="absolute top-0 bottom-0 left-0 right-0"
         onPress={onClose}
-      />
+      >
+        {Platform.OS === "ios" ? (
+          <BlurView intensity={28} tint="dark" style={{ flex: 1 }} />
+        ) : (
+          <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.55)" }} />
+        )}
+      </Pressable>
 
       {/* 2. Main Content Wrapper */}
       <View className="flex-1 justify-end" pointerEvents="box-none">
@@ -123,12 +131,18 @@ export const AddExpertiseModal: React.FC<ExpertiseModalProps> = ({
             paddingBottom: Platform.OS === "android" ? keyboardHeight : 0,
             marginBottom: Platform.OS === "ios" ? keyboardHeight : 0,
           }}
-          className="bg-[#19181B] rounded-t-[40px] w-full max-h-[80%] min-h-[60%] shadow-2xl overflow-hidden flex-1 mt-20"
+          className="rounded-t-[40px] w-full max-h-[80%] min-h-[60%] shadow-2xl overflow-hidden flex-1 mt-20"
         >
+          <ImageBackground
+            source={modalBg}
+            resizeMode="cover"
+            style={{ flex: 1 }}
+            imageStyle={{ borderTopLeftRadius: 40, borderTopRightRadius: 40 }}
+          >
           {/* --- 3. DRAG HANDLE (Swipe Area) --- */}
           <View
             {...panResponder.panHandlers}
-            className="w-full h-14 items-center justify-center bg-[#19181B] z-50 absolute top-0 border-b border-transparent"
+            className="w-full h-14 items-center justify-center z-50 absolute top-0"
           >
             <View className="w-12 h-1.5 bg-[#636366] rounded-full" />
           </View>
@@ -217,6 +231,7 @@ export const AddExpertiseModal: React.FC<ExpertiseModalProps> = ({
               </ImageBackground>
             </TouchableOpacity>
           </View>
+          </ImageBackground>
         </Animated.View>
       </View>
     </Modal>

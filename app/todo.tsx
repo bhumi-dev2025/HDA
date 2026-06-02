@@ -1,3 +1,4 @@
+import { BottomSheetTextInput } from "@gorhom/bottom-sheet";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
@@ -6,11 +7,9 @@ import {
   ImageBackground,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { BottomSheetTextInput } from "@gorhom/bottom-sheet";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AppBottomSheet } from "../componunts/Modals/modals2.0/AppBottomSheet";
 import { getTodayLog, updateDailyLog } from "../lib/TrackerService";
@@ -21,7 +20,7 @@ import C1 from "../assets/photo/home/C1.svg";
 import C2 from "../assets/photo/home/C2.svg";
 
 const homeBg = require("../assets/photo/login/2.0/home.png");
-const btnBg  = require("../assets/2.0/model/button.png");
+const btnBg = require("../assets/2.0/model/button.png");
 
 type Task = { text: string; isDone: boolean; time?: string };
 
@@ -37,9 +36,10 @@ const fmtTime = () => {
 export default function TodoPage() {
   const router = useRouter();
 
-  const [tasks, setTasks]         = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [editIdx, setEditIdx]     = useState<number | null>(null);
+  const [editIdx, setEditIdx] = useState<number | null>(null);
   const [inputText, setInputText] = useState("");
   const inputRef = useRef<any>(null);
 
@@ -49,6 +49,7 @@ export default function TodoPage() {
       if (data?.todo_list && data.todo_list.length > 0) {
         setTasks(data.todo_list);
       }
+      setLoading(false);
     })();
   }, []);
 
@@ -67,7 +68,6 @@ export default function TodoPage() {
   };
 
   const openAdd = () => {
-    // Max 3 tasks j add thay — juna model jevi j condition
     if (tasks.filter((t) => t.text.trim() !== "").length >= 3) return;
     setEditIdx(null);
     setInputText("");
@@ -76,6 +76,8 @@ export default function TodoPage() {
   };
 
   const openEdit = (i: number) => {
+    // Done task — uncheck karo pehla, edit nahi
+    if (tasks[i].isDone) return;
     setEditIdx(i);
     setInputText(tasks[i].text);
     setSheetOpen(true);
@@ -86,28 +88,36 @@ export default function TodoPage() {
     if (!inputText.trim()) return;
     let updated: Task[];
     if (editIdx !== null) {
+      // Edit mode — sheet band karo
       updated = tasks.map((t, i) =>
         i === editIdx ? { ...t, text: inputText.trim() } : t,
       );
+      await saveTasks(updated);
+      setSheetOpen(false);
+      setInputText("");
+      setEditIdx(null);
     } else {
+      // Add mode — Todoist style: sheet/keyboard band na karo
       updated = [
         ...tasks,
         { text: inputText.trim(), isDone: false, time: fmtTime() },
       ];
+      await saveTasks(updated);
+      setInputText(""); // sirf input clear karo
+      // 3 task thai jay to sheet band karo
+      if (updated.filter((t) => t.text.trim() !== "").length >= 3) {
+        setSheetOpen(false);
+      }
     }
-    await saveTasks(updated);
-    setSheetOpen(false);
-    setInputText("");
-    setEditIdx(null);
   };
 
   const isEditing = editIdx !== null;
-  const hasData   = tasks.filter((t) => t.text.trim() !== "").length > 0;
+  const hasData = tasks.filter((t) => t.text.trim() !== "").length > 0;
+  const taskCount = tasks.filter((t) => t.text.trim() !== "").length;
 
   return (
     <ImageBackground source={homeBg} style={{ flex: 1 }} resizeMode="cover">
       <SafeAreaView style={s.safe}>
-
         {/* Header */}
         <View style={s.header}>
           <TouchableOpacity onPress={() => router.back()} style={s.backBtn}>
@@ -118,12 +128,15 @@ export default function TodoPage() {
         </View>
 
         {/* Empty state */}
-        {!hasData ? (
+        {loading ? (
+          <View style={s.emptyWrap} />
+        ) : !hasData ? (
           <View style={s.emptyWrap}>
             <M4 width={120} height={120} />
             <Text style={s.emptyTitle}>No todo list yet</Text>
             <Text style={s.emptyDesc}>
-              Add your first todo list to stay organised and track{"\n"}your tasks with ease.
+              Add your first todo list to stay organised and track{"\n"}your
+              tasks with ease.
             </Text>
           </View>
         ) : (
@@ -140,11 +153,21 @@ export default function TodoPage() {
                 activeOpacity={0.85}
                 style={s.taskCard}
               >
-                <TouchableOpacity onPress={() => toggleTask(item.originalIndex)} style={s.checkbox}>
-                  {item.isDone ? <C2 width={22} height={22} /> : <C1 width={22} height={22} />}
+                <TouchableOpacity
+                  onPress={() => toggleTask(item.originalIndex)}
+                  style={s.checkbox}
+                >
+                  {item.isDone ? (
+                    <C2 width={22} height={22} />
+                  ) : (
+                    <C1 width={22} height={22} />
+                  )}
                 </TouchableOpacity>
                 <View style={s.taskInfo}>
-                  <Text style={[s.taskText, item.isDone && s.taskDone]} numberOfLines={2}>
+                  <Text
+                    style={[s.taskText, item.isDone && s.taskDone]}
+                    numberOfLines={2}
+                  >
                     {item.text}
                   </Text>
                   {item.time && (
@@ -162,28 +185,32 @@ export default function TodoPage() {
         )}
 
         {/* FAB or Bottom Button */}
-        {hasData ? (
-          <TouchableOpacity onPress={openAdd} style={s.fab}>
-            <Text style={s.fabTxt}>+</Text>
-          </TouchableOpacity>
-        ) : (
+        {!hasData ? (
           <View style={s.bottomBtn}>
             <TouchableOpacity onPress={openAdd} activeOpacity={0.85}>
-              <ImageBackground source={btnBg} style={s.btn} imageStyle={{ borderRadius: 18 }} resizeMode="cover">
+              <ImageBackground
+                source={btnBg}
+                style={s.btn}
+                imageStyle={{ borderRadius: 18 }}
+                resizeMode="cover"
+              >
                 <Text style={s.btnTxt}>Add Task</Text>
               </ImageBackground>
             </TouchableOpacity>
           </View>
-        )}
-
+        ) : taskCount < 3 ? (
+          <TouchableOpacity onPress={openAdd} style={s.fab}>
+            <Text style={s.fabTxt}>+</Text>
+          </TouchableOpacity>
+        ) : null}
       </SafeAreaView>
 
       {/* ── Bottom Sheet — keyboard AppBottomSheet thi handle thay ── */}
-      <AppBottomSheet 
-        isVisible={sheetOpen} 
+      <AppBottomSheet
+        isVisible={sheetOpen}
         onClose={() => setSheetOpen(false)}
-        snapPoints={["60%"]}
-        enableDynamicSizing={false}
+        // snapPoints={["60%"]}
+        enableDynamicSizing={true}
       >
         <View style={s.sheetContent}>
           <BottomSheetTextInput
@@ -197,50 +224,148 @@ export default function TodoPage() {
           />
           <View style={s.sheetDivider} />
           <Text style={s.sheetDescPlaceholder}>Description</Text>
-          <TouchableOpacity onPress={handleSave} activeOpacity={0.85} style={s.btnWrap}>
-            <ImageBackground source={btnBg} style={s.btn} imageStyle={{ borderRadius: 18 }} resizeMode="cover">
-              <Text style={s.btnTxt}>{isEditing ? "Update task" : "Add Task"}</Text>
+          <TouchableOpacity
+            onPress={handleSave}
+            activeOpacity={0.85}
+            style={s.btnWrap}
+          >
+            <ImageBackground
+              source={btnBg}
+              style={s.btn}
+              imageStyle={{ borderRadius: 18 }}
+              resizeMode="cover"
+            >
+              <Text style={s.btnTxt}>
+                {isEditing ? "Update task" : "Add Task"}
+              </Text>
             </ImageBackground>
           </TouchableOpacity>
         </View>
       </AppBottomSheet>
-
     </ImageBackground>
   );
 }
 
 const s = StyleSheet.create({
-  safe:         { flex: 1 },
-  header:       { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingTop: 8, paddingBottom: 12 },
-  backBtn:      { width: 36, height: 36, borderRadius: 18, backgroundColor: "rgba(255,255,255,0.1)", alignItems: "center", justifyContent: "center" },
-  backArrow:    { color: "#FFF", fontSize: 28, lineHeight: 32, marginTop: -2 },
-  headerTitle:  { color: "#FFF", fontSize: 18, fontWeight: "700" },
+  safe: { flex: 1 },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    paddingTop: 8,
+    paddingBottom: 12,
+  },
+  backBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "rgba(255,255,255,0.1)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  backArrow: { color: "#FFF", fontSize: 28, lineHeight: 32, marginTop: -2 },
+  headerTitle: { color: "#FFF", fontSize: 18, fontWeight: "700" },
 
-  emptyWrap:    { flex: 1, alignItems: "center", justifyContent: "center", gap: 12, paddingHorizontal: 40 },
-  emptyTitle:   { color: "#FFF", fontSize: 18, fontWeight: "700" },
-  emptyDesc:    { color: "rgba(255,255,255,0.5)", fontSize: 13, textAlign: "center", lineHeight: 20 },
+  emptyWrap: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12,
+    paddingHorizontal: 40,
+  },
+  emptyTitle: { color: "#FFF", fontSize: 18, fontWeight: "700" },
+  emptyDesc: {
+    color: "rgba(255,255,255,0.5)",
+    fontSize: 13,
+    textAlign: "center",
+    lineHeight: 20,
+  },
 
-  listContent:  { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 100, gap: 12 },
-  taskCard:     { flexDirection: "row", alignItems: "flex-start", gap: 14, backgroundColor: "rgba(255,255,255,0.07)", borderRadius: 16, padding: 16, borderWidth: StyleSheet.hairlineWidth, borderColor: "rgba(255,255,255,0.12)" },
-  checkbox:     { marginTop: 2 },
-  taskInfo:     { flex: 1, gap: 6 },
-  taskText:     { color: "#FFF", fontSize: 15, fontWeight: "600", lineHeight: 22 },
-  taskDone:     { color: "rgba(255,255,255,0.35)", textDecorationLine: "line-through" },
-  timeRow:      { flexDirection: "row", alignItems: "center", gap: 6 },
-  timeLabel:    { color: "rgba(255,255,255,0.4)", fontSize: 11 },
-  timeBadge:    { backgroundColor: "rgba(255,255,255,0.1)", borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 },
-  timeTxt:      { color: "rgba(255,255,255,0.6)", fontSize: 11 },
+  listContent: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 100,
+    gap: 12,
+  },
+  taskCard: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 14,
+    backgroundColor: "rgba(255,255,255,0.07)",
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: "rgba(255,255,255,0.12)",
+  },
+  checkbox: { marginTop: 2 },
+  taskInfo: { flex: 1, gap: 6 },
+  taskText: { color: "#FFF", fontSize: 15, fontWeight: "600", lineHeight: 22 },
+  taskDone: {
+    color: "rgba(255,255,255,0.35)",
+    textDecorationLine: "line-through",
+  },
+  timeRow: { flexDirection: "row", alignItems: "center", gap: 6 },
+  timeLabel: { color: "rgba(255,255,255,0.4)", fontSize: 11 },
+  timeBadge: {
+    backgroundColor: "rgba(255,255,255,0.1)",
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+  },
+  timeTxt: { color: "rgba(255,255,255,0.6)", fontSize: 11 },
 
-  fab:          { position: "absolute", right: 24, bottom: 36, width: 56, height: 56, borderRadius: 28, backgroundColor: "#FFF", alignItems: "center", justifyContent: "center", shadowColor: "#000", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 8 },
-  fabTxt:       { color: "#000", fontSize: 28, fontWeight: "300", marginTop: -2 },
+  fab: {
+    position: "absolute",
+    right: 24,
+    bottom: 36,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: "#FFF",
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  fabTxt: { color: "#000", fontSize: 28, fontWeight: "300", marginTop: -2 },
 
-  bottomBtn:    { paddingHorizontal: 16, paddingBottom: 24, paddingTop: 8 },
-  btnWrap:      { width: "100%", marginTop: 8 },
-  btn:          { width: "100%", height: 56, alignItems: "center", justifyContent: "center", borderRadius: 18, overflow: "hidden" },
-  btnTxt:       { color: "#FFF", fontSize: 17, fontWeight: "600", letterSpacing: 0.3 },
+  bottomBtn: { paddingHorizontal: 16, paddingBottom: 24, paddingTop: 8 },
+  btnWrap: { width: "100%", marginTop: 8 },
+  btn: {
+    width: "100%",
+    height: 56,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 18,
+    overflow: "hidden",
+  },
+  btnTxt: {
+    color: "#FFF",
+    fontSize: 17,
+    fontWeight: "600",
+    letterSpacing: 0.3,
+  },
 
-  sheetContent:         { gap: 12, paddingBottom: 8 },
-  sheetInput:           { color: "#FFF", fontSize: 16, fontWeight: "500", minHeight: 60, paddingVertical: 4 },
-  sheetDivider:         { height: StyleSheet.hairlineWidth, backgroundColor: "rgba(255,255,255,0.12)", marginVertical: 4 },
-  sheetDescPlaceholder: { color: "rgba(255,255,255,0.25)", fontSize: 14, paddingVertical: 8 },
+  sheetContent: { gap: 12, paddingBottom: 8 },
+  sheetInput: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "500",
+    minHeight: 60,
+    paddingVertical: 4,
+  },
+  sheetDivider: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: "rgba(255,255,255,0.12)",
+    marginVertical: 4,
+  },
+  sheetDescPlaceholder: {
+    color: "rgba(255,255,255,0.25)",
+    fontSize: 14,
+    paddingVertical: 8,
+  },
 });

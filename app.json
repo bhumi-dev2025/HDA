@@ -32,8 +32,7 @@
         "backgroundColor": "#ffffff"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.simple.humandesignacademy",
-      "softwareKeyboardLayoutMode": "pan"
+      "package": "com.simple.humandesignacademy"
     },
     "web": {
       "output": "static",

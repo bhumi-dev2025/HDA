@@ -1,6 +1,6 @@
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Dimensions,
   Image,
@@ -61,8 +61,19 @@ export default function HDAPath() {
   // Positions ek j vaar calculate thay — useMemo thi cache
   const POSITIONS = useMemo(() => buildPositions(), []);
   const TOTAL_HEIGHT = POSITIONS[POSITIONS.length - 1] + 200;
+  const lastPressTime = useRef(0);
+
+  const [visibleCount, setVisibleCount] = useState(20);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setVisibleCount(HDA_LESSONS.length), 300);
+    return () => clearTimeout(timer);
+  }, []);
 
   const openLesson = (lesson: Lesson) => {
+    const now = Date.now();
+    if (now - lastPressTime.current < 500) return; // debounce 500ms
+    lastPressTime.current = now;
     setSelected(lesson);
     setSheetOpen(true);
   };
@@ -180,7 +191,7 @@ export default function HDAPath() {
                 paddingBottom: 80,
               }}
             >
-              {HDA_LESSONS.map((lesson, index) => {
+              {HDA_LESSONS.slice(0, visibleCount).map((lesson, index) => {
                 const xFrac = ZIGZAG[index % ZIGZAG.length];
                 const xPos = (W - 97) * xFrac;
                 const yPos = POSITIONS[index];
@@ -238,7 +249,12 @@ export default function HDAPath() {
 
                     {/* Path Button */}
                     <View
-                      style={{ position: "absolute", top: yPos, left: xPos }}
+                      style={{
+                        position: "absolute",
+                        top: yPos,
+                        left: xPos,
+                        zIndex: 10,
+                      }}
                     >
                       <PathButton
                         icon={lesson.icon}

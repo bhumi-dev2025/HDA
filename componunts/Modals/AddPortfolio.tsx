@@ -16,12 +16,14 @@ import {
   Pressable,
   ImageBackground
 } from 'react-native';
+import { BlurView } from 'expo-blur';
 import { getLinkPreview } from 'link-preview-js';
 import * as Clipboard from 'expo-clipboard';
 import {PortfolioModalProps} from '../../types'
 
 const { height } = Dimensions.get('window');
 const buttonBg = require('../../assets/2.0/model/button.png');
+const modalBg = require('../../assets/2.0/model/bg.png');
 
 export const AddPortfolioModal:React.FC<PortfolioModalProps> = ({ isVisible, onClose, onSave }: PortfolioModalProps) => {
   const [link, setLink] = useState('');
@@ -139,11 +141,17 @@ export const AddPortfolioModal:React.FC<PortfolioModalProps> = ({ isVisible, onC
       onRequestClose={onClose}
     >
         <View className="flex-1">
-      {/* 1. Backdrop */}
+      {/* 1. Backdrop — BlurView */}
       <Pressable 
-        className="absolute top-0 bottom-0 left-0 right-0 bg-black/40" 
+        className="absolute top-0 bottom-0 left-0 right-0"
         onPress={onClose} 
-      />
+      >
+        {Platform.OS === "ios" ? (
+          <BlurView intensity={28} tint="dark" style={{ flex: 1 }} />
+        ) : (
+          <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.55)" }} />
+        )}
+      </Pressable>
 
       {/* 2. Main Content Wrapper */}
       <View className="flex-1 justify-end" pointerEvents="box-none">
@@ -151,19 +159,25 @@ export const AddPortfolioModal:React.FC<PortfolioModalProps> = ({ isVisible, onC
         <Animated.View 
           style={{ 
             transform: [{ translateY: panY }],
-            // Android padding fix
-            paddingBottom: Platform.OS === 'android' ? keyboardHeight : 0, 
-            // iOS margin fix
-            marginBottom: Platform.OS === 'ios' ? keyboardHeight : 0 
+            marginBottom: keyboardHeight,
+            width: '100%',
+            maxHeight: '85%',
+            minHeight: 400,
+            overflow: 'hidden',
+            borderTopLeftRadius: 40,
+            borderTopRightRadius: 40,
           }}
-          className="bg-[#19181B] rounded-t-[40px] w-full max-h-[80%] shadow-2xl overflow-hidden mt-20"
         >
-          
+          <ImageBackground
+            source={modalBg}
+            resizeMode="cover"
+            style={{ flex: 1, minHeight: 400 }}
+            imageStyle={{ borderTopLeftRadius: 40, borderTopRightRadius: 40 }}
+          >
           {/* --- 3. DRAG HANDLE --- */}
-          {/* Only this area is draggable */}
           <View 
             {...panResponder.panHandlers} 
-            className="w-full h-14 items-center justify-center bg-[#19181B] z-50 absolute top-0 border-b border-transparent"
+            className="w-full h-14 items-center justify-center z-50 absolute top-0"
           >
             <View className="w-12 h-1.5 bg-[#636366] rounded-full" />
           </View>
@@ -244,6 +258,7 @@ export const AddPortfolioModal:React.FC<PortfolioModalProps> = ({ isVisible, onC
             </TouchableOpacity>
 
           </View>
+          </ImageBackground>
         </Animated.View>
       </View>
       </View>

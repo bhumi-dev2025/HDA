@@ -1,4 +1,3 @@
-import { useHealthSteps } from "../../lib/useHealthSteps";
 import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
@@ -17,6 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { fetchGoogleFitSteps } from "../../lib/googleFitService";
 import { todoEvents } from "../../lib/todoEvents";
 import { getTodayLog, updateDailyLog } from "../../lib/TrackerService";
+import { useHealthSteps } from "../../lib/useHealthSteps";
 import {
   CardProps,
   HomeModalData,
@@ -28,7 +28,6 @@ import {
 import { ActivityRings } from "../../componunts/ActivityRings";
 import { ConfettiOverlay } from "../../componunts/Confetti";
 
-import MeditationModal from "../../componunts/Modals/MeditationModel";
 import { MeditationBottomSheet } from "../../componunts/Modals/modals2.0/MeditationBottomSheet";
 import { SleepBottomSheet } from "../../componunts/Modals/modals2.0/SleepBottomSheet";
 import { StepBottomSheet } from "../../componunts/Modals/modals2.0/StepBottomSheet";
@@ -53,8 +52,6 @@ import CC6 from "../../assets/2.0/home icon/C6.svg";
 import I1 from "../../assets/2.0/home icon/I1.svg";
 
 //CARD BG
-const b1 = require("../../assets/2.0/home bg/b1.png");
-const b2 = require("../../assets/2.0/home bg/b2.png");
 const b4 = require("../../assets/2.0/home bg/b4.png");
 const b5 = require("../../assets/2.0/home bg/b5.png");
 const b31 = require("../../assets/2.0/home bg/b31.png");
@@ -69,12 +66,13 @@ const CardContainer = ({
   onPress,
   heightClass = "h-auto",
   className = "",
+  style = {},
 }: CardProps) => (
   <LinearGradient
     colors={["rgba(255,255,255,0.18)", "rgba(0,0,0,0.18)"]}
     start={{ x: 0, y: 0 }}
     end={{ x: 1, y: 1 }}
-    style={{ borderRadius: 24, padding: 1 }}
+    style={[{ borderRadius: 24, padding: 1 }, style]}
     className={`w-full ${heightClass}`}
   >
     <TouchableOpacity
@@ -272,6 +270,13 @@ export default function HomeScreen() {
   // HealthKit — iOS only (Android pe null)
   const { requestAuthorization, stepStats } = useHealthSteps();
 
+  // iOS — app open thata j HealthKit permission maango
+  useEffect(() => {
+    if (Platform.OS === "ios") {
+      requestAuthorization();
+    }
+  }, []);
+
   // ── Ring recalculate helper — Apple app style, instant update ────────────
   const recalcRings = useCallback(
     (
@@ -389,24 +394,35 @@ export default function HomeScreen() {
 
   const handleStepPress = async () => {
     try {
+      // iOS — pehla HealthKit authorization maango
+      if (Platform.OS === "ios") {
+        await requestAuthorization();
+      }
+
       let steps: number | null = null;
       if (Platform.OS === "android") {
         steps = await fetchGoogleFitSteps();
       } else if (Platform.OS === "ios") {
         const qty = stepStats?.sumQuantity;
-        steps = Math.round(
+        const fetched = Math.round(
           typeof qty === "number" ? qty : ((qty as any)?.quantity ?? 0),
         );
+        // HealthKit connected hoy ane steps > 0 hoy to use karo
+        steps = fetched > 0 ? fetched : null;
       }
+
       if (steps !== null && steps !== undefined) {
-        lastSyncedSteps.current = steps; // useEffect double save rokva
+        // Steps mili gaya — auto save
+        lastSyncedSteps.current = steps;
         setStepData(steps.toString());
         setIsStepDone(true);
         await handleSave("step", steps.toString());
       } else {
+        // Steps na mili — HealthKit connected nathi — manual modal open karo
         setActiveModal("step");
       }
     } catch (error) {
+      // Error aavi — manual modal open karo
       setActiveModal("step");
     }
   };
@@ -467,6 +483,16 @@ export default function HomeScreen() {
       if (data.step_count != null) {
         setStepData(data.step_count.toString());
         setIsStepDone(true);
+      } else if (Platform.OS === "ios") {
+        // Supabase ma nahi pan HealthKit ma hoy to — stepStats check karo
+        const qty = stepStats?.sumQuantity;
+        const hkSteps = Math.round(
+          typeof qty === "number" ? qty : ((qty as any)?.quantity ?? 0),
+        );
+        if (hkSteps > 0) {
+          setStepData(hkSteps.toString());
+          setIsStepDone(true);
+        }
       }
 
       // Ring progress calculate karo
@@ -594,7 +620,13 @@ export default function HomeScreen() {
         });
       }, 500);
     }
-  }, [stepStats?.sumQuantity]);
+  }, [
+    stepStats?.sumQuantity,
+    workoutData,
+    meditationData,
+    waterData,
+    todoTasks,
+  ]);
 
   const homeBg = require("../../assets/photo/login/2.0/home.png");
   const ringbg = require("../../assets/2.0/home bg/b2.png");
@@ -768,7 +800,7 @@ export default function HomeScreen() {
                           </Text>
                           {/* </View> */}
                           <Text className="text-white text-2xl font-black">
-                            {meditationData}m
+                            {meditationData}
                           </Text>
                         </View>
                       </>
@@ -816,6 +848,7 @@ export default function HomeScreen() {
                 <CardContainer
                   onPress={() => setActiveModal("water")}
                   heightClass="h-56"
+                  style={{ minHeight: 200 }}
                 >
                   {!isWaterDone ? (
                     <>
@@ -892,6 +925,7 @@ export default function HomeScreen() {
                 <CardContainer
                   onPress={() => router.push("/todo")}
                   heightClass="h-56"
+                  style={{ minHeight: 200 }}
                   className="items-center justify-center"
                 >
                   {!isTodoDone ? (
@@ -1024,14 +1058,18 @@ export default function HomeScreen() {
                 wakeM: val.wakeM,
               });
             }}
-            initialValue={isSleepDone ? {
-              hours: parseInt(sleepData.hour || "0"),
-              minutes: parseInt(sleepData.minute || "0"),
-              bedH: (sleepData as any).bedH,
-              bedM: (sleepData as any).bedM,
-              wakeH: (sleepData as any).wakeH,
-              wakeM: (sleepData as any).wakeM,
-            } : undefined}
+            initialValue={
+              isSleepDone
+                ? {
+                    hours: parseInt(sleepData.hour || "0"),
+                    minutes: parseInt(sleepData.minute || "0"),
+                    bedH: (sleepData as any).bedH,
+                    bedM: (sleepData as any).bedM,
+                    wakeH: (sleepData as any).wakeH,
+                    wakeM: (sleepData as any).wakeM,
+                  }
+                : undefined
+            }
           />
           <WorkoutBottomSheet
             isVisible={activeModal === "workout"}
@@ -1042,7 +1080,6 @@ export default function HomeScreen() {
         </SafeAreaView>
       </ImageBackground>
       <ConfettiOverlay type={confetti} onComplete={handleConfettiDone} />
-
 
       {/* ── Meditation Bottom Sheet ── */}
       <MeditationBottomSheet

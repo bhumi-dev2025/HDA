@@ -86,6 +86,7 @@ export interface CardProps {
   onPress?: () => void;
   heightClass?: string;
   className?: string;
+  style?: ViewStyle;
 }
 
 //components prompt..

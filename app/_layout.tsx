@@ -8,6 +8,7 @@ import LottieView from "lottie-react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "../global.css";
 import { supabase } from "../lib/supabase";
+import { HDA_LESSONS } from "../constants/hdaPathData";
 
 
 export default function RootLayout() {
@@ -36,6 +37,9 @@ export default function RootLayout() {
     };
 
     checkUser();
+
+    // Splash time e HDA data preload — tab click karto instant ready
+    void HDA_LESSONS.length;
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_OUT') {
@@ -86,12 +90,10 @@ export default function RootLayout() {
       <Stack.Screen
         name="settings/index"
         options={{
-          // headerShown: true,
           title: "Settings",
           headerTitleAlign: "center",
           headerTitleStyle: { fontSize: 16, fontWeight: "600", color: "#111" },
           headerStyle: { backgroundColor: "#f5f5f5" },
-          // headerShadowVisible: false,
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => router.back()}

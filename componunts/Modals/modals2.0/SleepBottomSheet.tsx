@@ -63,23 +63,23 @@ const polar = (angleDeg: number, r: number) => {
 };
 
 const makeArcPath = (startAngle: number, sweepAngle: number, r: number) => {
-  const path = Skia.Path.Make();
   const rect = { x: CENTER - r, y: CENTER - r, width: r * 2, height: r * 2 };
-  path.addArc(rect, startAngle - 90, Math.min(sweepAngle, 359.9));
-  return path;
+  return Skia.PathBuilder.Make()
+    .addArc(rect, startAngle - 90, Math.min(sweepAngle, 359.9))
+    .build();
 };
 
 const makeTicksPath = () => {
-  const path = Skia.Path.Make();
+  const builder = Skia.PathBuilder.Make();
   for (let i = 0; i < 60; i++) {
-    const angle    = (i * 6 - 90) * (Math.PI / 180);
-    const isMajor  = i % 5 === 0;
-    const outerR   = RADIUS - STROKE / 2 - 2;          // ring inner edge par
-    const innerR   = outerR - (isMajor ? 10 : 5);      // andar jaay
-    path.moveTo(CENTER + outerR * Math.cos(angle), CENTER + outerR * Math.sin(angle));
-    path.lineTo(CENTER + innerR * Math.cos(angle), CENTER + innerR * Math.sin(angle));
+    const angle   = (i * 6 - 90) * (Math.PI / 180);
+    const isMajor = i % 5 === 0;
+    const outerR  = RADIUS - STROKE / 2 - 2;
+    const innerR  = outerR - (isMajor ? 10 : 5);
+    builder.moveTo(CENTER + outerR * Math.cos(angle), CENTER + outerR * Math.sin(angle));
+    builder.lineTo(CENTER + innerR * Math.cos(angle), CENTER + innerR * Math.sin(angle));
   }
-  return path;
+  return builder.build();
 };
 
 const getAngleFromTouch = (x: number, y: number) => {

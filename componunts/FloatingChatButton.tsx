@@ -1,14 +1,22 @@
 import { Ionicons } from "@expo/vector-icons";
+import { BlurView } from "expo-blur";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import {
   ActivityIndicator,
   Alert,
   Animated,
   FlatList,
+  ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
   Modal,
@@ -26,7 +34,10 @@ import AI7 from "../assets/photo/home/AI7.svg";
 import { chatEvents } from "../lib/chatEvents";
 import { GeminiResponse, getStoredApiKey, sendMessage } from "../lib/gemini";
 import { todoEvents } from "../lib/todoEvents";
-import { addTasksToDailyLog, removeTasksFromDailyLog } from "../lib/todoService";
+import {
+  addTasksToDailyLog,
+  removeTasksFromDailyLog,
+} from "../lib/todoService";
 import { getTodayLog, updateDailyLog } from "../lib/TrackerService";
 import ChatBubble from "./ChatBubble";
 
@@ -34,6 +45,7 @@ export type FloatingChatButtonHandle = { open: () => void };
 
 const CHAT_HISTORY_KEY = "chat_history";
 const MAX_HISTORY = 20;
+const modalBg = require("../assets/2.0/model/bg.png");
 
 type Message = {
   id: string;
@@ -85,19 +97,29 @@ export default forwardRef<FloatingChatButtonHandle>(
     }, []);
 
     useEffect(() => {
-      const showEv = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
-      const hideEv = Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
+      const showEv =
+        Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
+      const hideEv =
+        Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
       const onShow = (e: any) => {
         setKeyboardHeight(e.endCoordinates.height);
-        setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 150);
+        setTimeout(
+          () => flatListRef.current?.scrollToEnd({ animated: true }),
+          150,
+        );
       };
       const onHide = () => setKeyboardHeight(0);
       const s1 = Keyboard.addListener(showEv, onShow);
       const s2 = Keyboard.addListener(hideEv, onHide);
-      return () => { s1.remove(); s2.remove(); };
+      return () => {
+        s1.remove();
+        s2.remove();
+      };
     }, []);
 
-    useEffect(() => { loadHistory(); }, []);
+    useEffect(() => {
+      loadHistory();
+    }, []);
 
     const loadHistory = async () => {
       try {
@@ -113,16 +135,21 @@ export default forwardRef<FloatingChatButtonHandle>(
     };
 
     const clearHistory = () => {
-      Alert.alert("Clear Chat", "Are you sure you want to clear all chat history?", [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Clear", style: "destructive",
-          onPress: async () => {
-            setMessages([]);
-            await AsyncStorage.removeItem(CHAT_HISTORY_KEY);
+      Alert.alert(
+        "Clear Chat",
+        "Are you sure you want to clear all chat history?",
+        [
+          { text: "Cancel", style: "cancel" },
+          {
+            text: "Clear",
+            style: "destructive",
+            onPress: async () => {
+              setMessages([]);
+              await AsyncStorage.removeItem(CHAT_HISTORY_KEY);
+            },
           },
-        },
-      ]);
+        ],
+      );
     };
 
     useEffect(() => {
@@ -134,11 +161,17 @@ export default forwardRef<FloatingChatButtonHandle>(
 
     const appendMessage = (role: Message["role"], text: string) => {
       setMessages((prev) => {
-        const updated = [...prev, { id: Date.now().toString() + Math.random(), role, text }];
+        const updated = [
+          ...prev,
+          { id: Date.now().toString() + Math.random(), role, text },
+        ];
         saveHistory(updated);
         return updated;
       });
-      setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 100);
+      setTimeout(
+        () => flatListRef.current?.scrollToEnd({ animated: true }),
+        100,
+      );
     };
 
     const emitRefresh = () => {
@@ -146,118 +179,245 @@ export default forwardRef<FloatingChatButtonHandle>(
       setTimeout(() => todoEvents.emit(), 2000);
     };
 
-    const handleToolCall = async (functionName: string, args: Record<string, any>) => {
+    const handleToolCall = async (
+      functionName: string,
+      args: Record<string, any>,
+    ) => {
       if (functionName === "add_todo") {
         const newTasks: { text: string }[] = args.tasks ?? [];
-        if (!newTasks.length) { appendMessage("model", "I couldn't find any tasks to add."); return; }
+        if (!newTasks.length) {
+          appendMessage("model", "I couldn't find any tasks to add.");
+          return;
+        }
         try {
           const result = await addTasksToDailyLog(newTasks);
-          if (!result.success) { appendMessage("model", result.error ?? "Could not add tasks."); return; }
+          if (!result.success) {
+            appendMessage("model", result.error ?? "Could not add tasks.");
+            return;
+          }
           const taskLines = newTasks.map((t) => `• ${t.text}`).join("\n");
-          const remaining = result.merged.filter((m) => m.text.trim() !== "").length;
-          appendMessage("model", `✅ ${newTasks.length} task${newTasks.length > 1 ? "s" : ""} added:\n${taskLines}\n${remaining}/3 tasks in your list.`);
+          const remaining = result.merged.filter(
+            (m) => m.text.trim() !== "",
+          ).length;
+          appendMessage(
+            "model",
+            `✅ ${newTasks.length} task${newTasks.length > 1 ? "s" : ""} added:\n${taskLines}\n${remaining}/3 tasks in your list.`,
+          );
           if (result.error) appendMessage("error", result.error);
           emitRefresh();
-        } catch { appendMessage("model", "Sorry, I couldn't add the tasks. Please try again."); }
+        } catch {
+          appendMessage(
+            "model",
+            "Sorry, I couldn't add the tasks. Please try again.",
+          );
+        }
       } else if (functionName === "remove_todo") {
         const tasksToRemove: { text: string }[] = args.tasks ?? [];
         const removeAll: boolean = args.removeAll ?? false;
-        if (!removeAll && !tasksToRemove.length) { appendMessage("model", "Please tell me which task you want to remove."); return; }
+        if (!removeAll && !tasksToRemove.length) {
+          appendMessage(
+            "model",
+            "Please tell me which task you want to remove.",
+          );
+          return;
+        }
         try {
-          const result = await removeTasksFromDailyLog(tasksToRemove, removeAll);
-          if (!result.success) { appendMessage("model", "Your todo list is already empty."); return; }
-          if (!result.removedCount) { appendMessage("model", "I couldn't find that task."); return; }
+          const result = await removeTasksFromDailyLog(
+            tasksToRemove,
+            removeAll,
+          );
+          if (!result.success) {
+            appendMessage("model", "Your todo list is already empty.");
+            return;
+          }
+          if (!result.removedCount) {
+            appendMessage("model", "I couldn't find that task.");
+            return;
+          }
           if (removeAll) appendMessage("model", "✅ All tasks cleared.");
-          else appendMessage("model", `✅ ${result.removedCount} task${result.removedCount > 1 ? "s" : ""} removed.\n${result.remaining.length}/3 tasks remaining.`);
+          else
+            appendMessage(
+              "model",
+              `✅ ${result.removedCount} task${result.removedCount > 1 ? "s" : ""} removed.\n${result.remaining.length}/3 tasks remaining.`,
+            );
           emitRefresh();
-        } catch { appendMessage("model", "Sorry, I couldn't remove the task."); }
+        } catch {
+          appendMessage("model", "Sorry, I couldn't remove the task.");
+        }
       } else if (functionName === "set_meditation") {
         try {
           const result = await updateDailyLog("meditation", args.time ?? "10m");
-          if (!result.success) { appendMessage("model", "Could not update meditation."); return; }
+          if (!result.success) {
+            appendMessage("model", "Could not update meditation.");
+            return;
+          }
           appendMessage("model", `🧘 Meditation updated to ${args.time}!`);
           emitRefresh();
-        } catch { appendMessage("model", "Couldn't update meditation."); }
+        } catch {
+          appendMessage("model", "Couldn't update meditation.");
+        }
       } else if (functionName === "set_water") {
         try {
           const result = await updateDailyLog("water", args.liters ?? 1.5);
-          if (!result.success) { appendMessage("model", "Could not update water intake."); return; }
-          appendMessage("model", `💧 Water intake updated to ${(args.liters ?? 1.5).toFixed(1)}L!`);
+          if (!result.success) {
+            appendMessage("model", "Could not update water intake.");
+            return;
+          }
+          appendMessage(
+            "model",
+            `💧 Water intake updated to ${(args.liters ?? 1.5).toFixed(1)}L!`,
+          );
           emitRefresh();
-        } catch { appendMessage("model", "Couldn't update water intake."); }
+        } catch {
+          appendMessage("model", "Couldn't update water intake.");
+        }
       } else if (functionName === "set_sleep") {
-        const d = { hour: (args.hour ?? "08").toString().padStart(2, "0"), minute: (args.minute ?? "00").toString().padStart(2, "0") };
+        const d = {
+          hour: (args.hour ?? "08").toString().padStart(2, "0"),
+          minute: (args.minute ?? "00").toString().padStart(2, "0"),
+        };
         try {
           const result = await updateDailyLog("sleep", d);
-          if (!result.success) { appendMessage("model", "Could not update sleep."); return; }
-          appendMessage("model", `😴 Sleep updated to ${d.hour}h ${d.minute}m!`);
+          if (!result.success) {
+            appendMessage("model", "Could not update sleep.");
+            return;
+          }
+          appendMessage(
+            "model",
+            `😴 Sleep updated to ${d.hour}h ${d.minute}m!`,
+          );
           emitRefresh();
-        } catch { appendMessage("model", "Couldn't update sleep."); }
+        } catch {
+          appendMessage("model", "Couldn't update sleep.");
+        }
       } else if (functionName === "set_workout") {
-        const d = { hour: (args.hour ?? "00").toString().padStart(2, "0"), minute: (args.minute ?? "30").toString().padStart(2, "0") };
+        const d = {
+          hour: (args.hour ?? "00").toString().padStart(2, "0"),
+          minute: (args.minute ?? "30").toString().padStart(2, "0"),
+        };
         try {
           const result = await updateDailyLog("workout", d);
-          if (!result.success) { appendMessage("model", "Could not update workout."); return; }
-          appendMessage("model", `💪 Workout updated to ${d.hour}h ${d.minute}m!`);
+          if (!result.success) {
+            appendMessage("model", "Could not update workout.");
+            return;
+          }
+          appendMessage(
+            "model",
+            `💪 Workout updated to ${d.hour}h ${d.minute}m!`,
+          );
           emitRefresh();
-        } catch { appendMessage("model", "Couldn't update workout."); }
+        } catch {
+          appendMessage("model", "Couldn't update workout.");
+        }
       }
     };
 
     const handleSend = async () => {
       if (!input.trim() || loading) return;
       if (!hasKey) {
-        Alert.alert("No API Key", "Please add your Gemini API key in Settings first.",
-          [{ text: "Go to Settings", onPress: () => { setIsOpen(false); router.push("/settings/ai"); } }]);
+        Alert.alert(
+          "No API Key",
+          "Please add your Gemini API key in Settings first.",
+          [
+            {
+              text: "Go to Settings",
+              onPress: () => {
+                setIsOpen(false);
+                router.push("/settings/ai");
+              },
+            },
+          ],
+        );
         return;
       }
-      const userMsg: Message = { id: Date.now().toString(), role: "user", text: input.trim() };
+      const userMsg: Message = {
+        id: Date.now().toString(),
+        role: "user",
+        text: input.trim(),
+      };
       const currentHistory = messages
         .filter((m) => m.role === "user" || m.role === "model")
         .slice(-MAX_HISTORY)
         .map((m) => ({ role: m.role as "user" | "model", text: m.text }));
-      setMessages((prev) => { const updated = [...prev, userMsg]; saveHistory(updated); return updated; });
+      setMessages((prev) => {
+        const updated = [...prev, userMsg];
+        saveHistory(updated);
+        return updated;
+      });
       setInput("");
       setLoading(true);
       try {
         const todayLog = await getTodayLog();
-        const liveTodos: { text: string; isDone: boolean }[] = todayLog?.todo_list ?? [];
+        const liveTodos: { text: string; isDone: boolean }[] =
+          todayLog?.todo_list ?? [];
         const liveHealth = {
           meditation: todayLog?.meditation_time,
           water: todayLog?.water_intake,
           sleep: todayLog?.sleep_data,
           workout: todayLog?.workout_time,
         };
-        const response: GeminiResponse = await sendMessage(currentHistory, userMsg.text, activeTab, liveTodos, liveHealth);
+        const response: GeminiResponse = await sendMessage(
+          currentHistory,
+          userMsg.text,
+          activeTab,
+          liveTodos,
+          liveHealth,
+        );
         if (response.type === "text") appendMessage("model", response.text);
-        else if (response.type === "tool_call") await handleToolCall(response.functionName, response.args);
+        else if (response.type === "tool_call")
+          await handleToolCall(response.functionName, response.args);
         else if (response.type === "multi_tool_call") {
-          for (const call of response.calls) await handleToolCall(call.functionName, call.args);
+          for (const call of response.calls)
+            await handleToolCall(call.functionName, call.args);
         }
       } catch (error: any) {
         const isNoKey = error?.message === "NO_API_KEY";
         Alert.alert(
           isNoKey ? "No API Key" : "Error",
-          isNoKey ? "Please add your Gemini API key in Settings." : error?.message || "Unknown error.",
-          [{ text: isNoKey ? "Go to Settings" : "OK", onPress: isNoKey ? () => { setIsOpen(false); router.push("/settings/ai"); } : undefined }]
+          isNoKey
+            ? "Please add your Gemini API key in Settings."
+            : error?.message || "Unknown error.",
+          [
+            {
+              text: isNoKey ? "Go to Settings" : "OK",
+              onPress: isNoKey
+                ? () => {
+                    setIsOpen(false);
+                    router.push("/settings/ai");
+                  }
+                : undefined,
+            },
+          ],
         );
-      } finally { setLoading(false); }
+      } finally {
+        setLoading(false);
+      }
     };
 
     const NoKeyBanner = () =>
       hasKey === false ? (
         <TouchableOpacity
-          onPress={() => { setIsOpen(false); router.push("/settings/ai"); }}
+          onPress={() => {
+            setIsOpen(false);
+            router.push("/settings/ai");
+          }}
           style={{
-            marginHorizontal: 16, marginTop: 10,
+            marginHorizontal: 16,
+            marginTop: 10,
             backgroundColor: "rgba(44,36,0,0.9)",
-            borderWidth: 1, borderColor: "#FFD54F",
-            borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10,
-            flexDirection: "row", alignItems: "center",
+            borderWidth: 1,
+            borderColor: "#FFD54F",
+            borderRadius: 12,
+            paddingHorizontal: 14,
+            paddingVertical: 10,
+            flexDirection: "row",
+            alignItems: "center",
           }}
         >
           <Ionicons name="warning-outline" size={16} color="#F59E0B" />
-          <Text style={{ color: "#fbbf24", fontSize: 12, marginLeft: 8, flex: 1 }}>
+          <Text
+            style={{ color: "#fbbf24", fontSize: 12, marginLeft: 8, flex: 1 }}
+          >
             No API key found. Tap to add your Gemini key in Settings.
           </Text>
           <Ionicons name="chevron-forward" size={14} color="#F59E0B" />
@@ -265,17 +425,49 @@ export default forwardRef<FloatingChatButtonHandle>(
       ) : null;
 
     const EmptyState = () => (
-      <View style={{ flex: 1, justifyContent: "center", paddingHorizontal: 20 }}>
+      <View
+        style={{ flex: 1, justifyContent: "center", paddingHorizontal: 20 }}
+      >
         {(activeTab === "todo"
-          ? ["Buy groceries", "Call client tomorrow", "Finish project report", "Remove gym task"]
-          : ["8.5 Hours Sleep", "10 Min Meditation", "Drank 2 liters water", "Gym workout 45 Min"]
+          ? [
+              "Buy groceries",
+              "Call client tomorrow",
+              "Finish project report",
+              "Remove gym task",
+            ]
+          : [
+              "8.5 Hours Sleep",
+              "10 Min Meditation",
+              "Drank 2 liters water",
+              "Gym workout 45 Min",
+            ]
         ).map((item, i) => (
-          <View key={i} style={{
-            flexDirection: "row", alignItems: "center", justifyContent: "space-between",
-            paddingVertical: 13, borderBottomWidth: 0.5, borderBottomColor: D.emptyItemBorder,
-          }}>
-            <Text style={{ fontSize: 14, color: D.textSecondary, fontWeight: "400" }}>{item}</Text>
-            <Ionicons name="arrow-up-outline" size={14} color={D.textMuted} style={{ transform: [{ rotate: "45deg" }] }} />
+          <View
+            key={i}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              paddingVertical: 13,
+              borderBottomWidth: 0.5,
+              borderBottomColor: D.emptyItemBorder,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 14,
+                color: D.textSecondary,
+                fontWeight: "400",
+              }}
+            >
+              {item}
+            </Text>
+            <Ionicons
+              name="arrow-up-outline"
+              size={14}
+              color={D.textMuted}
+              style={{ transform: [{ rotate: "45deg" }] }}
+            />
           </View>
         ))}
       </View>
@@ -283,65 +475,141 @@ export default forwardRef<FloatingChatButtonHandle>(
 
     return (
       <>
-        <Modal visible={isOpen} transparent animationType="slide" onRequestClose={() => setIsOpen(false)}>
+        <Modal
+          visible={isOpen}
+          transparent
+          animationType="slide"
+          onRequestClose={() => setIsOpen(false)}
+        >
           <View style={{ flex: 1, justifyContent: "flex-end" }}>
-
+            {/* Blur backdrop — AppBottomSheet jevo j */}
             <TouchableOpacity
-              style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: D.backdrop }}
+              style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
               activeOpacity={1}
               onPress={() => setIsOpen(false)}
-            />
-
+            >
+              {Platform.OS === "ios" ? (
+                <BlurView
+                  intensity={28}
+                  tint="dark"
+                  style={{ flex: 1 }}
+                />
+              ) : (
+                <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.55)" }} />
+              )}
+            </TouchableOpacity>
             <KeyboardAvoidingView
               behavior={Platform.OS === "ios" ? "padding" : undefined}
               keyboardVerticalOffset={0}
             >
-              <View style={{
-                backgroundColor: D.bg,
-                borderTopLeftRadius: 28,
-                borderTopRightRadius: 28,
-                overflow: "hidden",
-                height: Platform.OS === "ios"
-                  ? (keyboardHeight > 0 ? 720 - keyboardHeight : 580)
-                  : (keyboardHeight > 0 ? 420 : 580),
-                marginBottom: Platform.OS === "android" ? keyboardHeight : 0,
-              }}>
-
+              <ImageBackground
+                source={modalBg}
+                resizeMode="cover"
+                style={{
+                  borderTopLeftRadius: 28,
+                  borderTopRightRadius: 28,
+                  overflow: "hidden",
+                  height:
+                    Platform.OS === "ios"
+                      ? keyboardHeight > 0
+                        ? 720 - keyboardHeight
+                        : 600
+                      : keyboardHeight > 0
+                        ? 420
+                        : 620,
+                  marginBottom: Platform.OS === "android" ? keyboardHeight : 0,
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+                imageStyle={{
+                  borderTopLeftRadius: 28,
+                  borderTopRightRadius: 28,
+                }}
+              >
                 {/* Drag Handle */}
-                <View style={{ alignItems: "center", paddingTop: 10, paddingBottom: 4 }}>
-                  <View style={{ width: 36, height: 4, borderRadius: 2, backgroundColor: D.handle }} />
+                <View
+                  style={{
+                    alignItems: "center",
+                    paddingTop: 10,
+                    paddingBottom: 4,
+                  }}
+                >
+                  <View
+                    style={{
+                      width: 36,
+                      height: 4,
+                      borderRadius: 2,
+                      backgroundColor: D.handle,
+                    }}
+                  />
                 </View>
 
                 {/* Header — empty state */}
                 {messages.length === 0 && (
-                  <View style={{
-                    alignItems: "center", paddingTop: 16, paddingBottom: 12,
-                    borderBottomWidth: 0.5, borderBottomColor: D.divider,
-                  }}>
-                    <View style={{ position: "absolute", right: 12, top: 12 }}>
-                      <TouchableOpacity onPress={() => setIsOpen(false)} style={{ padding: 8 }}>
-                        <Ionicons name="chevron-down" size={20} color={D.iconColor} />
+                  <View
+                    style={{
+                      alignItems: "center",
+                      paddingTop: 16,
+                      paddingBottom: 12,
+                      borderBottomWidth: 0.5,
+                      borderBottomColor: D.divider,
+                    }}
+                  >
+                    <View style={{ position: "absolute", right: 0, top: 12 }}>
+                      <TouchableOpacity
+                        onPress={() => setIsOpen(false)}
+                        style={{ padding: 8 }}
+                      >
+                        <Ionicons
+                          name="chevron-down"
+                          size={20}
+                          color={D.iconColor}
+                        />
                       </TouchableOpacity>
                     </View>
-
-                    <View style={{ marginBottom: 10, borderRadius: 10, overflow: "hidden", width: 52, height: 52 }}>
+                    <View
+                      style={{
+                        marginBottom: 10,
+                        borderRadius: 10,
+                        overflow: "hidden",
+                        width: 52,
+                        height: 52,
+                      }}
+                    >
                       <AI1 width={52} height={52} />
                     </View>
-
                     <MaskedView
                       maskElement={
-                        <Text style={{ fontSize: 22, fontWeight: "700", marginBottom: 4, letterSpacing: 0.2 }}>
+                        <Text
+                          style={{
+                            fontSize: 22,
+                            fontWeight: "700",
+                            marginBottom: 4,
+                            letterSpacing: 0.2,
+                          }}
+                        >
                           Health Assistant
                         </Text>
                       }
                     >
-                      <LinearGradient colors={["#6015C0", "#247FFB"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
-                        <Text style={{ fontSize: 22, fontWeight: "700", marginBottom: 4, letterSpacing: 0.2, opacity: 0 }}>
+                      <LinearGradient
+                        colors={["#6015C0", "#247FFB"]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 22,
+                            fontWeight: "700",
+                            marginBottom: 4,
+                            letterSpacing: 0.2,
+                            opacity: 0,
+                          }}
+                        >
                           Health Assistant
                         </Text>
                       </LinearGradient>
                     </MaskedView>
-
                     <Text style={{ fontSize: 12, color: D.textSecondary }}>
                       Track your daily health by chatting!
                     </Text>
@@ -350,137 +618,304 @@ export default forwardRef<FloatingChatButtonHandle>(
 
                 {/* Header — with messages */}
                 {messages.length > 0 && (
-                  <View style={{ flexDirection: "row", justifyContent: "flex-end", paddingHorizontal: 12, paddingTop: 8, paddingBottom: 4 }}>
-                    <TouchableOpacity onPress={clearHistory} style={{ padding: 8 }}>
-                      <Ionicons name="trash-outline" size={18} color={D.iconColor} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setIsOpen(false)} style={{ padding: 8 }}>
-                      <Ionicons name="chevron-down" size={20} color={D.iconColor} />
-                    </TouchableOpacity>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      paddingBottom: 10,
+                      borderBottomWidth: 0.5,
+                      borderBottomColor: D.divider,
+                      paddingLeft: 8,
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 8,
+                      }}
+                    >
+                      <View
+                        style={{
+                          borderRadius: 8,
+                          overflow: "hidden",
+                          width: 32,
+                          height: 32,
+                        }}
+                      >
+                        <AI1 width={32} height={32} />
+                      </View>
+                      <Text
+                        style={{
+                          color: D.textPrimary,
+                          fontSize: 15,
+                          fontWeight: "600",
+                        }}
+                      >
+                        Health Assistant
+                      </Text>
+                    </View>
+                    <View
+                      style={{ flexDirection: "row", alignItems: "center" }}
+                    >
+                      <TouchableOpacity
+                        onPress={clearHistory}
+                        style={{ padding: 8 }}
+                      >
+                        <Ionicons
+                          name="trash-outline"
+                          size={18}
+                          color={D.iconColor}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => setIsOpen(false)}
+                        style={{ padding: 8 }}
+                      >
+                        <Ionicons
+                          name="chevron-down"
+                          size={20}
+                          color={D.iconColor}
+                        />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 )}
 
                 <NoKeyBanner />
-
+                {/* Messages */}
                 <FlatList
                   ref={flatListRef}
                   data={messages}
                   keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => <ChatBubble role={item.role} text={item.text} />}
-                  contentContainerStyle={messages.length === 0 ? { flex: 1 } : { paddingVertical: 12 }}
-                  ListEmptyComponent={messages.length === 0 ? <EmptyState /> : null}
+                  renderItem={({ item }) => (
+                    <ChatBubble role={item.role} text={item.text} />
+                  )}
+                  contentContainerStyle={
+                    messages.length === 0
+                      ? { flex: 1 }
+                      : { paddingVertical: 12 }
+                  }
+                  ListEmptyComponent={
+                    messages.length === 0 ? <EmptyState /> : null
+                  }
                   onContentSizeChange={() => {
-                    if (isAtBottom.current) flatListRef.current?.scrollToEnd({ animated: true });
+                    if (isAtBottom.current)
+                      flatListRef.current?.scrollToEnd({ animated: true });
                   }}
-                  onScroll={({ nativeEvent }) => {
-                    const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
-                    isAtBottom.current = layoutMeasurement.height + contentOffset.y >= contentSize.height - 40;
+                  onScroll={(e) => {
+                    const { layoutMeasurement, contentOffset, contentSize } =
+                      e.nativeEvent;
+                    isAtBottom.current =
+                      layoutMeasurement.height + contentOffset.y >=
+                      contentSize.height - 40;
                   }}
                   scrollEventThrottle={16}
                   keyboardShouldPersistTaps="handled"
+                  style={{
+                    flex: 1,
+                    maxHeight:
+                      Platform.OS === "android" && keyboardHeight > 0
+                        ? 420 - 160
+                        : undefined,
+                  }}
                 />
 
                 {/* Loading */}
                 {loading && (
-                  <View style={{ paddingHorizontal: 16, paddingBottom: 8 }}>
-                    <View style={{
-                      backgroundColor: D.loadingBg, borderRadius: 16,
-                      paddingHorizontal: 14, paddingVertical: 10,
-                      flexDirection: "row", alignItems: "center", alignSelf: "flex-start",
-                    }}>
+                  <View style={{ paddingVertical: 8 }}>
+                    <View
+                      style={{
+                        backgroundColor: D.loadingBg,
+                        borderRadius: 16,
+                        paddingHorizontal: 14,
+                        paddingVertical: 10,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        alignSelf: "flex-start",
+                      }}
+                    >
                       <ActivityIndicator size="small" color={D.textSecondary} />
-                      <Text style={{ color: D.textSecondary, fontSize: 13, marginLeft: 8 }}>Thinking…</Text>
+                      <Text
+                        style={{
+                          color: D.textSecondary,
+                          fontSize: 13,
+                          marginLeft: 8,
+                        }}
+                      >
+                        Thinking…
+                      </Text>
                     </View>
                   </View>
                 )}
 
                 {/* Bottom — Tabs + Input */}
-                <View style={{
-                  borderTopWidth: 0.5, borderTopColor: D.divider,
-                  paddingTop: 10, paddingHorizontal: 14,
-                  paddingBottom: Platform.OS === "ios"
-                    ? (keyboardHeight > 0 ? 8 : insets.bottom + 8)
-                    : (keyboardHeight > 0 ? 40 : 32),
-                  backgroundColor: D.bg,
-                }}>
-
+                <View
+                  style={{
+                    borderTopWidth: 0.5,
+                    borderTopColor: D.divider,
+                    paddingTop: 10,
+                    paddingHorizontal: 14,
+                    paddingBottom:
+                      Platform.OS === "android"
+                        ? keyboardHeight > 0
+                          ? 12
+                          : 24
+                        : 8,
+                    backgroundColor: "transparent",
+                  }}
+                >
                   {/* Tabs */}
-                  <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginBottom: 10,
+                    }}
+                  >
                     <TouchableOpacity
                       onPress={() => setActiveTab("todo")}
                       activeOpacity={0.8}
                       style={{
-                        flexDirection: "row", alignItems: "center",
-                        paddingHorizontal: 14, paddingVertical: 7,
-                        borderRadius: 10, marginRight: 8,
-                        backgroundColor: activeTab === "todo" ? D.tabActiveBg : "transparent",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        paddingHorizontal: 14,
+                        paddingVertical: 7,
+                        borderRadius: 10,
+                        marginRight: 8,
+                        backgroundColor:
+                          activeTab === "todo" ? D.tabActiveBg : "transparent",
                         borderWidth: activeTab === "todo" ? 1.5 : 0,
-                        borderColor: activeTab === "todo" ? D.tabActiveBorder : "transparent",
+                        borderColor:
+                          activeTab === "todo"
+                            ? D.tabActiveBorder
+                            : "transparent",
                       }}
                     >
-                      <AI5 width={18} height={18} color={activeTab === "todo" ? D.textPrimary : D.textSecondary} style={{ marginRight: 5 }} />
-                      <Text style={{ fontSize: 13, fontWeight: "600", color: activeTab === "todo" ? D.textPrimary : D.textSecondary }}>
+                      <AI5
+                        width={18}
+                        height={18}
+                        color={
+                          activeTab === "todo" ? D.textPrimary : D.textSecondary
+                        }
+                        style={{ marginRight: 5 }}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontWeight: "600",
+                          color:
+                            activeTab === "todo"
+                              ? D.textPrimary
+                              : D.textSecondary,
+                        }}
+                      >
                         Todo
                       </Text>
                     </TouchableOpacity>
-
                     <TouchableOpacity
                       onPress={() => setActiveTab("health")}
                       activeOpacity={0.8}
                       style={{
-                        flexDirection: "row", alignItems: "center",
-                        paddingHorizontal: 14, paddingVertical: 7,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        paddingHorizontal: 14,
+                        paddingVertical: 7,
                         borderRadius: 10,
-                        backgroundColor: activeTab === "health" ? D.tabActiveBg : "transparent",
+                        backgroundColor:
+                          activeTab === "health"
+                            ? D.tabActiveBg
+                            : "transparent",
                         borderWidth: activeTab === "health" ? 1.5 : 0,
-                        borderColor: activeTab === "health" ? D.tabActiveBorder : "transparent",
+                        borderColor:
+                          activeTab === "health"
+                            ? D.tabActiveBorder
+                            : "transparent",
                       }}
                     >
-                      <AI4 width={18} height={18} color={activeTab === "health" ? D.textPrimary : D.textSecondary} style={{ marginRight: 5 }} />
-                      <Text style={{ fontSize: 13, fontWeight: "600", color: activeTab === "health" ? D.textPrimary : D.textSecondary }}>
+                      <AI4
+                        width={18}
+                        height={18}
+                        color={
+                          activeTab === "health"
+                            ? D.textPrimary
+                            : D.textSecondary
+                        }
+                        style={{ marginRight: 5 }}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontWeight: "600",
+                          color:
+                            activeTab === "health"
+                              ? D.textPrimary
+                              : D.textSecondary,
+                        }}
+                      >
                         Health
                       </Text>
                     </TouchableOpacity>
                   </View>
 
                   {/* Input */}
-                  <View style={{
-                    flexDirection: "row", alignItems: "center",
-                    backgroundColor: D.inputBg,
-                    borderRadius: 999,
-                    borderWidth: 1, borderColor: D.border,
-                    paddingLeft: 16, paddingRight: 6, paddingVertical: 6,
-                  }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      backgroundColor: D.inputBg,
+                      borderRadius: 999,
+                      borderWidth: 1,
+                      borderColor: D.border,
+                      paddingLeft: 16,
+                      paddingRight: 6,
+                      paddingVertical: 6,
+                      marginBottom: 20,
+                    }}
+                  >
                     <TextInput
-                      style={{ flex: 1, fontSize: 14, color: D.textPrimary, maxHeight: 120, paddingVertical: 4 }}
-                      placeholder={activeTab === "todo" ? "Add a task..." : "Ask HDA Ai..."}
+                      style={{
+                        flex: 1,
+                        fontSize: 14,
+                        color: D.textPrimary,
+                        maxHeight: 120,
+                        paddingVertical: 4,
+                      }}
+                      placeholder={
+                        activeTab === "todo" ? "Add a task..." : "Ask HDA Ai..."
+                      }
                       placeholderTextColor={D.textMuted}
                       value={input}
                       onChangeText={setInput}
                       multiline
                       onSubmitEditing={handleSend}
-                      blurOnSubmit={false}
                     />
                     <TouchableOpacity
                       onPress={handleSend}
                       disabled={loading || !input.trim()}
                       activeOpacity={0.8}
-                      style={[{
-                        width: 36, height: 36, borderRadius: 999,
-                        backgroundColor: D.sendBtn,
-                        alignItems: "center", justifyContent: "center", marginLeft: 8,
-                      }, (!input.trim() || loading) && { opacity: 0.35 }]}
+                      style={[
+                        {
+                          width: 36,
+                          height: 36,
+                          borderRadius: 999,
+                          alignItems: "center",
+                          justifyContent: "center",
+                          marginLeft: 8,
+                        },
+                        (!input.trim() || loading) && { opacity: 0.35 },
+                      ]}
                     >
-                      <AI7 width={22} height={22} />
+                      <AI7 width={36} height={36} />
                     </TouchableOpacity>
                   </View>
-
                 </View>
-              </View>
+              </ImageBackground>
             </KeyboardAvoidingView>
           </View>
         </Modal>
       </>
     );
-  }
+  },
 );

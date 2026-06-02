@@ -21,7 +21,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
     week: 1,
-    chapterColor: "#745A52",
+    chapterColor: "#2D1B69",
     bullets: [
       "Strip away cognitive noise to find your absolute personal clarity and true intent.",
       "Evaluate what specific production niches you are naturally good at.",
@@ -35,7 +35,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
     week: 1,
-    chapterColor: "#745A52",
+    chapterColor: "#2D1B69",
     bullets: [
       "Secure and install a specialized gym membership near your immediate home.",
       "Connect directly with your gym trainer for a personalized physical kickoff routine.",
@@ -49,7 +49,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
     week: 1,
-    chapterColor: "#745A52",
+    chapterColor: "#2D1B69",
     bullets: [
       "Learn Zarna's custom lecture on drawing doodles and analog habit layouts.",
       "Master efficient, structured note-taking habits using tactile pen and paper.",
@@ -63,7 +63,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
     week: 1,
-    chapterColor: "#745A52",
+    chapterColor: "#2D1B69",
     bullets: [
       "Deconstruct the precise structural benefits and blueprints of custom habit trackers.",
       "Turn loose daily actions into repeatable, bulletproof mental and physical workflows.",
@@ -77,7 +77,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
     week: 1,
-    chapterColor: "#745A52",
+    chapterColor: "#2D1B69",
     bullets: [
       "Select a project idea under strict constraints: No digital products that AI can kill tomorrow.",
       "Pivot parameters toward shared experiences or physical projects like AR systems, card games, or holograms.",
@@ -91,7 +91,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
     week: 1,
-    chapterColor: "#745A52",
+    chapterColor: "#2D1B69",
     bullets: [
       "Stabilize mental focus and anxieties using standard Anapan Meditation breath principles.",
       "Use deep focus anchoring to construct a strong internal foundation for your mind.",
@@ -105,7 +105,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
     week: 1,
-    chapterColor: "#745A52",
+    chapterColor: "#2D1B69",
     bullets: [
       "Complete a professional fashion and image stylist analysis to discover your presentation style.",
       "Identify specific aesthetic styles and wardrobe choices tailored to your body type.",
@@ -119,14 +119,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
     week: 1,
-    chapterColor: "#745A52",
+    chapterColor: "#2D1B69",
     bullets: [
       "Research, decide upon, and register early at a suitable formal meditation facility.",
       "Lock in your formal 10-day silent meditation journey scheduled at the absolute end of the course.",
       "Establish a rigid timeline boundary to mark your graduation transition into life 2.0.",
     ],
   },
-
   // ─── Phase 1 | Chapter 2 : FigJam AI & Product Specs (Week 2) ───
   {
     id: 9,
@@ -135,7 +134,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 2",
     chapterTitle: "FigJam AI & Product Specs",
     week: 2,
-    chapterColor: "#2B3D50",
+    chapterColor: "#0F3460",
     bullets: [
       "Discover the fundamentals of FigJam and the native FigJam AI workspace architecture.",
       "Use text prompt blocks to instantly create customized meeting templates, board structures, and visual timelines.",
@@ -149,7 +148,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 2",
     chapterTitle: "FigJam AI & Product Specs",
     week: 2,
-    chapterColor: "#2B3D50",
+    chapterColor: "#0F3460",
     bullets: [
       "Use FigJam AI to instantly sort messy brainstorm stickies into clean, clear thematic groups.",
       "Hone in on core patterns and automatically summarize extensive board data with a single click.",
@@ -163,7 +162,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 2",
     chapterTitle: "FigJam AI & Product Specs",
     week: 2,
-    chapterColor: "#2B3D50",
+    chapterColor: "#0F3460",
     bullets: [
       "Study the deep logic of human problems through self-discovery and internal inspection.",
       "Track the core three-part framework: Where does pain sit, why does it happen, and what is its cure?",
@@ -177,7 +176,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 2",
     chapterTitle: "FigJam AI & Product Specs",
     week: 2,
-    chapterColor: "#2B3D50",
+    chapterColor: "#0F3460",
     bullets: [
       "Breakdown the basic structure of a corporate white-paper document and why it is made.",
       "Isolate your target user persona and define the precise problem landscape your product addresses.",
@@ -191,14 +190,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 2",
     chapterTitle: "FigJam AI & Product Specs",
     week: 2,
-    chapterColor: "#2B3D50",
+    chapterColor: "#0F3460",
     bullets: [
       "Brainstorm target brand identifiers to get down to a definitive name for your product.",
       "Craft and lock in a sharp, high-impact tagline that represents your core value matrix.",
       "Double-check your core parameters against anti-AI guardrails to ensure permanent viability.",
     ],
   },
-
   // ─── Phase 1 | Chapter 3 : Figma Foundations & AI Assets (Week 2) ───
   {
     id: 14,
@@ -207,7 +205,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 3",
     chapterTitle: "Figma Foundations & AI Assets",
     week: 2,
-    chapterColor: "#4A3F6B",
+    chapterColor: "#1B4332",
     bullets: [
       "Learn why every modern design software operates on identical spatial logic.",
       "Map interface patterns common to all viewports using cursors, toolbars, and white space.",
@@ -221,7 +219,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 3",
     chapterTitle: "Figma Foundations & AI Assets",
     week: 2,
-    chapterColor: "#4A3F6B",
+    chapterColor: "#1B4332",
     bullets: [
       "Study prompt generation engineering to render ultra-precise, complex artistic visuals.",
       "Master blending visual settings, aspects, and stylization weights using text-to-image engines.",
@@ -235,7 +233,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 3",
     chapterTitle: "Figma Foundations & AI Assets",
     week: 2,
-    chapterColor: "#4A3F6B",
+    chapterColor: "#1B4332",
     bullets: [
       "Explore diverse corporate logo classifications and collect moodboards on Pinterest.",
       "Generate unique reference concepts using tailored asset prompts.",
@@ -250,7 +248,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 3",
     chapterTitle: "Figma Foundations & AI Assets",
     week: 2,
-    chapterColor: "#4A3F6B",
+    chapterColor: "#1B4332",
     bullets: [
       "Deconstruct scale, weight, and visual contrast principles used for high-profile assets.",
       "Apply deep color theory matrices to pick palettes that stir exact target human emotions.",
@@ -264,7 +262,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 3",
     chapterTitle: "Figma Foundations & AI Assets",
     week: 2,
-    chapterColor: "#4A3F6B",
+    chapterColor: "#1B4332",
     bullets: [
       "Mix curated Pinterest layout research with raw generated AI textures and images.",
       "Blend layered graphical elements, typography blocks, and masks inside Figma.",
@@ -278,14 +276,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 3",
     chapterTitle: "Figma Foundations & AI Assets",
     week: 2,
-    chapterColor: "#4A3F6B",
+    chapterColor: "#1B4332",
     bullets: [
       "Construct original brand visual patterns, grid structures, and decorative shapes.",
       "Layout swipeable, multi-frame carousel templates for vertical social media feeds.",
       "Scale asset boundaries to generate uniform Twitter headers and YouTube cover banners.",
     ],
   },
-
   // ─── Phase 1 | Chapter 4 : Landing Page Strategy & Core AI Systems (Week 3) ───
   {
     id: 20,
@@ -294,7 +291,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 4",
     chapterTitle: "Landing Page Strategy & Core AI",
     week: 3,
-    chapterColor: "#3D5A3E",
+    chapterColor: "#9A3324",
     bullets: [
       "Study fundamental conversion metrics to understand why high-performing landing pages are built.",
       "Isolate your target web traffic profiles and define clear visitor expectations.",
@@ -308,7 +305,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 4",
     chapterTitle: "Landing Page Strategy & Core AI",
     week: 3,
-    chapterColor: "#3D5A3E",
+    chapterColor: "#9A3324",
     bullets: [
       "Master font styles, type selection scales, and structural web readability.",
       "Standardize average layout type sizing parameters across mobile and desktop banners.",
@@ -322,7 +319,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 4",
     chapterTitle: "Landing Page Strategy & Core AI",
     week: 3,
-    chapterColor: "#3D5A3E",
+    chapterColor: "#9A3324",
     bullets: [
       "Explore top-tier designer landing pages on Pinterest to gather spatial inspiration.",
       "Deconstruct and blend layout blocks from 5 leading web designs into an original map.",
@@ -336,14 +333,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 4",
     chapterTitle: "Landing Page Strategy & Core AI",
     week: 3,
-    chapterColor: "#3D5A3E",
+    chapterColor: "#9A3324",
     bullets: [
       "Master advanced text prompting rules explicitly built for the Figma Make engine.",
       "Instruct generative prompt matrix blocks to instantly output structurally functional landing page mockups.",
       "Rapidly customize layout sections and generated assets inside your design environment.",
     ],
   },
-
   // ─── Phase 1 | Chapter 5 : Component Systems & Layout Architecture (Week 3) ───
   {
     id: 24,
@@ -352,7 +348,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 5",
     chapterTitle: "Figma Design Systems & Assembly",
     week: 3,
-    chapterColor: "#5A3D3D",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Learn the foundational mechanics of reusable master components and design instances.",
       "Group atom-level building blocks into flexible nested layout modules.",
@@ -366,14 +362,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 5",
     chapterTitle: "Figma Design Systems & Assembly",
     week: 3,
-    chapterColor: "#5A3D3D",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Construct unified button matrices, navigation panels, and active link states.",
       "Deploy systematic localized spacing tokens, padding parameters, and column grids.",
       "Connect all variable values together to achieve responsive layout fluidities.",
     ],
   },
-
   // ─── Phase 1 | Chapter 6 : Responsive Mobile Adaptation (Week 4) ───
   {
     id: 26,
@@ -382,7 +377,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 6",
     chapterTitle: "Mobile App UI/UX Architecture",
     week: 4,
-    chapterColor: "#2B4A5A",
+    chapterColor: "#784212",
     bullets: [
       "Convert your established high-fidelity desktop website assets down into a native mobile workspace layout.",
       "Restructure wide grid features into vertical stack structures to streamline thumb-driven interaction maps.",
@@ -396,7 +391,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 6",
     chapterTitle: "Mobile App UI/UX Architecture",
     week: 4,
-    chapterColor: "#2B4A5A",
+    chapterColor: "#784212",
     bullets: [
       "Reposition typography scales and margins to maximize visibility and accessibility on small screens.",
       "Size navigation components and active button zones to standard pixel sizes to prevent user touch errors.",
@@ -410,7 +405,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 6",
     chapterTitle: "Mobile App UI/UX Architecture",
     week: 4,
-    chapterColor: "#2B4A5A",
+    chapterColor: "#784212",
     bullets: [
       "Map interactive wiring paths across panels to build a functional user flow mockup demonstration.",
       "Use smart animate parameters to configure smooth, realistic modal slide-ups and layout sweeps.",
@@ -424,14 +419,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 6",
     chapterTitle: "Mobile App UI/UX Architecture",
     week: 4,
-    chapterColor: "#2B4A5A",
+    chapterColor: "#784212",
     bullets: [
       "Cast your finalized mockup canvas directly into the Figma Mirror application.",
       "Audit alignment mistakes, balance font weights, and eliminate interface friction.",
       "Lock down a pixel-perfect, production-ready blueprint ready for Framer development.",
     ],
   },
-
   // ─── Phase 1 | Chapter 7 : Design.md & Google Project Stitch AI (Week 4) ───
   {
     id: 30,
@@ -440,7 +434,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 7",
     chapterTitle: "Generative Design System Automation",
     week: 4,
-    chapterColor: "#4A4A2B",
+    chapterColor: "#4A235A",
     bullets: [
       "Master Markdown rules required to author a professional software design specification text file.",
       "Learn to systematically serialize and export your active Figma design token values into an organized, flat text layout.",
@@ -454,7 +448,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 7",
     chapterTitle: "Generative Design System Automation",
     week: 4,
-    chapterColor: "#4A4A2B",
+    chapterColor: "#4A235A",
     bullets: [
       "Learn the foundational prompt syntax to utilize Google Project Stitch AI as an interactive co-pilot engine.",
       "Inject your custom exported Design.md text parameters directly into the context memory of the AI node.",
@@ -468,14 +462,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 1 | Chapter 7",
     chapterTitle: "Generative Design System Automation",
     week: 4,
-    chapterColor: "#4A4A2B",
+    chapterColor: "#4A235A",
     bullets: [
       "Instruct the Stitch engine to output completely new asset variants matching your exact Design.md document rules.",
       "Use generative prompt adjustments to automatically produce themed dark-mode files and multi-device templates.",
       "Port your finalized, consistent asset layers back into Figma to complete your verified universal brand engine.",
     ],
   },
-
   // ─── Phase 2 | Chapter 8 : Framer Workspace Foundations (Week 5) ───
   {
     id: 33,
@@ -484,7 +477,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2 | Chapter 8",
     chapterTitle: "Figma-to-NoCode Translation",
     week: 5,
-    chapterColor: "#1A3A4A",
+    chapterColor: "#2D1B69",
     bullets: [
       "Explore the complete Framer interface, breaking down Pages, Layers, and the global Assets library.",
       "Master the operational logic of code-free web environments and production staging fields.",
@@ -498,7 +491,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2 | Chapter 8",
     chapterTitle: "Figma-to-NoCode Translation",
     week: 5,
-    chapterColor: "#1A3A4A",
+    chapterColor: "#2D1B69",
     bullets: [
       "Set up standard viewport container blocks to build uniform desktop, tablet, and mobile breakpoints.",
       "Use pre-built structure layouts to securely convert raw graphic ideas into real web boxes.",
@@ -512,14 +505,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2 | Chapter 8",
     chapterTitle: "Figma-to-NoCode Translation",
     week: 5,
-    chapterColor: "#1A3A4A",
+    chapterColor: "#2D1B69",
     bullets: [
       "Deploy specialized plugins to quickly copy structural graphic assets directly from your Figma artboards.",
       "Import active design system assets into Framer while preserving core layout layer depths.",
       "Debug broken bounding geometry, fix text line anomalies, and align scaling factors.",
     ],
   },
-
   // ─── Phase 2 | Chapter 9 : Generative Framer Workshop Modules (Week 5) ───
   {
     id: 36,
@@ -528,14 +520,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2 | Chapter 9",
     chapterTitle: "AI Component Engineering Masterclass",
     week: 5,
-    chapterColor: "#2B1A4A",
+    chapterColor: "#0F3460",
     bullets: [
       "Open the Framer Workshop panel to explore its dedicated AI design workspace engine and learn standard logic parameters.",
       "Write text prompt scripts inside the workshop console to output functional web components, customized layout grids, nav arrays, and footer variations instantly.",
       "Use conversational prompts to program smart hover transitions, active click parameters, and complex canvas entrance sequences.",
     ],
   },
-
   // ─── Phase 2 | Chapter 10 : Generative 3D Modeling Systems (Week 6) ───
   {
     id: 37,
@@ -544,7 +535,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2 | Chapter 10",
     chapterTitle: "Generative Spatial Engineering",
     week: 6,
-    chapterColor: "#3A1A2B",
+    chapterColor: "#1B4332",
     bullets: [
       "Learn foundational prompt mechanics to output lightweight, web-optimized 3D shapes from raw text descriptions.",
       "Utilize text-to-3D and image-to-3D engines within browser-based workspaces to rapidly build product drafts.",
@@ -558,7 +549,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2 | Chapter 10",
     chapterTitle: "Generative Spatial Engineering",
     week: 6,
-    chapterColor: "#3A1A2B",
+    chapterColor: "#1B4332",
     bullets: [
       "Generate high-definition textures and physically-based rendering (PBR) material maps using text commands.",
       "Adjust material values including roughness, metallic shine, and environmental lighting variables.",
@@ -572,14 +563,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2 | Chapter 10",
     chapterTitle: "Generative Spatial Engineering",
     week: 6,
-    chapterColor: "#3A1A2B",
+    chapterColor: "#1B4332",
     bullets: [
       "Automatically optimize structural topology to ensure hyper-fast browser loading times on live landing pages.",
       "Use automated AI skinning and rigging controls to prepare your generated assets for interaction maps.",
       "Clean up geometry boundaries and export assets into standardized production formats like GLB or FBX.",
     ],
   },
-
   // ─── Phase 2 | Chapter 11 : Production Integration Architecture (Week 6) ───
   {
     id: 40,
@@ -588,7 +578,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2 | Chapter 11",
     chapterTitle: "Framer 3D Interactivity & Hosting",
     week: 6,
-    chapterColor: "#1A2B3A",
+    chapterColor: "#9A3324",
     bullets: [
       "Set up standard base properties and variant states for your models without writing code.",
       "Wire up event triggers to drive interactive loops based on user mouse movements and click instances.",
@@ -602,7 +592,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2 | Chapter 11",
     chapterTitle: "Framer 3D Interactivity & Hosting",
     week: 6,
-    chapterColor: "#1A2B3A",
+    chapterColor: "#9A3324",
     bullets: [
       "Export your live interactive asset models using secure staging URLs and embed scripts.",
       "Inject your spatial objects directly into responsive container boxes inside your Framer layout tree.",
@@ -616,14 +606,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2 | Chapter 11",
     chapterTitle: "Framer 3D Interactivity & Hosting",
     week: 6,
-    chapterColor: "#1A2B3A",
+    chapterColor: "#9A3324",
     bullets: [
       "Synchronize model rotation steps and spatial scales with real-time browser scrolling parameters.",
       "Build interactive transition paths where objects organically unfold or transform as viewers traverse your site.",
       "Run layout tests to eliminate tracking latency, optimize loading performance, and publish to your custom domain.",
     ],
   },
-
   // ─── Phase 2.5 | Chapter 1 : Advanced Vibe Coding with Claude (Week 7) ───
   {
     id: 43,
@@ -632,7 +621,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
     week: 7,
-    chapterColor: "#FF6B2B",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Shift from conversational chatbot windows to an intense, multi-file local vibe-coding workspace.",
       "Master the Claude Command Line Interface (CLI) environment to handle complex background automation runs.",
@@ -646,7 +635,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
     week: 7,
-    chapterColor: "#FF6B2B",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Set up deep context windows to prevent token loss across hours of complex workspace development.",
       "Isolate high-volume system operations and file outputs into specialized context splits.",
@@ -660,7 +649,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
     week: 7,
-    chapterColor: "#FF6B2B",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Write your master local CLAUDE.md configuration file inside your project's root folder.",
       "Hardcode architecture guidelines, design parameters, and review check-lists into the AI's core memory.",
@@ -674,7 +663,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
     week: 7,
-    chapterColor: "#FF6B2B",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Author specialized SKILL.md playbooks to extend your agent's domain capabilities.",
       "Package repetitive visual design reviews and structural staging pushes into single short custom tasks.",
@@ -688,7 +677,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
     week: 7,
-    chapterColor: "#FF6B2B",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Learn Model Context Protocol (MCP) standards to safely link your AI straight to your local asset folders.",
       "Use secure protocol tunnels to bypass private company network firewalls responsibly.",
@@ -702,7 +691,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
     week: 7,
-    chapterColor: "#FF6B2B",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Connect your live Figma design component databases using official workspace context connectors.",
       "Read web typography matrices, local layout tokens, and UI styles directly into your prompt run.",
@@ -716,7 +705,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
     week: 7,
-    chapterColor: "#FF6B2B",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Synchronize multi-app documentation spanning Google Drive files, Notion notes, and Slack arrays.",
       "Pull user research data and startup specifications into active AI memory with a single click.",
@@ -730,7 +719,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
     week: 7,
-    chapterColor: "#FF6B2B",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Switch from normal chat loops to the multi-step Claude Cowork persistent desktop agent workspace.",
       "Describe complex goals in plain English and let the desktop agent outline and execute its own plan.",
@@ -744,7 +733,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
     week: 7,
-    chapterColor: "#FF6B2B",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Install specialized pre-packaged business, legal, and engineering workflow plug-ins.",
       "Execute instant slash commands like /data:analyze or /marketing:metrics-review.",
@@ -758,14 +747,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
     week: 7,
-    chapterColor: "#FF6B2B",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Spawn separate parallel sub-agent workers to run isolated workspace tasks at the same time.",
       "Direct a master lead agent to split complex assignments, manage sub-tasks, and merge results.",
       "Set up recurring morning routines to audit changes and write updates on managed infrastructure.",
     ],
   },
-
   // ─── Phase 2.5 | Chapter 2 : ChatGPT Deep Research (Week 8) ───
   {
     id: 53,
@@ -774,7 +762,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 2",
     chapterTitle: "Advanced Reasoning & Research Systems",
     week: 8,
-    chapterColor: "#10A37F",
+    chapterColor: "#784212",
     bullets: [
       "Initialize multi-step, autonomous web research loops using ChatGPT's native Deep Research architecture.",
       "Learn to structure deep discovery questions to direct the AI agent to dive into market niches over hours.",
@@ -788,7 +776,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 2",
     chapterTitle: "Advanced Reasoning & Research Systems",
     week: 8,
-    chapterColor: "#10A37F",
+    chapterColor: "#784212",
     bullets: [
       "Master advanced prompt design paradigms utilizing the reasoning modes of ChatGPT o-series models.",
       "Force the system to execute hidden background chain-of-thought protocols before outputting response steps.",
@@ -802,14 +790,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 2",
     chapterTitle: "Advanced Reasoning & Research Systems",
     week: 8,
-    chapterColor: "#10A37F",
+    chapterColor: "#784212",
     bullets: [
       "Use system profile prompts to permanently feed your product specifications into the AI's core profile memory.",
       "Learn to update, clear, or tweak personal background facts to scale customized long-term outputs.",
       "Build persistent baseline style constraints that track automatically across separate new chat rooms.",
     ],
   },
-
   // ─── Phase 2.5 | Chapter 3 : ChatGPT Desktop App Connectors (Week 8) ───
   {
     id: 56,
@@ -818,7 +805,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 3",
     chapterTitle: "Cross-App Production Automation",
     week: 8,
-    chapterColor: "#0D7A5F",
+    chapterColor: "#4A235A",
     bullets: [
       "Set up and secure the ChatGPT desktop app environment directly linked to your active code editors.",
       "Enable system-level view context parameters so the AI co-pilot can read and audit raw open script boxes.",
@@ -832,7 +819,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 3",
     chapterTitle: "Cross-App Production Automation",
     week: 8,
-    chapterColor: "#0D7A5F",
+    chapterColor: "#4A235A",
     bullets: [
       "Link the Canva workspace connector to instantly map raw data into finished investor presentation decks.",
       "Connect ChatGPT straight to Figma to run automated reviews on active visual layout architectures.",
@@ -846,14 +833,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 3",
     chapterTitle: "Cross-App Production Automation",
     week: 8,
-    chapterColor: "#0D7A5F",
+    chapterColor: "#4A235A",
     bullets: [
       "Connect your Adobe account natively to ChatGPT to drive background layout runs via text lines.",
       "Automate graphic asset generation and heavy background filters inside Adobe Express and Photoshop.",
       "Port your completed, automated visual layers back into your Framer canvas files smoothly.",
     ],
   },
-
   // ─── Phase 2.5 | Chapter 4 : Google AI Studio (Week 9) ───
   {
     id: 59,
@@ -862,7 +848,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 4",
     chapterTitle: "Hands-Free Multimodal Interaction",
     week: 9,
-    chapterColor: "#1A73E8",
+    chapterColor: "#2D1B69",
     bullets: [
       "Configure continuous, non-stop voice conversations with Gemini using native microphone inputs.",
       "Master expressing complex startup strategies, layout structures, and loose logic ideas fluently without stopping to type.",
@@ -876,7 +862,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 4",
     chapterTitle: "Hands-Free Multimodal Interaction",
     week: 9,
-    chapterColor: "#1A73E8",
+    chapterColor: "#2D1B69",
     bullets: [
       "Setup a complete multi-view web platform containing separate, fully functional Client-Side interfaces and Admin-Side control frameworks.",
       "Write text prompt matrix chains inside Google AI Studio to instantly generate responsive React code architectures.",
@@ -890,14 +876,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 4",
     chapterTitle: "Hands-Free Multimodal Interaction",
     week: 9,
-    chapterColor: "#1A73E8",
+    chapterColor: "#2D1B69",
     bullets: [
       "Prompt Google AI Studio to write high-performance 3D WebGL script structures and interactive canvas components.",
       "Embed your web-optimized custom 3D design models natively into your code layouts without losing execution speed.",
       "Build interactive browser-based games and immersive spatial landing page features that respond instantly to mouse actions.",
     ],
   },
-
   // ─── Phase 2.5 | Chapter 5 : Google Cloud Staging & Firebase (Week 9) ───
   {
     id: 62,
@@ -906,7 +891,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 5",
     chapterTitle: "Production Backends & Cloud Operations",
     week: 9,
-    chapterColor: "#F57C00",
+    chapterColor: "#0F3460",
     bullets: [
       "Connect your Google AI Studio project files directly to a scalable backend database environment using Firebase integration.",
       "Implement secure system authentication paths enabling users to execute instant 'Sign In with Google' login flows.",
@@ -920,7 +905,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 5",
     chapterTitle: "Production Backends & Cloud Operations",
     week: 9,
-    chapterColor: "#F57C00",
+    chapterColor: "#0F3460",
     bullets: [
       "Navigate the Google Cloud Console to provision web project instances and configure structural project endpoints.",
       "Search for, purchase, and lock down your startup's dedicated official custom website domain name framework.",
@@ -934,14 +919,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 | Chapter 5",
     chapterTitle: "Production Backends & Cloud Operations",
     week: 9,
-    chapterColor: "#F57C00",
+    chapterColor: "#0F3460",
     bullets: [
       "Embed Google Analytics tracking tags directly into your application's code structure to capture live visitor activities.",
       "Construct clean dashboard panels to monitor active session numbers, geographic traffic streams, and user retention curves.",
       "Audit live data metrics to evaluate product-market fit and optimize your platform for real-world production releases.",
     ],
   },
-
   // ─── Phase 2.5 Expert | Chapter 1 : Claude Code Terminal (Week 10) ───
   {
     id: 65,
@@ -950,7 +934,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 Expert | Chapter 1",
     chapterTitle: "Claude Code Terminal Orchestration",
     week: 10,
-    chapterColor: "#CC785C",
+    chapterColor: "#1B4332",
     bullets: [
       "Set up local dependencies (Node.js and Git) and install the native Claude Code binary directly into your system terminal.",
       "Run authentication paths using secure Console authorization loops to enable pre-paid centralized cost tracking profiles.",
@@ -964,7 +948,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 Expert | Chapter 1",
     chapterTitle: "Claude Code Terminal Orchestration",
     week: 10,
-    chapterColor: "#CC785C",
+    chapterColor: "#1B4332",
     bullets: [
       "Trigger Claude Code's full agentic loop to explore project trees, write structural plans, and await manual approval lines.",
       "Use conversational prompts to command multi-file changes, automatic styling fixes, and layout alterations at the same time.",
@@ -978,14 +962,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 Expert | Chapter 1",
     chapterTitle: "Claude Code Terminal Orchestration",
     week: 10,
-    chapterColor: "#CC785C",
+    chapterColor: "#1B4332",
     bullets: [
       "Use text commands to instruct the agent to crawl, read, and completely explain a raw open-source GitHub project repository.",
       "Extract layout files, functional design pieces, and code architectures found across the web.",
       "Merge and graft those external features cleanly into your live app files without breaking background settings.",
     ],
   },
-
   // ─── Phase 2.5 Expert | Chapter 2 : MCP Automation Systems (Week 10) ───
   {
     id: 68,
@@ -994,7 +977,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 Expert | Chapter 2",
     chapterTitle: "MCP Server Integrations",
     week: 10,
-    chapterColor: "#7B4F9E",
+    chapterColor: "#9A3324",
     bullets: [
       "Learn Model Context Protocol (MCP) definitions and run terminal commands to link external servers directly into your agent.",
       "Map secure protocol routing variables inside the root system settings file to give your agent permission to use real-world tools.",
@@ -1008,7 +991,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 Expert | Chapter 2",
     chapterTitle: "MCP Server Integrations",
     week: 10,
-    chapterColor: "#7B4F9E",
+    chapterColor: "#9A3324",
     bullets: [
       "Link the Figma MCP server to allow your terminal agent to read layout variables, frames, and typography maps directly.",
       "Connect the Meta Ads or marketing protocol to pull campaign records, monitor asset data, and track metrics from your terminal.",
@@ -1022,14 +1005,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 Expert | Chapter 2",
     chapterTitle: "MCP Server Integrations",
     week: 10,
-    chapterColor: "#7B4F9E",
+    chapterColor: "#9A3324",
     bullets: [
       "Integrate Google Cloud and specialized cloud infrastructure MCP servers directly into your active console engine.",
       "Instruct the agent to run code deployments, track server instances, and audit project statuses using plain English commands.",
       "Leverage built-in git tools to commit changes, log errors, and push verified code directly to live staging platforms.",
     ],
   },
-
   // ─── Phase 2.5 Expert | Chapter 3 : Google Antigravity (Week 11) ───
   {
     id: 71,
@@ -1038,7 +1020,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 Expert | Chapter 3",
     chapterTitle: "Transitioning to Heavy Production",
     week: 11,
-    chapterColor: "#34A853",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Execute the official Google I/O 2026 context export sequence to bring your web-built AI Studio prototype into Antigravity 2.0.",
       "Port over your full conversational history and prompt states alongside the source code with a single click.",
@@ -1052,7 +1034,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 Expert | Chapter 3",
     chapterTitle: "Transitioning to Heavy Production",
     week: 11,
-    chapterColor: "#34A853",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Install and configure the new stable Android CLI 1.0 utility onto your machine's system directory.",
       "Allow your Antigravity agent to communicate with Android Studio's core compilation engine without manually opening the heavy IDE UI.",
@@ -1066,14 +1048,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 Expert | Chapter 3",
     chapterTitle: "Transitioning to Heavy Production",
     week: 11,
-    chapterColor: "#34A853",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Upgrade your setup to the $100/mo Google AI Ultra plan to access higher usage limits and full agent coordination features.",
       "Direct your primary Antigravity agent to spawn separate parallel subagents to handle focused sub-tasks.",
       "Run background tasks asynchronously so you can keep iterating on your front-end layout components.",
     ],
   },
-
   // ─── Phase 2.5 Expert | Chapter 4 : Gemini-Driven App Distribution (Week 11) ───
   {
     id: 74,
@@ -1082,7 +1063,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 Expert | Chapter 4",
     chapterTitle: "Jetpack Compose & Google Play Deployment",
     week: 11,
-    chapterColor: "#1A8754",
+    chapterColor: "#784212",
     bullets: [
       "Command your agent to completely refactor loose user views into clean, native Jetpack Compose Kotlin structures.",
       "Use advanced Android skills to let the agent render live visual layout previews of your screens directly.",
@@ -1096,7 +1077,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 Expert | Chapter 4",
     chapterTitle: "Jetpack Compose & Google Play Deployment",
     week: 11,
-    chapterColor: "#1A8754",
+    chapterColor: "#784212",
     bullets: [
       "Wire up your active workspace agent directly to your Google Play Developer Console profile settings.",
       "Automate code building, bundle key signing, and version verification tests through simple command terminal prompts.",
@@ -1110,14 +1091,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 2.5 Expert | Chapter 4",
     chapterTitle: "Jetpack Compose & Google Play Deployment",
     week: 11,
-    chapterColor: "#1A8754",
+    chapterColor: "#784212",
     bullets: [
       "Initialize the new Android Studio Migration Assistant agent to map your code structure onto cross-platform targets.",
       "Let the migration agent read your native Kotlin layouts and rewrite them into clean iOS Swift architectures.",
       "Package your newly cross-migrated visual assets and upload the completed app bundle straight to Apple's App Store Connect portal.",
     ],
   },
-
   // ─── Phase 3 | Chapter 1 : Generative Pre-Production (Week 12) ───
   {
     id: 77,
@@ -1126,7 +1106,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 1",
     chapterTitle: "Multi-Source Image Composition",
     week: 12,
-    chapterColor: "#C2185B",
+    chapterColor: "#4A235A",
     bullets: [
       "Study how to scrape and collect raw layout geometries and framing inspirations from Pinterest.",
       "Learn to combine distinct reference styles together to formulate one unified visual system in your head.",
@@ -1140,7 +1120,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 1",
     chapterTitle: "Multi-Source Image Composition",
     week: 12,
-    chapterColor: "#C2185B",
+    chapterColor: "#4A235A",
     bullets: [
       "Master advanced text-to-image prompt parameters utilizing the native ChatGPT Images 2.0 engine.",
       "Command aspect changes, camera lenses, lighting styles, and compositional values without code.",
@@ -1154,7 +1134,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 1",
     chapterTitle: "Multi-Source Image Composition",
     week: 12,
-    chapterColor: "#C2185B",
+    chapterColor: "#4A235A",
     bullets: [
       "Initialize side-by-side prompt generation parameters using the Google AI Studio developer playground.",
       "Switch between diverse production models to test how different network weights render identical phrases.",
@@ -1168,7 +1148,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 1",
     chapterTitle: "Multi-Source Image Composition",
     week: 12,
-    chapterColor: "#C2185B",
+    chapterColor: "#4A235A",
     bullets: [
       "Launch an interactive, AI-powered workspace using the brand new Adobe Firefly Board framework.",
       "Structure loose design thoughts, vector color palettes, text notes, and mockups in one collaborative space.",
@@ -1182,7 +1162,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 1",
     chapterTitle: "Multi-Source Image Composition",
     week: 12,
-    chapterColor: "#C2185B",
+    chapterColor: "#4A235A",
     bullets: [
       "Deploy specialized Adobe text-to-image variations directly inside your structured project board rows.",
       "Run style transfers and vector alignment controls to ensure all generated panels look visually coherent.",
@@ -1196,14 +1176,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 1",
     chapterTitle: "Multi-Source Image Composition",
     week: 12,
-    chapterColor: "#C2185B",
+    chapterColor: "#4A235A",
     bullets: [
       "Onboard into Google Flow (VideoFX/Vids) to translate raw text lines into stylized video assets.",
       "Master camera movement syntax (pans, zooms, track motions) using advanced video prompt engineering.",
       "Generate 3 to 5 second high-fidelity atmospheric AI video clips to deploy across your marketing pipeline.",
     ],
   },
-
   // ─── Phase 3 | Chapter 2 : Storytelling Architecture (Week 13) ───
   {
     id: 83,
@@ -1212,7 +1191,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 2",
     chapterTitle: "Universal Content Planning & Shooting",
     week: 13,
-    chapterColor: "#E64A19",
+    chapterColor: "#2D1B69",
     bullets: [
       "Deconstruct the classic 12 Principles of Animation (Squash & Stretch, Anticipation, Timing) for modern video assets.",
       "Map kinetic physics rules onto standard layouts to ensure your text transitions, graphic pop-ins, and scene cuts feel natural.",
@@ -1226,14 +1205,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 2",
     chapterTitle: "Universal Content Planning & Shooting",
     week: 13,
-    chapterColor: "#E64A19",
+    chapterColor: "#2D1B69",
     bullets: [
       "Build a bulletproof pre-production checklist that works for any video format, from 9:16 Instagram Reels to complex motion graphic tracks.",
       "Plan your timeline markers, sound effects, text cues, and asset placeholders before touching any editing software.",
       "Connect loose creative ideas into a highly systematic execution plan to eliminate editing room confusion.",
     ],
   },
-
   // ─── Phase 3 | Chapter 3 : Generative AI Storyboarding (Week 13) ───
   {
     id: 85,
@@ -1242,14 +1220,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 3",
     chapterTitle: "Conversational Frameworks & Visual Storyboards",
     week: 13,
-    chapterColor: "#BF360C",
+    chapterColor: "#0F3460",
     bullets: [
       "Hold real-time conversational prompt runs with Gemini 2.0 or ChatGPT Images 2.0 to transform your loose script ideas into sequential, highly accurate visual panels.",
       "Master style-locking tokens and narrative continuity variables to ensure that characters, lighting aesthetics, and backgrounds stay completely uniform across every single scene frame.",
       "Port your completed multi-frame generative panels directly into a collaborative Figma canvas layout to arrange, group, and map out the exact chronological structure of your final video asset.",
     ],
   },
-
   // ─── Phase 3 | Chapter 4 : On-Camera Presence (Week 14) ───
   {
     id: 86,
@@ -1258,7 +1235,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 4",
     chapterTitle: "Screen Confidence & Physical Production",
     week: 14,
-    chapterColor: "#6A1E55",
+    chapterColor: "#1B4332",
     bullets: [
       "Learn to use your phone or camera to shoot high-quality, stable baseline source footage with proper frame alignment.",
       "Set up a functional local studio space using a simple mobile stand, clean framing, and accessible layout baselines.",
@@ -1266,7 +1243,6 @@ export const HDA_LESSONS: Lesson[] = [
       "Implement the 'Infinite Rolling Take' routine, allowing the camera to record continuously until you capture your absolute perfect shot.",
     ],
   },
-
   // ─── Phase 3 | Chapter 5 : Post-Production in Premiere Pro (Week 14) ───
   {
     id: 87,
@@ -1275,7 +1251,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 5",
     chapterTitle: "Non-Linear Editing System Workspace",
     week: 14,
-    chapterColor: "#9999FF",
+    chapterColor: "#9A3324",
     bullets: [
       "Onboard into the native Premiere Pro interface layout, mapping the Source Monitor, Program Monitor, Project Panels, and Timeline tracks.",
       "Implement a professional bin structure inside your project window to organize raw camera multi-takes, audio logs, and graphics.",
@@ -1289,7 +1265,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 5",
     chapterTitle: "Non-Linear Editing System Workspace",
     week: 14,
-    chapterColor: "#9999FF",
+    chapterColor: "#9A3324",
     bullets: [
       "Initialize Premiere Pro's AI Transcribe engine to instantly convert your recorded rolling spoken takes into text scripts.",
       "Use text-based editing to quickly delete text lines, clearing dead spaces, filler words, and bad takes directly from the source track.",
@@ -1303,14 +1279,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 5",
     chapterTitle: "Non-Linear Editing System Workspace",
     week: 14,
-    chapterColor: "#9999FF",
+    chapterColor: "#9A3324",
     bullets: [
       "Deploy the Essential Sound panel's Enhanced Speech algorithms to remove room echo and background hum instantly.",
       "Balance baseline audio frequencies to ensure your vocal track remains punchy, clear, and perfectly centered.",
       "Export a clean, high-bitrate master edit file explicitly configured to be port-ready for motion design staging in After Effects.",
     ],
   },
-
   // ─── Phase 3 | Chapter 6 : Motion Design in After Effects (Week 15) ───
   {
     id: 90,
@@ -1319,7 +1294,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 6",
     chapterTitle: "Keyframes & Vector Asset Porting",
     week: 15,
-    chapterColor: "#9999FF",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Onboard into the After Effects workspace layout, mapping composition panels, multi-layered timelines, and effects controls.",
       "Deploy the AEUX plugin framework to instantly transfer raw vector UI components and layout paths directly out of Figma.",
@@ -1333,7 +1308,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 6",
     chapterTitle: "Keyframes & Vector Asset Porting",
     week: 15,
-    chapterColor: "#9999FF",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Master spatial properties, interpolations, and basic transform properties to anchor your baseline animation tracks.",
       "Open the native Graph Editor console to manipulate value curves and speed charts manually.",
@@ -1347,14 +1322,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 6",
     chapterTitle: "Keyframes & Vector Asset Porting",
     week: 15,
-    chapterColor: "#9999FF",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Integrate industry-standard motion graphics utilities, including Animation Composer, Boombox, and Motion 4.",
       "Use automated transformation rigs and shortcut tool palettes to eliminate repetitive keyframing operations.",
       "Synchronize production sound asset libraries directly to visual markers to maximize layout impacts.",
     ],
   },
-
   // ─── Phase 3 | Chapter 7 : Brand Asset Animation (Week 15) ───
   {
     id: 93,
@@ -1363,7 +1337,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 7",
     chapterTitle: "Kinetic Brand Packaging",
     week: 15,
-    chapterColor: "#7B1FA2",
+    chapterColor: "#784212",
     bullets: [
       "Collect a curated motion design moodboard from Pinterest to map dynamic layout paths and visual trends.",
       "Animate your company logo or personal brand asset using layered reveal tracks, mask configurations, and trim paths.",
@@ -1377,7 +1351,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 7",
     chapterTitle: "Kinetic Brand Packaging",
     week: 15,
-    chapterColor: "#7B1FA2",
+    chapterColor: "#784212",
     bullets: [
       "Build high-conversion, responsive motion graphic templates tailored for 9:16 Instagram Reels and YouTube Shorts.",
       "Coordinate layered typography sweeps, shape banners, and image containers to showcase your startup's products.",
@@ -1391,14 +1365,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 7",
     chapterTitle: "Kinetic Brand Packaging",
     week: 15,
-    chapterColor: "#7B1FA2",
+    chapterColor: "#784212",
     bullets: [
       "Export your primary video cut to Veed.io to instantly generate frame-accurate, hardcoded subtitle tracks.",
       "Apply stylized, high-contrast kinetic caption layouts to protect mobile accessibility and maximize content retention loops.",
       "Inject dynamic transitions and atmospheric background sound elements to make your final video timeline pop.",
     ],
   },
-
   // ─── Phase 3 | Chapter 8 : Multi-Platform Export & Publishing (Week 15) ───
   {
     id: 96,
@@ -1407,7 +1380,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 8",
     chapterTitle: "Distribution Mastering & Pipeline Launch",
     week: 15,
-    chapterColor: "#512DA8",
+    chapterColor: "#4A235A",
     bullets: [
       "Set up the After Effects Render Queue and Adobe Media Encoder paths to output high-bitrate, web-optimized MP4 files.",
       "Export dedicated, clean Master File archives alongside modular template layers for fast iteration loops later.",
@@ -1421,7 +1394,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 8",
     chapterTitle: "Distribution Mastering & Pipeline Launch",
     week: 15,
-    chapterColor: "#512DA8",
+    chapterColor: "#4A235A",
     bullets: [
       "Freeze and extract high-impact canvas frames out of your finished video sequence to use as baseline covers.",
       "Compose high-contrast typography stamps and crisp asset outlines inside Figma to optimize your click-through rates.",
@@ -1435,7 +1408,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 8",
     chapterTitle: "Distribution Mastering & Pipeline Launch",
     week: 15,
-    chapterColor: "#512DA8",
+    chapterColor: "#4A235A",
     bullets: [
       "Execute your first official asset release loop by uploading your completed 9:16 vertical Reel to live media channels.",
       "Author engagement-optimized copywriting titles, keyword tags, and strategic platform links to route incoming traffic.",
@@ -1449,14 +1422,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 8",
     chapterTitle: "Distribution Mastering & Pipeline Launch",
     week: 15,
-    chapterColor: "#512DA8",
+    chapterColor: "#4A235A",
     bullets: [
       "Inject your generative AI video assets and cinematic clips smoothly into physical environment layers while maintaining perfect perspective locks.",
       "Utilize advanced Rotobrush algorithms and multi-layered bezier masking tracks to isolate foreground elements and cleanly wrap AI graphics behind real-world subjects.",
       "Architect complex typography animation arrays featuring expressions, kinetic tracking maps, and per-character lighting interactions to achieve a high-end look.",
     ],
   },
-
   // ─── Phase 3 | Chapter 10 : Creator Economy (Week 17) ───
   {
     id: 100,
@@ -1465,7 +1437,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 10",
     chapterTitle: "Platform Algorithms & Case Studies",
     week: 17,
-    chapterColor: "#F9A825",
+    chapterColor: "#2D1B69",
     bullets: [
       "Study the underlying mechanics of the creator economy across Instagram Reels and YouTube Shorts.",
       "Deconstruct short-form content distribution rules to exploit search algorithms and audience distribution waves.",
@@ -1479,7 +1451,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 10",
     chapterTitle: "Platform Algorithms & Case Studies",
     week: 17,
-    chapterColor: "#F9A825",
+    chapterColor: "#2D1B69",
     bullets: [
       "Break down the exact real-world content growth strategies deployed to scale Iconscout and Cashfree systems.",
       "Map custom growth flywheels to systematically tie video views to direct landing page checkouts.",
@@ -1493,14 +1465,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 10",
     chapterTitle: "Platform Algorithms & Case Studies",
     week: 17,
-    chapterColor: "#F9A825",
+    chapterColor: "#2D1B69",
     bullets: [
       "Build an algorithmic competitor board by analyzing 5 elite creators posting regularly in your direct market.",
       "Isolate their layout formats, editing structures, pacing frameworks, and sound design layers to build a design moodboard.",
       "Leverage premium profile options to unlock deep metrics and reverse-engineer successful viral styles.",
     ],
   },
-
   // ─── Phase 3 | Chapter 11 : Sketch Writing & Publishing (Week 17) ───
   {
     id: 103,
@@ -1509,7 +1480,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 11",
     chapterTitle: "30-Second Content Architecture",
     week: 17,
-    chapterColor: "#E65100",
+    chapterColor: "#0F3460",
     bullets: [
       "Study the Deep Thaker playbook for crafting highly engaging 30-second comedic or informative sketches.",
       "Hardcode hyper-impactful 5-word hooks designed to capture viewers instantly within the critical first seconds.",
@@ -1523,7 +1494,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 11",
     chapterTitle: "30-Second Content Architecture",
     week: 17,
-    chapterColor: "#E65100",
+    chapterColor: "#0F3460",
     bullets: [
       "Record your scripted sketch takes and execute high-speed dialogue cutting loops inside Premiere Pro.",
       "Move your layout to After Effects to overlay custom-animated motion graphics and brand assets seamlessly.",
@@ -1537,14 +1508,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 11",
     chapterTitle: "30-Second Content Architecture",
     week: 17,
-    chapterColor: "#E65100",
+    chapterColor: "#0F3460",
     bullets: [
       "Fabricate high-contrast video cover assets in Figma to maintain a cohesive, professional profile identity.",
       "Run a seed release sequence by publishing your short across close channels and masterminds to capture early feedback.",
       "Use initial tracking data to refine visual messaging choices before launching paid media budgets.",
     ],
   },
-
   // ─── Phase 3 | Chapter 12 : Paid Acquisition & Meta Ads (Week 17) ───
   {
     id: 106,
@@ -1553,7 +1523,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 12",
     chapterTitle: "Algorithmic Campaign Operations",
     week: 17,
-    chapterColor: "#1877F2",
+    chapterColor: "#1B4332",
     bullets: [
       "Set up your Meta Business Manager suite, pixel tracking tags, and standard tracking configurations.",
       "Structure optimization funnels designed to push high-converting vertical video creatives to target buyers.",
@@ -1567,7 +1537,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 12",
     chapterTitle: "Algorithmic Campaign Operations",
     week: 17,
-    chapterColor: "#1877F2",
+    chapterColor: "#1B4332",
     bullets: [
       "Install and configure a Model Context Protocol (MCP) server to connect Meta Ads APIs straight to your AI workspace.",
       "Allow terminal-driven engineering agents to monitor ad spends, pull analytics, and check performance matrices.",
@@ -1581,14 +1551,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Phase 3 | Chapter 12",
     chapterTitle: "Algorithmic Campaign Operations",
     week: 17,
-    chapterColor: "#1877F2",
+    chapterColor: "#1B4332",
     bullets: [
       "Use plain English terminal instructions to build, review, and schedule mass marketing content campaigns.",
       "Program AI agents to evaluate ad metrics in real-time, instantly adjusting bids or swapping slow assets.",
       "Link your scheduling calendar arrays directly to automated distribution engines for continuous web visibility.",
     ],
   },
-
   // ─── Final Phase | Chapter 1 : Real-World Networking (Week 18) ───
   {
     id: 109,
@@ -1597,7 +1566,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Final Phase | Chapter 1",
     chapterTitle: "Live Event Integration & Public Performance",
     week: 18,
-    chapterColor: "#D4AF37",
+    chapterColor: "#9A3324",
     bullets: [
       "Learn how to confidently introduce yourself, network fluidly, and share active Academy projects during live local tech conferences.",
       "Master body language, crisp voice modulation, and elevator pitch dynamics to seamlessly explain your design engineering builds.",
@@ -1611,7 +1580,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Final Phase | Chapter 1",
     chapterTitle: "Live Event Integration & Public Performance",
     week: 18,
-    chapterColor: "#D4AF37",
+    chapterColor: "#9A3324",
     bullets: [
       "Build bulletproof psychological comfort on stage by practicing physical breathing anchors, eye contact zones, and posture stability.",
       "Master how to handle live rejection, unexpected technical errors, and critical audience pushback during an open mic presentation gracefully.",
@@ -1625,14 +1594,13 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Final Phase | Chapter 1",
     chapterTitle: "Live Event Integration & Public Performance",
     week: 18,
-    chapterColor: "#D4AF37",
+    chapterColor: "#9A3324",
     bullets: [
       "Learn the foundational rules of narrative comedy, timing beats, and writing relatable jokes customized for high-stress business crowds.",
       "Master how to deliver targeted jokes naturally to instantly break tension and command full room attention.",
       "Practice a structured framework to write, edit, and perform your own original presentation jokes live on stage during mock demo days.",
     ],
   },
-
   // ─── Final Phase | Chapter 2 : Investor Pitch Decks (Week 18) ───
   {
     id: 112,
@@ -1641,7 +1609,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Final Phase | Chapter 2",
     chapterTitle: "High-Conversion Capital Raising",
     week: 18,
-    chapterColor: "#B8860B",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Deconstruct the exact financial and narrative definition of a pitch deck to understand exactly why founders use them to raise capital.",
       "Map out a visually stunning, minimalist layout strategy that favors crisp typographic hierarchies over heavy, cluttered imagery.",
@@ -1655,7 +1623,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Final Phase | Chapter 2",
     chapterTitle: "High-Conversion Capital Raising",
     week: 18,
-    chapterColor: "#B8860B",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Collect and meticulously study 5 legendary pitch deck examples from massive global companies to reverse-engineer their success.",
       "Construct a lean, hyper-optimized presentation deck featuring a minimum of 7 core slides covering Problem, Solution, Traction, and Market.",
@@ -1669,15 +1637,14 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Final Phase | Chapter 2",
     chapterTitle: "High-Conversion Capital Raising",
     week: 18,
-    chapterColor: "#B8860B",
+    chapterColor: "#1A6B5A",
     bullets: [
       "Package your finished presentation boards and export a pristine, web-optimized Pitchdeck.pdf file ready for distribution.",
       "Learn how to strategically target, cold-pitch, and safely email your PDF file straight to active angel investors and venture networks.",
       "Combine your built social media brand footprint with your pitch document to maximize investor confidence and close funding rounds.",
     ],
   },
-
-  // ─── Final Phase | Chapter 1 : Vipasna & Graduation (Week 19) ───
+  // ─── Final Phase | Mindset : Vipasna & Graduation (Week 19) ───
   {
     id: 115,
     icon: PATH_ICON,
@@ -1685,7 +1652,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Final Phase | Mindset",
     chapterTitle: "Deep Psychological Processing & Calibrations",
     week: 19,
-    chapterColor: "#4CAF50",
+    chapterColor: "#784212",
     bullets: [
       "Disconnect completely from tech infrastructure to undergo a deep, 10-day intensive Vipasna meditation retreat framework.",
       "Use this isolated, peaceful time to deeply reflect on the systems you have built and plan how to scale them to the next level.",
@@ -1699,7 +1666,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Final Phase | Mindset",
     chapterTitle: "Deep Psychological Processing & Calibrations",
     week: 19,
-    chapterColor: "#4CAF50",
+    chapterColor: "#784212",
     bullets: [
       "Study the core visual nodes of inner engineering: Self-Awareness, Living in the Moment, and true Peace.",
       "Cultivate an unshakeable Stoic mindset to easily process market volatility, product friction, and everyday business stress.",
@@ -1713,13 +1680,14 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Final Phase | Mindset",
     chapterTitle: "Deep Psychological Processing & Calibrations",
     week: 19,
-    chapterColor: "#4CAF50",
+    chapterColor: "#784212",
     bullets: [
       "Return from mental isolation with total clarity, shedding coding anxieties and design blockades completely.",
       "Merge your sharpened cognitive stamina with your technical engineering tools to operate like a true Superhuman.",
       "Lock down your absolute final product alterations ahead of the live investor presentation.",
     ],
   },
+  // ─── Final Phase | Graduation (Week 19) ───
   {
     id: 118,
     icon: PATH_ICON,
@@ -1727,7 +1695,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Final Phase | Graduation",
     chapterTitle: "Live Fundraising Capital & Beyond",
     week: 19,
-    chapterColor: "#FFD700",
+    chapterColor: "#4A235A",
     bullets: [
       "Step onto the final stage to deliver your polished startup presentation deck directly in front of active venture investors.",
       "Defend your technical architecture, design assets, and marketing pipeline choices dynamically under live evaluation.",
@@ -1741,7 +1709,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Final Phase | Graduation",
     chapterTitle: "Live Fundraising Capital & Beyond",
     week: 19,
-    chapterColor: "#FFD700",
+    chapterColor: "#4A235A",
     bullets: [
       "Celebrate the successful completion of the intensive Academy curriculum with your peers and engineering mentors.",
       "Formally lock down your active alumni portal credentials to access lifelong masterminds and collaborative talent pools.",
@@ -1755,7 +1723,7 @@ export const HDA_LESSONS: Lesson[] = [
     chapter: "Final Phase | Graduation",
     chapterTitle: "Live Fundraising Capital & Beyond",
     week: 19,
-    chapterColor: "#FFD700",
+    chapterColor: "#4A235A",
     bullets: [
       "Conclude your structured academic path and officially mark the grand boundary line of your new life.",
       "Deploy your fully funded, self-contained interactive web platforms and automated marketing systems into the real world.",
@@ -1763,4 +1731,3 @@ export const HDA_LESSONS: Lesson[] = [
     ],
   },
 ];
-

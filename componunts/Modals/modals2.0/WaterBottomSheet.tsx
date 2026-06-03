@@ -48,7 +48,7 @@ const STEP_W = SLIDER_W / STEPS.length;
 // ─────────────────────────────────────────────────────────────
 //  HELPERS
 // ─────────────────────────────────────────────────────────────
-const fmt = (l: number) => `${l.toFixed(1)}L`;
+const fmt = (l: number) => `${l.toFixed(1)}ltr`;
 
 type Props = {
   isVisible: boolean;

@@ -1,24 +1,24 @@
 import * as Haptics from "expo-haptics";
 import React, { useEffect, useState } from "react";
 import {
-    Dimensions,
-    ImageBackground,
-    Pressable,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  ImageBackground,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
-    Extrapolation,
-    interpolate,
-    runOnJS,
-    useAnimatedStyle,
-    useSharedValue,
-    withSequence,
-    withSpring,
-    withTiming,
+  Extrapolation,
+  interpolate,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withSpring,
+  withTiming,
 } from "react-native-reanimated";
 import { AppBottomSheet } from "./AppBottomSheet";
 
@@ -42,8 +42,29 @@ const RUBBER_SPRING = { damping: 60, stiffness: 900 };
 const SPRING = { damping: 90, stiffness: 1200 };
 
 const STEPS: number[] = [
-  ...Array.from({ length: 12 }, (_, i) => (i + 1) * 5), // 5m – 60m
-  ...Array.from({ length: 46 }, (_, i) => (i + 3) * 30), // 1.5h – 24h (30min steps)
+  10,
+  15,
+  20,
+  25,
+  30,
+  35,
+  40,
+  45,
+  50,
+  55,
+  60, // 10m – 1h
+  75,
+  90,
+  105,
+  120,
+  135,
+  150,
+  165,
+  180, // 1h15m – 3h
+  210,
+  240,
+  270,
+  300, // 3h30m – 5h
 ];
 const STEP_W = SLIDER_W / STEPS.length;
 
@@ -80,7 +101,7 @@ export function WorkoutBottomSheet({
   onSave,
   initialValue = { hour: "00", minute: "30" },
 }: Props) {
-  const initMins = Math.max(5, fromTD(initialValue) || 30);
+  const initMins = Math.max(10, fromTD(initialValue) || 30);
   const initIdx = Math.max(
     0,
     STEPS.findIndex((s) => s >= initMins),

@@ -125,7 +125,7 @@ export function MeditationBottomSheet({
   }));
 
   const handleSave = () => {
-    onSave(`${value}`);
+    onSave(`${value}m`);
     onClose();
   };
 

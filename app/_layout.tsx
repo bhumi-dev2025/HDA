@@ -1,15 +1,24 @@
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Session } from "@supabase/supabase-js";
 import { Stack, useRouter, useSegments } from "expo-router";
+import LottieView from "lottie-react-native";
 import { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
-import LottieView from "lottie-react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { HDA_LESSONS } from "../constants/hdaPathData";
 import "../global.css";
 import { supabase } from "../lib/supabase";
-import { HDA_LESSONS } from "../constants/hdaPathData";
 
+if (typeof global !== "undefined") {
+  const originalHandler = (global as any).ErrorUtils?.getGlobalHandler?.();
+  (global as any).ErrorUtils?.setGlobalHandler?.(
+    (error: any, isFatal: boolean) => {
+      if (error?.message?.includes("com.apple.healthkit")) return;
+      originalHandler?.(error, isFatal);
+    },
+  );
+}
 
 export default function RootLayout() {
   const [session, setSession] = useState<Session | null>(null);
@@ -21,7 +30,10 @@ export default function RootLayout() {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
         if (error) {
           await supabase.auth.signOut();
           setSession(null);
@@ -41,8 +53,10 @@ export default function RootLayout() {
     // Splash time e HDA data preload — tab click karto instant ready
     void HDA_LESSONS.length;
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_OUT') {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === "SIGNED_OUT") {
         setSession(null);
       } else {
         setSession(session);
@@ -56,24 +70,24 @@ export default function RootLayout() {
   useEffect(() => {
     if (!initialized || !animationDone) return;
 
-    const protectedGroups = ['(tabs)', 'settings', 'setting_Screens', 'wallet'];
-    const inProtectedRoute = protectedGroups.some(g => segments[0] === g);
+    const protectedGroups = ["(tabs)", "settings", "setting_Screens", "wallet"];
+    const inProtectedRoute = protectedGroups.some((g) => segments[0] === g);
 
     if (!session && inProtectedRoute) {
-      router.replace('/');
+      router.replace("/");
     } else if (session && (segments as string[]).length === 0) {
-      router.replace('/(tabs)/home');
+      router.replace("/(tabs)/home");
     }
   }, [session, initialized, animationDone, segments]);
 
   if (!initialized || !animationDone) {
     return (
-      <View style={{ flex: 1, backgroundColor: '#000000' }}>
+      <View style={{ flex: 1, backgroundColor: "#000000" }}>
         <LottieView
-          source={require('../assets/lottie/splashanimation.json')}
+          source={require("../assets/lottie/splashanimation.json")}
           autoPlay
           loop={false}
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: "100%", height: "100%" }}
           resizeMode="cover"
           onAnimationFinish={() => setAnimationDone(true)}
         />
@@ -85,31 +99,40 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <BottomSheetModalProvider>
         <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" /> 
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen
-        name="settings/index"
-        options={{
-          title: "Settings",
-          headerTitleAlign: "center",
-          headerTitleStyle: { fontSize: 16, fontWeight: "600", color: "#111" },
-          headerStyle: { backgroundColor: "#f5f5f5" },
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => router.back()}
-              style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: "#e5e5e5", alignItems: "center", justifyContent: "center", marginLeft: 4 }}
-            >
-              <Ionicons name="chevron-back" size={18} color="#111" />
-            </TouchableOpacity>
-          ),
-        }}
-      />
-      <Stack.Screen
-        name="settings/ai"
-        options={{ headerShown: false }}
-      />
-      </Stack>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen
+            name="settings/index"
+            options={{
+              title: "Settings",
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                fontSize: 16,
+                fontWeight: "600",
+                color: "#111",
+              },
+              headerStyle: { backgroundColor: "#f5f5f5" },
+              headerLeft: () => (
+                <TouchableOpacity
+                  onPress={() => router.back()}
+                  style={{
+                    width: 34,
+                    height: 34,
+                    borderRadius: 17,
+                    backgroundColor: "#e5e5e5",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginLeft: 4,
+                  }}
+                >
+                  <Ionicons name="chevron-back" size={18} color="#111" />
+                </TouchableOpacity>
+              ),
+            }}
+          />
+          <Stack.Screen name="settings/ai" options={{ headerShown: false }} />
+        </Stack>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
-  ); 
+  );
 }

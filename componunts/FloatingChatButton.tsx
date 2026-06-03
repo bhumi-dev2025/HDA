@@ -34,6 +34,7 @@ import AI7 from "../assets/photo/home/AI7.svg";
 import { chatEvents } from "../lib/chatEvents";
 import { GeminiResponse, getStoredApiKey, sendMessage } from "../lib/gemini";
 import { todoEvents } from "../lib/todoEvents";
+import { healthEvents } from "../lib/healthEvents";
 import {
   addTasksToDailyLog,
   removeTasksFromDailyLog,
@@ -175,8 +176,13 @@ export default forwardRef<FloatingChatButtonHandle>(
     };
 
     const emitRefresh = () => {
-      todoEvents.emit();
-      setTimeout(() => todoEvents.emit(), 2000);
+      if (activeTab === "todo") {
+        setTimeout(() => todoEvents.emit(), 500);
+        setTimeout(() => todoEvents.emit(), 2500);
+      } else {
+        setTimeout(() => healthEvents.emit(), 500);
+        setTimeout(() => healthEvents.emit(), 2500);
+      }
     };
 
     const handleToolCall = async (

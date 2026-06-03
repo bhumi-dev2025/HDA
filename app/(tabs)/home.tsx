@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { fetchGoogleFitSteps } from "../../lib/googleFitService";
+import { healthEvents } from "../../lib/healthEvents";
 import { todoEvents } from "../../lib/todoEvents";
 import { getTodayLog, updateDailyLog } from "../../lib/TrackerService";
 import { useHealthSteps } from "../../lib/useHealthSteps";
@@ -273,7 +274,7 @@ export default function HomeScreen() {
   // iOS — app open thata j HealthKit permission maango
   useEffect(() => {
     if (Platform.OS === "ios") {
-      requestAuthorization();
+      requestAuthorization().catch(() => {});
     }
   }, []);
 
@@ -546,10 +547,9 @@ export default function HomeScreen() {
     }, [refreshAll, autoSyncSteps]),
   );
 
-  // todoEvents subscribe — todo page thi save thay tyare ring turant update karo
+  // todoEvents subscribe — AI todo tab thi task add/remove thay tyare update
   useEffect(() => {
     const unsubscribe = todoEvents.subscribe(async () => {
-      // Fresh data fetch karo ane rings update karo
       const data = await getTodayLog();
       if (!data) return;
 
@@ -561,7 +561,62 @@ export default function HomeScreen() {
 
       if (data.score != null) setCurrentScore(data.score);
 
-      // Ring recalc — latest data sathe
+      const wMins =
+        parseInt(data.workout_time?.hour || "0") * 60 +
+        parseInt(data.workout_time?.minute || "0");
+      const stepsVal = parseInt(data.step_count?.toString() || "0");
+      const mMins = parseInt(data.meditation_time || "0");
+      const waterVal = data.water_intake || 0;
+      const todosDone = tasks.filter(
+        (t: TaskItem) => t.isDone && t.text?.trim() !== "",
+      ).length;
+      const todosTotal = tasks.filter(
+        (t: TaskItem) => t.text?.trim() !== "",
+      ).length;
+
+      setRedProgress(
+        (Math.min(wMins / 45, 1) + Math.min(stepsVal / 8000, 1)) / 2,
+      );
+      setBlueProgress(
+        (Math.min(waterVal / 3.5, 1) + Math.min(mMins / 20, 1)) / 2,
+      );
+      setGreenProgress(todosTotal > 0 ? todosDone / todosTotal : 0);
+      setAnimKey((k) => k + 1);
+    });
+    return unsubscribe;
+  }, []);
+
+  // healthEvents subscribe — AI health tab thi workout/water/sleep/meditation update thay tyare
+  useEffect(() => {
+    const unsubscribe = healthEvents.subscribe(async () => {
+      const data = await getTodayLog();
+      if (!data) return;
+
+      if (data.score != null) setCurrentScore(data.score);
+
+      // Meditation
+      if (data.meditation_time != null) {
+        setMeditationData(data.meditation_time);
+        setIsMeditationDone(true);
+      }
+      // Water
+      if (data.water_intake != null) {
+        setWaterData(data.water_intake);
+        setIsWaterDone(true);
+      }
+      // Sleep
+      if (data.sleep_data != null) {
+        setSleepData(data.sleep_data);
+        setIsSleepDone(true);
+      }
+      // Workout
+      if (data.workout_time != null) {
+        setWorkoutData(data.workout_time);
+        setIsWorkoutDone(true);
+      }
+
+      // Ring recalc
+      const tasks: TaskItem[] = data.todo_list ?? [];
       const wMins =
         parseInt(data.workout_time?.hour || "0") * 60 +
         parseInt(data.workout_time?.minute || "0");
@@ -800,7 +855,7 @@ export default function HomeScreen() {
                           </Text>
                           {/* </View> */}
                           <Text className="text-white text-2xl font-black">
-                            {meditationData}
+                            {parseInt(meditationData || "0")}m
                           </Text>
                         </View>
                       </>
@@ -956,7 +1011,7 @@ export default function HomeScreen() {
                         <View className="items-center justify-start mb-4 mt-4">
                           {todoTasks
                             .filter((t) => t.text !== "")
-                            .slice(0, 5)
+                            .slice(0, 3)
                             .map((item, index) => (
                               <View
                                 key={index}

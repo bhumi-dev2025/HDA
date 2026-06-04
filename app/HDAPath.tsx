@@ -305,7 +305,7 @@ export default function HDAPath() {
                 }}
               >
                 <Image
-                  source={selected.icon}
+                  source={selected.modelIcon ?? selected.icon}
                   style={{ width: 34, height: 34 }}
                   resizeMode="contain"
                 />

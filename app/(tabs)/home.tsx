@@ -90,7 +90,6 @@ const CardContainer = ({
 export default function HomeScreen() {
   const router = useRouter();
 
-  const [demoModal, setDemoModal] = useState(false);
   const [currentScore, setCurrentScore] = useState(0);
   const [activeModal, setActiveModal] = useState<HomeModalType>(null);
   const [animKey, setAnimKey] = useState(0);
@@ -1135,14 +1134,6 @@ export default function HomeScreen() {
         </SafeAreaView>
       </ImageBackground>
       <ConfettiOverlay type={confetti} onComplete={handleConfettiDone} />
-
-      {/* ── Meditation Bottom Sheet ── */}
-      <MeditationBottomSheet
-        isVisible={demoModal}
-        onClose={() => setDemoModal(false)}
-        onSave={(val) => handleSave("meditation", val)}
-        initialValue={meditationData}
-      />
     </>
   );
 }

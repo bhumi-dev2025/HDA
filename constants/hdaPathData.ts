@@ -1,8 +1,10 @@
 const PATH_ICON = require('../assets/2.0/path/p1.png');
+const MODEL_ICON = require('../assets/2.0/path/p2.png');
 
 export interface Lesson {
   id: number;
   icon: any;
+  modelIcon?: any;
   title: string;
   chapter: string;
   chapterTitle: string;
@@ -17,6 +19,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 1,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Purpose Deconstruction",
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
@@ -31,6 +34,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 2,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Physical Onboarding",
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
@@ -45,6 +49,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 3,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Analog Habit Mechanics",
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
@@ -59,6 +64,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 4,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Habit Systemization",
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
@@ -73,6 +79,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 5,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Anti-AI Ideation Matrices",
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
@@ -87,6 +94,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 6,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Anapan Concentration",
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
@@ -101,6 +109,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 7,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Aesthetic Styling Rules",
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
@@ -115,6 +124,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 8,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Vipasana Registration",
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
@@ -130,6 +140,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 9,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Generative Workspace Workflows",
     chapter: "Phase 1 | Chapter 2",
     chapterTitle: "FigJam AI & Product Specs",
@@ -144,6 +155,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 10,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Automated Synthesis & Sorting",
     chapter: "Phase 1 | Chapter 2",
     chapterTitle: "FigJam AI & Product Specs",
@@ -158,6 +170,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 11,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Metaphysics of Friction",
     chapter: "Phase 1 | Chapter 2",
     chapterTitle: "FigJam AI & Product Specs",
@@ -172,6 +185,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 12,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "White-Paper Specifications",
     chapter: "Phase 1 | Chapter 2",
     chapterTitle: "FigJam AI & Product Specs",
@@ -186,6 +200,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 13,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Product Naming & Taglines",
     chapter: "Phase 1 | Chapter 2",
     chapterTitle: "FigJam AI & Product Specs",
@@ -201,6 +216,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 14,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Universal Interface Mindset",
     chapter: "Phase 1 | Chapter 3",
     chapterTitle: "Figma Foundations & AI Assets",
@@ -215,6 +231,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 15,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "AI Image Generation & Prompts",
     chapter: "Phase 1 | Chapter 3",
     chapterTitle: "Figma Foundations & AI Assets",
@@ -229,6 +246,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 16,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Vector Logo Systems",
     chapter: "Phase 1 | Chapter 3",
     chapterTitle: "Figma Foundations & AI Assets",
@@ -244,6 +262,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 17,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Visual Hierarchy Mechanics",
     chapter: "Phase 1 | Chapter 3",
     chapterTitle: "Figma Foundations & AI Assets",
@@ -258,6 +277,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 18,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "High-Fidelity Artwork Mixing",
     chapter: "Phase 1 | Chapter 3",
     chapterTitle: "Figma Foundations & AI Assets",
@@ -272,6 +292,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 19,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Multi-Platform Brand Layouts",
     chapter: "Phase 1 | Chapter 3",
     chapterTitle: "Figma Foundations & AI Assets",
@@ -287,6 +308,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 20,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Architecture of Intent",
     chapter: "Phase 1 | Chapter 4",
     chapterTitle: "Landing Page Strategy & Core AI",
@@ -301,6 +323,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 21,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Typography Scales & Sizing",
     chapter: "Phase 1 | Chapter 4",
     chapterTitle: "Landing Page Strategy & Core AI",
@@ -315,6 +338,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 22,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Art of Stealing & Wireframing",
     chapter: "Phase 1 | Chapter 4",
     chapterTitle: "Landing Page Strategy & Core AI",
@@ -329,6 +353,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 23,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Figma Make AI Prompts",
     chapter: "Phase 1 | Chapter 4",
     chapterTitle: "Landing Page Strategy & Core AI",
@@ -344,6 +369,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 24,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Master Component Architecture",
     chapter: "Phase 1 | Chapter 5",
     chapterTitle: "Figma Design Systems & Assembly",
@@ -358,6 +384,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 25,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Building Responsive Tokens",
     chapter: "Phase 1 | Chapter 5",
     chapterTitle: "Figma Design Systems & Assembly",
@@ -373,6 +400,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 26,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Mobile Down-Scaling Blueprint",
     chapter: "Phase 1 | Chapter 6",
     chapterTitle: "Mobile App UI/UX Architecture",
@@ -387,6 +415,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 27,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Mobile Tap Targets & Type Tuning",
     chapter: "Phase 1 | Chapter 6",
     chapterTitle: "Mobile App UI/UX Architecture",
@@ -401,6 +430,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 28,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Advanced Prototype Animations",
     chapter: "Phase 1 | Chapter 6",
     chapterTitle: "Mobile App UI/UX Architecture",
@@ -415,6 +445,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 29,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Device Mirroring & Tuning",
     chapter: "Phase 1 | Chapter 6",
     chapterTitle: "Mobile App UI/UX Architecture",
@@ -430,6 +461,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 30,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Design.md Specification Architecture",
     chapter: "Phase 1 | Chapter 7",
     chapterTitle: "Generative Design System Automation",
@@ -444,6 +476,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 31,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Google Project Stitch Prompt Engineering",
     chapter: "Phase 1 | Chapter 7",
     chapterTitle: "Generative Design System Automation",
@@ -458,6 +491,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 32,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Consistent Variable Design Generation",
     chapter: "Phase 1 | Chapter 7",
     chapterTitle: "Generative Design System Automation",
@@ -473,6 +507,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 33,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Development Canvas Mindset",
     chapter: "Phase 2 | Chapter 8",
     chapterTitle: "Figma-to-NoCode Translation",
@@ -487,6 +522,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 34,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Responsive Breakdown Mechanics",
     chapter: "Phase 2 | Chapter 8",
     chapterTitle: "Figma-to-NoCode Translation",
@@ -501,6 +537,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 35,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Figma HTML Porting Workflows",
     chapter: "Phase 2 | Chapter 8",
     chapterTitle: "Figma-to-NoCode Translation",
@@ -516,6 +553,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 36,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Framer Workshop Interface Onboarding",
     chapter: "Phase 2 | Chapter 9",
     chapterTitle: "AI Component Engineering Masterclass",
@@ -531,6 +569,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 37,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Text-to-3D Generative Logic",
     chapter: "Phase 2 | Chapter 10",
     chapterTitle: "Generative Spatial Engineering",
@@ -545,6 +584,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 38,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "AI Texture Mapping & PBR Materials",
     chapter: "Phase 2 | Chapter 10",
     chapterTitle: "Generative Spatial Engineering",
@@ -559,6 +599,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 39,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Mesh Optimization & Rigging",
     chapter: "Phase 2 | Chapter 10",
     chapterTitle: "Generative Spatial Engineering",
@@ -574,6 +615,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 40,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Event-Driven State Machines",
     chapter: "Phase 2 | Chapter 11",
     chapterTitle: "Framer 3D Interactivity & Hosting",
@@ -588,6 +630,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 41,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "No-Code Framer Embedding",
     chapter: "Phase 2 | Chapter 11",
     chapterTitle: "Framer 3D Interactivity & Hosting",
@@ -602,6 +645,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 42,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Kinetic Scroll Actions",
     chapter: "Phase 2 | Chapter 11",
     chapterTitle: "Framer 3D Interactivity & Hosting",
@@ -617,6 +661,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 43,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Vibe Coding Terminal Mindset",
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
@@ -631,6 +676,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 44,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Context Window Engineering",
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
@@ -645,6 +691,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 45,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The CLAUDE.md Blueprint",
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
@@ -659,6 +706,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 46,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Building Custom Skills",
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
@@ -673,6 +721,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 47,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The MCP Directory System",
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
@@ -687,6 +736,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 48,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Figma Connectors & Asset Sync",
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
@@ -701,6 +751,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 49,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Google Workspace & Product Integration",
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
@@ -715,6 +766,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 50,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Persistent Cowork Staging Task Loop",
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
@@ -729,6 +781,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 51,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Deploying Pre-Built Plugin Packages",
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
@@ -743,6 +796,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 52,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Orchestrating Sub-Agent Teams",
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
@@ -758,6 +812,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 53,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Deep Research Engine Workflows",
     chapter: "Phase 2.5 | Chapter 2",
     chapterTitle: "Advanced Reasoning & Research Systems",
@@ -772,6 +827,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 54,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Advanced Reasoning & Chain-of-Thought",
     chapter: "Phase 2.5 | Chapter 2",
     chapterTitle: "Advanced Reasoning & Research Systems",
@@ -786,6 +842,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 55,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Dynamic Memory Calibration",
     chapter: "Phase 2.5 | Chapter 2",
     chapterTitle: "Advanced Reasoning & Research Systems",
@@ -801,6 +858,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 56,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Desktop App Context Workspace",
     chapter: "Phase 2.5 | Chapter 3",
     chapterTitle: "Cross-App Production Automation",
@@ -815,6 +873,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 57,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Canva & Figma On-The-Spot Systems",
     chapter: "Phase 2.5 | Chapter 3",
     chapterTitle: "Cross-App Production Automation",
@@ -829,6 +888,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 58,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Adobe Automation & Asset Creation",
     chapter: "Phase 2.5 | Chapter 3",
     chapterTitle: "Cross-App Production Automation",
@@ -844,6 +904,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 59,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Hands-Free Ambient Brainstorming",
     chapter: "Phase 2.5 | Chapter 4",
     chapterTitle: "Hands-Free Multimodal Interaction",
@@ -858,6 +919,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 60,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Full-Stack Split-Architecture Apps",
     chapter: "Phase 2.5 | Chapter 4",
     chapterTitle: "Hands-Free Multimodal Interaction",
@@ -872,6 +934,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 61,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Interactive WebGL & Spatial Engineering",
     chapter: "Phase 2.5 | Chapter 4",
     chapterTitle: "Hands-Free Multimodal Interaction",
@@ -887,6 +950,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 62,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Firebase Authentication & Backend Sync",
     chapter: "Phase 2.5 | Chapter 5",
     chapterTitle: "Production Backends & Cloud Operations",
@@ -901,6 +965,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 63,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Google Cloud Network Mapping",
     chapter: "Phase 2.5 | Chapter 5",
     chapterTitle: "Production Backends & Cloud Operations",
@@ -915,6 +980,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 64,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Google Analytics Metric Tracking",
     chapter: "Phase 2.5 | Chapter 5",
     chapterTitle: "Production Backends & Cloud Operations",
@@ -930,6 +996,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 65,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Agentic Terminal Workspace",
     chapter: "Phase 2.5 Expert | Chapter 1",
     chapterTitle: "Claude Code Terminal Orchestration",
@@ -944,6 +1011,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 66,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Explore-Plan-Confirm Engine",
     chapter: "Phase 2.5 Expert | Chapter 1",
     chapterTitle: "Claude Code Terminal Orchestration",
@@ -958,6 +1026,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 67,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Global Open Source Repo Grafting",
     chapter: "Phase 2.5 Expert | Chapter 1",
     chapterTitle: "Claude Code Terminal Orchestration",
@@ -973,6 +1042,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 68,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The MCP Configuration Architecture",
     chapter: "Phase 2.5 Expert | Chapter 2",
     chapterTitle: "MCP Server Integrations",
@@ -987,6 +1057,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 69,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Figma & Marketing MCP Connectors",
     chapter: "Phase 2.5 Expert | Chapter 2",
     chapterTitle: "MCP Server Integrations",
@@ -1001,6 +1072,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 70,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Cloud Console & Infrastructure Operations",
     chapter: "Phase 2.5 Expert | Chapter 2",
     chapterTitle: "MCP Server Integrations",
@@ -1016,6 +1088,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 71,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The AI Studio Export-to-Antigravity Flow",
     chapter: "Phase 2.5 Expert | Chapter 3",
     chapterTitle: "Transitioning to Heavy Production",
@@ -1030,6 +1103,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 72,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Android Studio CLI Onboarding",
     chapter: "Phase 2.5 Expert | Chapter 3",
     chapterTitle: "Transitioning to Heavy Production",
@@ -1044,6 +1118,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 73,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Building with Parallel Agent Teams",
     chapter: "Phase 2.5 Expert | Chapter 3",
     chapterTitle: "Transitioning to Heavy Production",
@@ -1059,6 +1134,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 74,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Agentic Jetpack Compose Refactoring",
     chapter: "Phase 2.5 Expert | Chapter 4",
     chapterTitle: "Jetpack Compose & Google Play Deployment",
@@ -1073,6 +1149,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 75,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Google Play Production Publishing",
     chapter: "Phase 2.5 Expert | Chapter 4",
     chapterTitle: "Jetpack Compose & Google Play Deployment",
@@ -1087,6 +1164,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 76,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Android Studio Migration Assistant",
     chapter: "Phase 2.5 Expert | Chapter 4",
     chapterTitle: "Jetpack Compose & Google Play Deployment",
@@ -1102,6 +1180,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 77,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Imagination Translation Matrix",
     chapter: "Phase 3 | Chapter 1",
     chapterTitle: "Multi-Source Image Composition",
@@ -1116,6 +1195,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 78,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "ChatGPT Images 2.0 Token Control",
     chapter: "Phase 3 | Chapter 1",
     chapterTitle: "Multi-Source Image Composition",
@@ -1130,6 +1210,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 79,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Google AI Studio Multi-Model Audits",
     chapter: "Phase 3 | Chapter 1",
     chapterTitle: "Multi-Source Image Composition",
@@ -1144,6 +1225,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 80,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Adobe Firefly Boards Setup",
     chapter: "Phase 3 | Chapter 1",
     chapterTitle: "Multi-Source Image Composition",
@@ -1158,6 +1240,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 81,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Generative Firefly Model Blending",
     chapter: "Phase 3 | Chapter 1",
     chapterTitle: "Multi-Source Image Composition",
@@ -1172,6 +1255,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 82,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Google Flow Cinematic Prompting",
     chapter: "Phase 3 | Chapter 1",
     chapterTitle: "Multi-Source Image Composition",
@@ -1187,6 +1271,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 83,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "12 Principles of Animation for Social Media",
     chapter: "Phase 3 | Chapter 2",
     chapterTitle: "Universal Content Planning & Shooting",
@@ -1201,6 +1286,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 84,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Multi-Format Production Roadmap",
     chapter: "Phase 3 | Chapter 2",
     chapterTitle: "Universal Content Planning & Shooting",
@@ -1216,6 +1302,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 85,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Generative Frame Assembly Pipeline",
     chapter: "Phase 3 | Chapter 3",
     chapterTitle: "Conversational Frameworks & Visual Storyboards",
@@ -1231,6 +1318,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 86,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Voice Projection & Continuous Take Workflow",
     chapter: "Phase 3 | Chapter 4",
     chapterTitle: "Screen Confidence & Physical Production",
@@ -1247,6 +1335,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 87,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Premiere Pro Interface & Media Ingestion",
     chapter: "Phase 3 | Chapter 5",
     chapterTitle: "Non-Linear Editing System Workspace",
@@ -1261,6 +1350,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 88,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Text-Based Transcription & Raw Cutting",
     chapter: "Phase 3 | Chapter 5",
     chapterTitle: "Non-Linear Editing System Workspace",
@@ -1275,6 +1365,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 89,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Computational Audio Enhancement & Export",
     chapter: "Phase 3 | Chapter 5",
     chapterTitle: "Non-Linear Editing System Workspace",
@@ -1290,6 +1381,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 90,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "After Effects Workspace & AEUX Porting",
     chapter: "Phase 3 | Chapter 6",
     chapterTitle: "Keyframes & Vector Asset Porting",
@@ -1304,6 +1396,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 91,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Spatial Mechanics & The Graph Editor",
     chapter: "Phase 3 | Chapter 6",
     chapterTitle: "Keyframes & Vector Asset Porting",
@@ -1318,6 +1411,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 92,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Production Plugin Integration",
     chapter: "Phase 3 | Chapter 6",
     chapterTitle: "Keyframes & Vector Asset Porting",
@@ -1333,6 +1427,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 93,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Logo Rigs & Pinterest Moodboarding",
     chapter: "Phase 3 | Chapter 7",
     chapterTitle: "Kinetic Brand Packaging",
@@ -1347,6 +1442,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 94,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Reel Template Design & Layout Arrays",
     chapter: "Phase 3 | Chapter 7",
     chapterTitle: "Kinetic Brand Packaging",
@@ -1361,6 +1457,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 95,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Veed.io Captions & Cinematic Impact",
     chapter: "Phase 3 | Chapter 7",
     chapterTitle: "Kinetic Brand Packaging",
@@ -1376,6 +1473,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 96,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Render Settings & Archive Templates",
     chapter: "Phase 3 | Chapter 8",
     chapterTitle: "Distribution Mastering & Pipeline Launch",
@@ -1390,6 +1488,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 97,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "High-Click Cover & Thumbnail Fabrication",
     chapter: "Phase 3 | Chapter 8",
     chapterTitle: "Distribution Mastering & Pipeline Launch",
@@ -1404,6 +1503,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 98,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Production Publishing Sequence",
     chapter: "Phase 3 | Chapter 8",
     chapterTitle: "Distribution Mastering & Pipeline Launch",
@@ -1418,6 +1518,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 99,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Multimodality Spatial Composite",
     chapter: "Phase 3 | Chapter 8",
     chapterTitle: "Distribution Mastering & Pipeline Launch",
@@ -1433,6 +1534,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 100,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Quantity Game & Platform Algorithms",
     chapter: "Phase 3 | Chapter 10",
     chapterTitle: "Platform Algorithms & Case Studies",
@@ -1447,6 +1549,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 101,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Product Growth Architecture",
     chapter: "Phase 3 | Chapter 10",
     chapterTitle: "Platform Algorithms & Case Studies",
@@ -1461,6 +1564,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 102,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Creator Moodboard Strategy",
     chapter: "Phase 3 | Chapter 10",
     chapterTitle: "Platform Algorithms & Case Studies",
@@ -1476,6 +1580,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 103,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Deep Thaker Sketch Systems & 5-Word Hooks",
     chapter: "Phase 3 | Chapter 11",
     chapterTitle: "30-Second Content Architecture",
@@ -1490,6 +1595,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 104,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Fast-Track Post-Production Flow",
     chapter: "Phase 3 | Chapter 11",
     chapterTitle: "30-Second Content Architecture",
@@ -1504,6 +1610,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 105,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Visual Identity Publishing Loops",
     chapter: "Phase 3 | Chapter 11",
     chapterTitle: "30-Second Content Architecture",
@@ -1519,6 +1626,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 106,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Meta Ads Campaign Infrastructure",
     chapter: "Phase 3 | Chapter 12",
     chapterTitle: "Algorithmic Campaign Operations",
@@ -1533,6 +1641,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 107,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Meta Ads MCP Server Connection",
     chapter: "Phase 3 | Chapter 12",
     chapterTitle: "Algorithmic Campaign Operations",
@@ -1547,6 +1656,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 108,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Autonomous Content Distribution & Scheduling",
     chapter: "Phase 3 | Chapter 12",
     chapterTitle: "Algorithmic Campaign Operations",
@@ -1562,6 +1672,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 109,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Real-World Event Presence",
     chapter: "Final Phase | Chapter 1",
     chapterTitle: "Live Event Integration & Public Performance",
@@ -1576,6 +1687,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 110,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Stage Comfort & Rejection Mechanics",
     chapter: "Final Phase | Chapter 1",
     chapterTitle: "Live Event Integration & Public Performance",
@@ -1590,6 +1702,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 111,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Humor & Joke Delivery Engineering",
     chapter: "Final Phase | Chapter 1",
     chapterTitle: "Live Event Integration & Public Performance",
@@ -1605,6 +1718,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 112,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Pitch Deck Foundations & Strategic Anatomy",
     chapter: "Final Phase | Chapter 2",
     chapterTitle: "High-Conversion Capital Raising",
@@ -1619,6 +1733,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 113,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Corporate Teardowns & 7-Slide Blueprints",
     chapter: "Final Phase | Chapter 2",
     chapterTitle: "High-Conversion Capital Raising",
@@ -1633,6 +1748,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 114,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Pitchdeck.pdf Export & Investor Launch",
     chapter: "Final Phase | Chapter 2",
     chapterTitle: "High-Conversion Capital Raising",
@@ -1648,6 +1764,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 115,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The 10-Day Mindset Isolation Track",
     chapter: "Final Phase | Mindset",
     chapterTitle: "Deep Psychological Processing & Calibrations",
@@ -1662,6 +1779,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 116,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Core Pillars of the Human Element",
     chapter: "Final Phase | Mindset",
     chapterTitle: "Deep Psychological Processing & Calibrations",
@@ -1676,6 +1794,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 117,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Superhuman Product Realignment",
     chapter: "Final Phase | Mindset",
     chapterTitle: "Deep Psychological Processing & Calibrations",
@@ -1691,6 +1810,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 118,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Live Investor Demo Day Pitch",
     chapter: "Final Phase | Graduation",
     chapterTitle: "Live Fundraising Capital & Beyond",
@@ -1705,6 +1825,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 119,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "Graduation Ceremonies & Network Locking",
     chapter: "Final Phase | Graduation",
     chapterTitle: "Live Fundraising Capital & Beyond",
@@ -1719,6 +1840,7 @@ export const HDA_LESSONS: Lesson[] = [
   {
     id: 120,
     icon: PATH_ICON,
+    modelIcon: MODEL_ICON,
     title: "The Infinite Journey: Initializing Life 2.0",
     chapter: "Final Phase | Graduation",
     chapterTitle: "Live Fundraising Capital & Beyond",

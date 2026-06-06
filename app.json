@@ -8,7 +8,7 @@
     "scheme": "app",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "buildNumber": "9",
+      "buildNumber": "10",
       "supportsTablet": false,
       "bundleIdentifier": "com.simple.humandesignacademy",
       "googleServicesFile": "./GoogleService-Info.plist",
@@ -26,7 +26,7 @@
       }
     },
     "android": {
-      "versionCode": 10,
+      "versionCode": 11,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
@@ -59,9 +59,9 @@
       [
         "expo-splash-screen",
         {
-          // "image": "./assets/images/splash-icon.png",
-          // "imageWidth": 200,
-          // "resizeMode": "contain",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
           "backgroundColor": "#000000",
           "dark": {
             "backgroundColor": "#000000"

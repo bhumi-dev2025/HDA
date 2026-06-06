@@ -121,7 +121,7 @@ const ProfileScreen = () => {
   };
 
   return (
-    <View className="flex-1 bg-black">
+    <View className="flex-1 bg-black/90">
       <StatusBar style="dark" />
 
       {/* Header Image */}
@@ -130,13 +130,13 @@ const ProfileScreen = () => {
         {/* Wallet + Settings buttons — top right */}
         <View className="absolute top-12 right-5 flex-row items-center gap-2">
           <TouchableOpacity
-            className="w-10 h-10 items-center justify-center rounded-full bg-white/80"
+            className="w-10 h-10 items-center justify-center rounded-full bg-[#656565]"
             onPress={() => router.push("/wallet")}
           >
             <A2 height={22} width={22} />
           </TouchableOpacity>
           <TouchableOpacity
-            className="w-10 h-10 items-center justify-center rounded-full bg-white/80"
+            className="w-10 h-10 items-center justify-center rounded-full bg-[#656565]"
             onPress={() => router.push("/settings")}
           >
             <A1 height={22} width={22} />

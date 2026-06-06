@@ -1,5 +1,6 @@
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Dimensions,
@@ -58,6 +59,7 @@ export default function HDAPath() {
     HDA_LESSONS[0].chapterColor,
   );
 
+  const router = useRouter();
   // Positions ek j vaar calculate thay — useMemo thi cache
   const POSITIONS = useMemo(() => buildPositions(), []);
   const TOTAL_HEIGHT = POSITIONS[POSITIONS.length - 1] + 200;
@@ -146,6 +148,7 @@ export default function HDAPath() {
               <TouchableOpacity
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                  router.push("/phases" as any);
                 }}
                 activeOpacity={0.7}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}

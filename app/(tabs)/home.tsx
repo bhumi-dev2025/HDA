@@ -301,8 +301,10 @@ export default function HomeScreen() {
       setBlueProgress(
         (Math.min(wtrData / 3.5, 1) + Math.min(mMins / 20, 1)) / 2,
       );
-      // 🟢 Tasks only
-      setGreenProgress(todoTotal > 0 ? todoDone / todoTotal : 0);
+      // 🟢 Tasks — max 3 tasks consider karva, each task = 1/3 ring
+      // 1 task done = 33%, 2 = 66%, 3 = 100% — total < 3 hoy to bhi proportional
+      const effectiveTotal = Math.max(todoTotal, 3);
+      setGreenProgress(todoTotal > 0 ? todoDone / effectiveTotal : 0);
     },
     [],
   );
@@ -521,11 +523,9 @@ export default function HomeScreen() {
       setBlueProgress(
         (Math.min(waterVal / 3.5, 1) + Math.min(meditationMins / 20, 1)) / 2,
       );
-      setGreenProgress(todosTotal > 0 ? todosDone / todosTotal : 0);
-
-      setAnimKey((k) => k + 1);
-    } catch (e) {
-      console.log("[HOME] refreshAll error:", e);
+      // 🟢 Green = Tasks — max 3 tasks, each = 1/3 ring
+      const effectiveTodoTotal = Math.max(todosTotal, 3);
+      setGreenProgress(todosTotal > 0 ? todosDone / effectiveTodoTotal : 0);
     } finally {
       // Thodi delay sathe reset — jethhi state update complete thay
       setTimeout(() => {
@@ -579,7 +579,7 @@ export default function HomeScreen() {
       setBlueProgress(
         (Math.min(waterVal / 3.5, 1) + Math.min(mMins / 20, 1)) / 2,
       );
-      setGreenProgress(todosTotal > 0 ? todosDone / todosTotal : 0);
+      setGreenProgress(todosTotal > 0 ? todosDone / Math.max(todosTotal, 3) : 0);
       setAnimKey((k) => k + 1);
     });
     return unsubscribe;
@@ -635,7 +635,7 @@ export default function HomeScreen() {
       setBlueProgress(
         (Math.min(waterVal / 3.5, 1) + Math.min(mMins / 20, 1)) / 2,
       );
-      setGreenProgress(todosTotal > 0 ? todosDone / todosTotal : 0);
+      setGreenProgress(todosTotal > 0 ? todosDone / Math.max(todosTotal, 3) : 0);
       setAnimKey((k) => k + 1);
     });
     return unsubscribe;

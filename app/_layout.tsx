@@ -131,6 +131,9 @@ export default function RootLayout() {
             }}
           />
           <Stack.Screen name="settings/ai" options={{ headerShown: false }} />
+          <Stack.Screen name="phases" options={{ headerShown: false }} />
+          <Stack.Screen name="phase-paywall" options={{ headerShown: false }} />
+          <Stack.Screen name="phase-detail" options={{ headerShown: false }} />
         </Stack>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>

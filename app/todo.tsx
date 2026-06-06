@@ -1,10 +1,15 @@
 import { BottomSheetTextInput } from "@gorhom/bottom-sheet";
+import DateTimePicker, {
+  DateTimePickerAndroid,
+} from "@react-native-community/datetimepicker";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
   FlatList,
   ImageBackground,
+  Keyboard,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -24,13 +29,24 @@ const btnBg = require("../assets/2.0/model/button.png");
 
 type Task = { text: string; isDone: boolean; time?: string };
 
-const fmtTime = () => {
-  const d = new Date();
+const dateToTimeStr = (d: Date): string => {
   let h = d.getHours();
   const m = String(d.getMinutes()).padStart(2, "0");
   const ap = h >= 12 ? "PM" : "AM";
   h = h % 12 || 12;
   return `${h}:${m} ${ap}`;
+};
+
+const timeStrToDate = (t: string): Date => {
+  const [time, period] = t.split(" ");
+  const [hStr, mStr] = time.split(":");
+  let h = parseInt(hStr);
+  const m = parseInt(mStr);
+  if (period === "PM" && h !== 12) h += 12;
+  if (period === "AM" && h === 12) h = 0;
+  const d = new Date();
+  d.setHours(h, m, 0, 0);
+  return d;
 };
 
 export default function TodoPage() {
@@ -41,14 +57,19 @@ export default function TodoPage() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [editIdx, setEditIdx] = useState<number | null>(null);
   const [inputText, setInputText] = useState("");
+  const [selectedTime, setSelectedTime] = useState<string | undefined>(
+    undefined,
+  );
+  // iOS only — picker show/hide flag + date
+  const [iosPickerDate, setIosPickerDate] = useState<Date>(new Date());
+  const [showIosPicker, setShowIosPicker] = useState(false);
   const inputRef = useRef<any>(null);
 
   useEffect(() => {
     (async () => {
       const data = await getTodayLog();
-      if (data?.todo_list && data.todo_list.length > 0) {
+      if (data?.todo_list && data.todo_list.length > 0)
         setTasks(data.todo_list);
-      }
       setLoading(false);
     })();
   }, []);
@@ -61,53 +82,81 @@ export default function TodoPage() {
 
   const toggleTask = async (i: number) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    const updated = tasks.map((t, idx) =>
-      idx === i ? { ...t, isDone: !t.isDone } : t,
+    await saveTasks(
+      tasks.map((t, idx) => (idx === i ? { ...t, isDone: !t.isDone } : t)),
     );
-    await saveTasks(updated);
+  };
+
+  // Time picker open — Android: native dialog | iOS: spinner modal
+  const openTimePicker = () => {
+    const initDate = selectedTime ? timeStrToDate(selectedTime) : new Date();
+    if (Platform.OS === "android") {
+      DateTimePickerAndroid.open({
+        mode: "time",
+        value: initDate,
+        is24Hour: false,
+        onChange: (event, date) => {
+          if (event.type === "set" && date) {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            setSelectedTime(dateToTimeStr(date));
+          }
+        },
+      });
+    } else {
+      // iOS — pehla keyboard dismiss karo, pachhi spinner show karo
+      Keyboard.dismiss();
+      setIosPickerDate(initDate);
+      setShowIosPicker(true);
+    }
   };
 
   const openAdd = () => {
     if (tasks.filter((t) => t.text.trim() !== "").length >= 3) return;
     setEditIdx(null);
     setInputText("");
+    setSelectedTime(undefined);
+    setIosPickerDate(new Date());
+    setShowIosPicker(false);
     setSheetOpen(true);
     setTimeout(() => inputRef.current?.focus(), 400);
   };
 
   const openEdit = (i: number) => {
-    // Done task — uncheck karo pehla, edit nahi
     if (tasks[i].isDone) return;
     setEditIdx(i);
     setInputText(tasks[i].text);
+    setSelectedTime(tasks[i].time);
+    setIosPickerDate(tasks[i].time ? timeStrToDate(tasks[i].time) : new Date());
+    setShowIosPicker(false);
     setSheetOpen(true);
     setTimeout(() => inputRef.current?.focus(), 400);
   };
 
   const handleSave = async () => {
     if (!inputText.trim()) return;
-    let updated: Task[];
+    setShowIosPicker(false);
     if (editIdx !== null) {
-      // Edit mode — sheet band karo
-      updated = tasks.map((t, i) =>
-        i === editIdx ? { ...t, text: inputText.trim() } : t,
+      await saveTasks(
+        tasks.map((t, i) =>
+          i === editIdx
+            ? { ...t, text: inputText.trim(), time: selectedTime }
+            : t,
+        ),
       );
-      await saveTasks(updated);
       setSheetOpen(false);
       setInputText("");
+      setSelectedTime(undefined);
       setEditIdx(null);
     } else {
-      // Add mode — Todoist style: sheet/keyboard band na karo
-      updated = [
+      const updated = [
         ...tasks,
-        { text: inputText.trim(), isDone: false, time: fmtTime() },
+        { text: inputText.trim(), isDone: false, time: selectedTime },
       ];
       await saveTasks(updated);
-      setInputText(""); // sirf input clear karo
-      // 3 task thai jay to sheet band karo
-      if (updated.filter((t) => t.text.trim() !== "").length >= 3) {
+      setInputText("");
+      setSelectedTime(undefined);
+      if (updated.filter((t) => t.text.trim() !== "").length >= 3)
         setSheetOpen(false);
-      }
     }
   };
 
@@ -118,7 +167,6 @@ export default function TodoPage() {
   return (
     <ImageBackground source={homeBg} style={{ flex: 1 }} resizeMode="cover">
       <SafeAreaView style={s.safe}>
-        {/* Header */}
         <View style={s.header}>
           <TouchableOpacity onPress={() => router.back()} style={s.backBtn}>
             <Text style={s.backArrow}>‹</Text>
@@ -127,7 +175,6 @@ export default function TodoPage() {
           <View style={{ width: 36 }} />
         </View>
 
-        {/* Empty state */}
         {loading ? (
           <View style={s.emptyWrap} />
         ) : !hasData ? (
@@ -172,7 +219,7 @@ export default function TodoPage() {
                   </Text>
                   {item.time && (
                     <View style={s.timeRow}>
-                      <Text style={s.timeLabel}>I'll finish this by</Text>
+                      <Text style={s.timeLabel}>I will finish this by</Text>
                       <View style={s.timeBadge}>
                         <Text style={s.timeTxt}>🕐 {item.time}</Text>
                       </View>
@@ -184,7 +231,6 @@ export default function TodoPage() {
           />
         )}
 
-        {/* FAB or Bottom Button */}
         {!hasData ? (
           <View style={s.bottomBtn}>
             <TouchableOpacity onPress={openAdd} activeOpacity={0.85}>
@@ -205,11 +251,9 @@ export default function TodoPage() {
         ) : null}
       </SafeAreaView>
 
-      {/* ── Bottom Sheet — keyboard AppBottomSheet thi handle thay ── */}
       <AppBottomSheet
         isVisible={sheetOpen}
         onClose={() => setSheetOpen(false)}
-        // snapPoints={["60%"]}
         enableDynamicSizing={true}
       >
         <View style={s.sheetContent}>
@@ -222,8 +266,62 @@ export default function TodoPage() {
             style={s.sheetInput}
             multiline
           />
+
           <View style={s.sheetDivider} />
-          <Text style={s.sheetDescPlaceholder}>Description</Text>
+
+          {/* Time row */}
+          <View style={s.timePickerRow}>
+            <TouchableOpacity
+              onPress={openTimePicker}
+              activeOpacity={0.7}
+              style={s.timePickerBtn}
+            >
+              <Text style={s.timePickerIcon}>🕐</Text>
+              <Text
+                style={[s.timePickerTxt, selectedTime && s.timePickerTxtSet]}
+              >
+                {selectedTime
+                  ? `Finish by  ${selectedTime}`
+                  : "Set finish time"}
+              </Text>
+            </TouchableOpacity>
+
+            {selectedTime && !showIosPicker && (
+              <TouchableOpacity
+                onPress={() => setSelectedTime(undefined)}
+                hitSlop={12}
+                style={s.clearBtn}
+              >
+                <Text style={s.clearTxt}>✕</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {/* iOS spinner — shows only when user taps "Set finish time" */}
+          {Platform.OS === "ios" && showIosPicker && (
+            <View style={s.iosPickerWrap}>
+              <DateTimePicker
+                mode="time"
+                value={iosPickerDate}
+                display="spinner"
+                themeVariant="dark"
+                style={s.iosSpinner}
+                onChange={(_, date) => {
+                  if (date) {
+                    setIosPickerDate(date);
+                    setSelectedTime(dateToTimeStr(date));
+                  }
+                }}
+              />
+              <TouchableOpacity
+                onPress={() => setShowIosPicker(false)}
+                style={s.iosDoneBtn}
+              >
+                <Text style={s.iosDoneTxt}>Done</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
           <TouchableOpacity
             onPress={handleSave}
             activeOpacity={0.85}
@@ -266,7 +364,6 @@ const s = StyleSheet.create({
   },
   backArrow: { color: "#FFF", fontSize: 28, lineHeight: 32, marginTop: -2 },
   headerTitle: { color: "#FFF", fontSize: 18, fontWeight: "700" },
-
   emptyWrap: {
     flex: 1,
     alignItems: "center",
@@ -281,7 +378,6 @@ const s = StyleSheet.create({
     textAlign: "center",
     lineHeight: 20,
   },
-
   listContent: {
     paddingHorizontal: 16,
     paddingTop: 8,
@@ -314,7 +410,6 @@ const s = StyleSheet.create({
     paddingVertical: 3,
   },
   timeTxt: { color: "rgba(255,255,255,0.6)", fontSize: 11 },
-
   fab: {
     position: "absolute",
     right: 24,
@@ -332,9 +427,8 @@ const s = StyleSheet.create({
     elevation: 8,
   },
   fabTxt: { color: "#000", fontSize: 28, fontWeight: "300", marginTop: -2 },
-
   bottomBtn: { paddingHorizontal: 16, paddingBottom: 24, paddingTop: 8 },
-  btnWrap: { width: "100%", marginTop: 8 },
+  btnWrap: { width: "100%", marginTop: 4 },
   btn: {
     width: "100%",
     height: 56,
@@ -349,23 +443,58 @@ const s = StyleSheet.create({
     fontWeight: "600",
     letterSpacing: 0.3,
   },
-
   sheetContent: { gap: 12, paddingBottom: 8 },
   sheetInput: {
     color: "#FFF",
     fontSize: 16,
     fontWeight: "500",
-    minHeight: 60,
+    minHeight: 48,
     paddingVertical: 4,
   },
   sheetDivider: {
     height: StyleSheet.hairlineWidth,
     backgroundColor: "rgba(255,255,255,0.12)",
-    marginVertical: 4,
+    marginVertical: 2,
   },
-  sheetDescPlaceholder: {
-    color: "rgba(255,255,255,0.25)",
+
+  // Time picker row
+  timePickerRow: { flexDirection: "row", alignItems: "center", gap: 8 },
+  timePickerBtn: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 14,
+    backgroundColor: "rgba(255,255,255,0.07)",
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: "rgba(255,255,255,0.12)",
+  },
+  timePickerIcon: { fontSize: 16 },
+  timePickerTxt: {
+    flex: 1,
+    color: "rgba(255,255,255,0.35)",
     fontSize: 14,
-    paddingVertical: 8,
+    fontWeight: "500",
   },
+  timePickerTxtSet: { color: "#FFF" },
+  clearBtn: { padding: 8 },
+  clearTxt: { color: "rgba(255,255,255,0.4)", fontSize: 14 },
+
+  // iOS spinner picker
+  iosPickerWrap: {
+    width: "100%",
+    backgroundColor: "rgba(255,255,255,0.05)",
+    borderRadius: 16,
+    overflow: "hidden",
+    marginTop: 4,
+  },
+  iosSpinner: { width: "100%", height: 150 },
+  iosDoneBtn: {
+    alignSelf: "flex-end",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  iosDoneTxt: { color: "#FFF", fontSize: 16, fontWeight: "600" },
 });

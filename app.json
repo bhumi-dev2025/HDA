@@ -2,13 +2,13 @@
   "expo": {
     "name": "Human Design Academy",
     "slug": "HumanDesignAcademy",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "app",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "buildNumber": "10",
+      "buildNumber": "13",
       "supportsTablet": false,
       "bundleIdentifier": "com.simple.humandesignacademy",
       "googleServicesFile": "./GoogleService-Info.plist",
@@ -26,7 +26,7 @@
       }
     },
     "android": {
-      "versionCode": 11,
+      "versionCode": 15,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"

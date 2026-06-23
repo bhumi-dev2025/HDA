@@ -4,11 +4,19 @@ import { Session } from "@supabase/supabase-js";
 import { Stack, useRouter, useSegments } from "expo-router";
 import LottieView from "lottie-react-native";
 import { useEffect, useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { HDA_LESSONS } from "../constants/hdaPathData";
 import "../global.css";
 import { supabase } from "../lib/supabase";
+
+// ✅ Global fix: device/system font-size settings ignore કરો
+// આનાથી badhi <Text> ane <TextInput> ni size badhi devices ma consistent rahese
+(Text as any).defaultProps = (Text as any).defaultProps || {};
+(Text as any).defaultProps.allowFontScaling = false;
+
+(TextInput as any).defaultProps = (TextInput as any).defaultProps || {};
+(TextInput as any).defaultProps.allowFontScaling = false;
 
 if (typeof global !== "undefined") {
   const originalHandler = (global as any).ErrorUtils?.getGlobalHandler?.();

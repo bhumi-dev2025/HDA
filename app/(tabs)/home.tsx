@@ -579,7 +579,9 @@ export default function HomeScreen() {
       setBlueProgress(
         (Math.min(waterVal / 3.5, 1) + Math.min(mMins / 20, 1)) / 2,
       );
-      setGreenProgress(todosTotal > 0 ? todosDone / Math.max(todosTotal, 3) : 0);
+      setGreenProgress(
+        todosTotal > 0 ? todosDone / Math.max(todosTotal, 3) : 0,
+      );
       setAnimKey((k) => k + 1);
     });
     return unsubscribe;
@@ -635,7 +637,9 @@ export default function HomeScreen() {
       setBlueProgress(
         (Math.min(waterVal / 3.5, 1) + Math.min(mMins / 20, 1)) / 2,
       );
-      setGreenProgress(todosTotal > 0 ? todosDone / Math.max(todosTotal, 3) : 0);
+      setGreenProgress(
+        todosTotal > 0 ? todosDone / Math.max(todosTotal, 3) : 0,
+      );
       setAnimKey((k) => k + 1);
     });
     return unsubscribe;
@@ -837,23 +841,31 @@ export default function HomeScreen() {
                   <View className="p-4 h-full flex-row items-center gap-4">
                     {!isMeditationDone ? (
                       <>
-                        <CC1 height={45} width={45} />
+                        <CC1 height={42} width={42} />
                         <View className="w-[1px] h-8 bg-[#E5E5EA]" />
-                        <Text className="text-white font-medium text-sm">
-                          Mind clear. Soul{"\n"}light.
+                        <Text
+                          className="flex-1 text-white font-medium text-sm"
+                          numberOfLines={2}
+                          adjustsFontSizeToFit
+                        >
+                          Mind clear. Soul light.
                         </Text>
                       </>
                     ) : (
                       <>
-                        <CC1 height={45} width={45} />
+                        <CC1 height={42} width={42} />
                         <View className="w-[1px] h-8 bg-[#E5E5EA]" />
-                        <View>
+                        <View className="flex-1">
                           {/* <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1"> */}
                           <Text className="text-[#CCCCCC] text-[12px] font-bold">
                             Meditation
                           </Text>
                           {/* </View> */}
-                          <Text className="text-white text-2xl font-black">
+                          <Text
+                            className="text-white text-2xl font-medium"
+                            numberOfLines={1}
+                            adjustsFontSizeToFit
+                          >
                             {parseInt(meditationData || "0")}m
                           </Text>
                         </View>
@@ -874,23 +886,31 @@ export default function HomeScreen() {
                   <View className="p-4 h-full flex-row items-center gap-4">
                     {!isWorkoutDone ? (
                       <>
-                        <CC2 height={45} width={45} />
+                        <CC2 height={42} width={42} />
                         <View className="w-[1px] h-8 bg-[#E5E5EA]" />
-                        <Text className="text-white font-medium text-sm">
-                          Strength built in{"\n"}Stillness.
+                        <Text
+                          className="flex-1 text-white font-medium text-sm"
+                          numberOfLines={2}
+                          // adjustsFontSizeToFit
+                        >
+                          Strength built in Stillness.
                         </Text>
                       </>
                     ) : (
                       <>
-                        <CC2 height={45} width={45} />
+                        <CC2 height={42} width={42} />
                         <View className="w-[1px] h-8 bg-[#E5E5EA]" />
-                        <View>
+                        <View className="flex-1">
                           {/* <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1"> */}
                           <Text className="text-[#CCCCCC] text-[12px] font-bold">
                             Workout
                           </Text>
                           {/* </View> */}
-                          <Text className="text-white text-2xl font-black">
+                          <Text
+                            className="text-white text-2xl font-medium"
+                            numberOfLines={1}
+                            adjustsFontSizeToFit
+                          >
                             {workoutData.hour}h {workoutData.minute}m
                           </Text>
                         </View>
@@ -913,8 +933,12 @@ export default function HomeScreen() {
                       />
                       <View className="p-4 items-center justify-between h-full py-6">
                         <CC3 height={50} width={50} />
-                        <Text className="text-white text-center font-medium text-sm">
-                          Water brings life,health,{"\n"} and happiness.
+                        <Text
+                          className="text-white text-center font-medium text-sm"
+                          numberOfLines={2}
+                          adjustsFontSizeToFit
+                        >
+                          Water brings life, health, and happiness.
                         </Text>
                       </View>
                     </>
@@ -930,7 +954,11 @@ export default function HomeScreen() {
                           <Text className="text-white text-center font-medium text-[10px] leading-3 mb-2">
                             Water brings life,health,{"\n"} and happiness.
                           </Text>
-                          <Text className="text-white text-3xl font-black">
+                          <Text
+                            className="text-white text-2xl font-medium"
+                            numberOfLines={1}
+                            adjustsFontSizeToFit
+                          >
                             {waterData}ltr
                           </Text>
                         </View>
@@ -951,23 +979,31 @@ export default function HomeScreen() {
                   <View className="p-4 h-full flex-row items-center gap-4">
                     {!isStepDone ? (
                       <>
-                        <CC4 height={45} width={45} />
+                        <CC4 height={42} width={42} />
                         <View className="w-[1px] h-8 bg-[#E5E5EA]" />
-                        <Text className="flex-1 text-white font-medium text-sm">
-                          Mindful steps,{"\n"}peaceful path.
+                        <Text
+                          className="flex-1 text-white font-medium text-sm"
+                          numberOfLines={2}
+                          adjustsFontSizeToFit
+                        >
+                          Mindful steps, peaceful path.
                         </Text>
                       </>
                     ) : (
                       <>
-                        <CC4 height={45} width={45} />
+                        <CC4 height={42} width={42} />
                         <View className="w-[1px] h-8 bg-[#E5E5EA]" />
-                        <View>
+                        <View className="flex-1">
                           {/* <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1"> */}
                           <Text className="text-[#CCCCCC] text-[12px] font-bold">
                             Steps
                           </Text>
                           {/* </View> */}
-                          <Text className="text-white text-2xl font-black">
+                          <Text
+                            className="text-white text-2xl font-medium"
+                            numberOfLines={1}
+                            adjustsFontSizeToFit
+                          >
                             {stepData}
                           </Text>
                         </View>
@@ -1047,23 +1083,31 @@ export default function HomeScreen() {
                   <View className="p-4 h-full flex-row items-center gap-4">
                     {!isSleepDone ? (
                       <>
-                        <CC6 height={45} width={45} />
+                        <CC6 height={42} width={42} />
                         <View className="w-[1px] h-8 bg-[#E5E5EA]" />
-                        <Text className="text-white font-medium text-sm">
-                          Quiet mind.{"\n"}Deep Sleep.
+                        <Text
+                          className="flex-1 text-white font-medium text-sm"
+                          numberOfLines={2}
+                          adjustsFontSizeToFit
+                        >
+                          Quiet mind. Deep Sleep.
                         </Text>
                       </>
                     ) : (
                       <>
-                        <CC6 height={45} width={45} />
+                        <CC6 height={42} width={42} />
                         <View className="w-[1px] h-8 bg-[#E5E5EA]" />
-                        <View>
+                        <View className="flex-1">
                           {/* <View className="bg-[#FFFFFF1A] px-2 py-0.5 rounded-full self-start mb-1"> */}
                           <Text className="text-[#CCCCCC] text-[12px] font-bold">
                             Sleep
                           </Text>
                           {/* </View> */}
-                          <Text className="text-white text-2xl font-black">
+                          <Text
+                            className="text-white text-2xl font-medium"
+                            numberOfLines={1}
+                            adjustsFontSizeToFit
+                          >
                             {sleepData.hour}h {sleepData.minute}m
                           </Text>
                         </View>

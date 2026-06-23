@@ -1,6 +1,6 @@
 import * as Haptics from "expo-haptics";
 import React, { FC, ReactNode, useEffect } from "react";
-import { Pressable, Text } from "react-native";
+import { Pressable, Text, useWindowDimensions } from "react-native";
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
@@ -10,6 +10,12 @@ import Animated, {
 
 const BUTTON_SCALE_DURATION = 150;
 const BUTTON_SCALE_PRESSED = 0.9;
+
+// Design was built for a large phone (~430pt wide, e.g. big Android / Pro Max).
+// On narrower screens (iPhone 15 Pro, small Android, etc.) we scale padding
+// and font size down proportionally so the label never wraps/overflows.
+const BASE_WIDTH = 430;
+const MIN_SCALE = 0.72;
 
 interface TabButtonProps {
   focused: boolean;
@@ -24,6 +30,9 @@ export const TabButton: FC<TabButtonProps> = ({
   children,
   label,
 }) => {
+  const { width: screenWidth } = useWindowDimensions();
+  const scaleFactor = Math.max(MIN_SCALE, Math.min(1, screenWidth / BASE_WIDTH));
+
   const scale = useSharedValue(1);
   const progress = useSharedValue(focused ? 1 : 0);
 
@@ -40,7 +49,7 @@ export const TabButton: FC<TabButtonProps> = ({
     backgroundColor: interpolateColor(
       progress.value,
       [0, 1],
-      ["rgba(255,255,255,0)", "rgba(255,255,255,0.2)"]
+      ["rgba(255,255,255,0)", "rgba(255,255,255,0.2)"],
     ),
   }));
 
@@ -66,21 +75,22 @@ export const TabButton: FC<TabButtonProps> = ({
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            paddingVertical: 8,
-            paddingHorizontal: 16,
+            paddingVertical: 8 * scaleFactor,
+            paddingHorizontal: 14 * scaleFactor,
             borderRadius: 999,
-            gap: 3,
+            gap: 3 * scaleFactor,
           },
         ]}
       >
         {children}
         {label && (
           <Text
+            numberOfLines={1}
             style={{
               color: focused ? "white" : "#8E8E93",
-              fontSize: 12,
+              fontSize: 11 * scaleFactor,
               fontWeight: focused ? "600" : "400",
-              letterSpacing: 0.2,
+              letterSpacing: 0,
             }}
           >
             {label}

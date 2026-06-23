@@ -1,6 +1,12 @@
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import React, { FC } from "react";
-import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { chatEvents } from "../lib/chatEvents";
 import { TabButton } from "./tab-button";
@@ -14,6 +20,12 @@ import AI from "../assets/2.0/home icon/ai.svg";
 const TAB_BG = require("../assets/2.0/home bg/t2.png");
 const CIRCLE_BG = require("../assets/2.0/home bg/t1.png");
 
+// Same base-width scaling approach as tab-button.tsx, so icon sizes and the
+// AI circle button shrink proportionally on narrow screens instead of
+// pushing the tab bar wider than the screen / causing overflow.
+const BASE_WIDTH = 430;
+const MIN_SCALE = 0.72;
+
 export enum Tab {
   Home = "home",
   Web = "web",
@@ -23,6 +35,11 @@ export enum Tab {
 
 export const CustomTabBar: FC<BottomTabBarProps> = ({ state, navigation }) => {
   const insets = useSafeAreaInsets();
+  const { width: screenWidth } = useWindowDimensions();
+  const scaleFactor = Math.max(MIN_SCALE, Math.min(1, screenWidth / BASE_WIDTH));
+  const iconSize = Math.round(22 * scaleFactor);
+  const aiIconSize = Math.round(40 * scaleFactor);
+  const circleSize = Math.round(75 * scaleFactor);
 
   const isTabFocused = (routeName: string) => {
     const index = state.routes.findIndex((route) => route.name === routeName);
@@ -42,7 +59,7 @@ export const CustomTabBar: FC<BottomTabBarProps> = ({ state, navigation }) => {
           onPress={() => navigation.navigate(Tab.Home)}
           label="Home"
         >
-          <HOME width={22} height={22} />
+          <HOME width={iconSize} height={iconSize} />
         </TabButton>
 
         <TabButton
@@ -50,7 +67,7 @@ export const CustomTabBar: FC<BottomTabBarProps> = ({ state, navigation }) => {
           onPress={() => navigation.navigate(Tab.Web)}
           label="  HDA  "
         >
-          <HDA width={22} height={22} />
+          <HDA width={iconSize} height={iconSize} />
         </TabButton>
 
         <TabButton
@@ -58,7 +75,7 @@ export const CustomTabBar: FC<BottomTabBarProps> = ({ state, navigation }) => {
           onPress={() => navigation.navigate(Tab.Explore)}
           label="Alumni"
         >
-          <ALUMNI width={22} height={22} />
+          <ALUMNI width={iconSize} height={iconSize} />
         </TabButton>
 
         <TabButton
@@ -66,13 +83,13 @@ export const CustomTabBar: FC<BottomTabBarProps> = ({ state, navigation }) => {
           onPress={() => navigation.navigate(Tab.Profile)}
           label="Profile"
         >
-          <PROFILE width={22} height={22} />
+          <PROFILE width={iconSize} height={iconSize} />
         </TabButton>
       </ImageBackground>
 
       {/* AI Circle Button */}
       <TouchableOpacity
-        style={styles.plusButton}
+        style={[styles.plusButton, { width: circleSize, height: circleSize }]}
         activeOpacity={0.8}
         onPress={() => chatEvents.emit()}
       >
@@ -81,7 +98,7 @@ export const CustomTabBar: FC<BottomTabBarProps> = ({ state, navigation }) => {
           style={styles.plusButtonBg}
           imageStyle={{ borderRadius: 999 }}
         >
-          <AI width={40} height={40} />
+          <AI width={aiIconSize} height={aiIconSize} />
         </ImageBackground>
       </TouchableOpacity>
     </View>
@@ -102,7 +119,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 8,
+    paddingHorizontal: 4,
     paddingVertical: 8,
     borderRadius: 999,
     overflow: "hidden",

@@ -1,5 +1,55 @@
 const PATH_ICON = require('../assets/2.0/path/p1.png');
+const PATH_ICON9 = require('../assets/2.0/path/p9.png');
+const PATH_ICON26 = require('../assets/2.0/path/p26.png');
+const PATH_ICON15 = require('../assets/2.0/path/p15.png');
+const PATH_ICON23 = require('../assets/2.0/path/p23.png');
+const PATH_ICON31 = require('../assets/2.0/path/p31.png');
+const PATH_ICON33 = require('../assets/2.0/path/p33.png');
+const PATH_ICON37 = require('../assets/2.0/path/p37.png');
+const PATH_ICON43 = require('../assets/2.0/path/p43.png');
+const PATH_ICON53 = require('../assets/2.0/path/p53.png');
+const PATH_ICON59 = require('../assets/2.0/path/p59.png');
+const PATH_ICON74 = require('../assets/2.0/path/p74.png');
+const PATH_ICON78 = require('../assets/2.0/path/p53.png');
+const PATH_ICON80 = require('../assets/2.0/path/p80.png');
+const PATH_ICON83 = require('../assets/2.0/path/p83.png');
+const PATH_ICON90 = require('../assets/2.0/path/p83.png');
+const PATH_ICON106 = require('../assets/2.0/path/p106.png');
+
+
 const MODEL_ICON = require('../assets/2.0/path/p2.png');
+const MODEL_ICON15 = require('../assets/2.0/path/m15.png');
+const MODEL_ICON26 = require('../assets/2.0/path/m26.png');
+const MODEL_ICON9 = require('../assets/2.0/path/m9.png');
+const MODEL_ICON23 = require('../assets/2.0/path/m23.png');
+const MODEL_ICON31 = require('../assets/2.0/path/m31.png');
+const MODEL_ICON33 = require('../assets/2.0/path/m33.png');
+const MODEL_ICON37 = require('../assets/2.0/path/m37.png');
+const MODEL_ICON43 = require('../assets/2.0/path/m43.png');
+const MODEL_ICON53 = require('../assets/2.0/path/m53.png');
+const MODEL_ICON59 = require('../assets/2.0/path/m59.png');
+const MODEL_ICON74 = require('../assets/2.0/path/m74.png');
+const MODEL_ICON78 = require('../assets/2.0/path/m53.png');
+const MODEL_ICON80 = require('../assets/2.0/path/m80.png');
+const MODEL_ICON83 = require('../assets/2.0/path/m83.png');
+const MODEL_ICON106 = require('../assets/2.0/path/m106.png');
+const MODEL_ICON90 = require('../assets/2.0/path/m83.png');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export interface Lesson {
   id: number;
@@ -11,6 +61,12 @@ export interface Lesson {
   week: number;
   bullets: string[];
   chapterColor: string;
+  hintText?: string;
+  hintOffsetX?: number;   
+  hintOffsetY?: number;
+  arrowRotate?: string; 
+  arrowTop?: number;    
+  arrowLeft?: number;
 }
 
 export const HDA_LESSONS: Lesson[] = [
@@ -139,8 +195,8 @@ export const HDA_LESSONS: Lesson[] = [
   // ─── Phase 1 | Chapter 2 : FigJam AI & Product Specs (Week 2) ───
   {
     id: 9,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON9,
+    modelIcon: MODEL_ICON9,
     title: "Generative Workspace Workflows",
     chapter: "Phase 1 | Chapter 2",
     chapterTitle: "FigJam AI & Product Specs",
@@ -151,6 +207,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Use text prompt blocks to instantly create customized meeting templates, board structures, and visual timelines.",
       "Learn how to add specificity to your AI prompts to dial in exact project layouts in seconds.",
     ],
+    hintText: "Hey, FigJam",
+    hintOffsetX: 30,  
+    hintOffsetY: 60,
+    arrowRotate: '80deg', 
+    arrowTop: -20,       
+    arrowLeft: -15,
   },
   {
     id: 10,
@@ -227,11 +289,17 @@ export const HDA_LESSONS: Lesson[] = [
       "Map interface patterns common to all viewports using cursors, toolbars, and white space.",
       "Overcome platform choice paralysis by focusing purely on raw creative execution.",
     ],
+    // hintText: "Hey, Figma",
+    // hintOffsetX: -180,  
+    // hintOffsetY: 60,
+    // arrowRotate: '195deg', 
+    // arrowTop: -20,       
+    // arrowLeft: 80,
   },
   {
     id: 15,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON15,
+    modelIcon: MODEL_ICON15,
     title: "AI Image Generation & Prompts",
     chapter: "Phase 1 | Chapter 3",
     chapterTitle: "Figma Foundations & AI Assets",
@@ -242,6 +310,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Master blending visual settings, aspects, and stylization weights using text-to-image engines.",
       "Port customized high-fidelity AI artwork directly into your design environment.",
     ],
+    hintText: "AI - Image",
+    hintOffsetX: -180,  
+    hintOffsetY: 60,
+    arrowRotate: '195deg', 
+    arrowTop: -20,       
+    arrowLeft: 80,
   },
   {
     id: 16,
@@ -352,8 +426,8 @@ export const HDA_LESSONS: Lesson[] = [
   },
   {
     id: 23,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON23,
+    modelIcon: MODEL_ICON23,
     title: "Figma Make AI Prompts",
     chapter: "Phase 1 | Chapter 4",
     chapterTitle: "Landing Page Strategy & Core AI",
@@ -364,6 +438,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Instruct generative prompt matrix blocks to instantly output structurally functional landing page mockups.",
       "Rapidly customize layout sections and generated assets inside your design environment.",
     ],
+    hintText: "Figma Make",
+    hintOffsetX: -180,  
+    hintOffsetY: 60,
+    arrowRotate: '195deg', 
+    arrowTop: -20,       
+    arrowLeft: 85,
   },
   // ─── Phase 1 | Chapter 5 : Component Systems & Layout Architecture (Week 3) ───
   {
@@ -399,8 +479,8 @@ export const HDA_LESSONS: Lesson[] = [
   // ─── Phase 1 | Chapter 6 : Responsive Mobile Adaptation (Week 4) ───
   {
     id: 26,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON26,
+    modelIcon: MODEL_ICON26,
     title: "The Mobile Down-Scaling Blueprint",
     chapter: "Phase 1 | Chapter 6",
     chapterTitle: "Mobile App UI/UX Architecture",
@@ -411,6 +491,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Restructure wide grid features into vertical stack structures to streamline thumb-driven interaction maps.",
       "Learn standard mobile viewport parameters, target boundaries, scale variations, and thumb-zone safety grids.",
     ],
+    hintText: "Mobile UI/UX",
+    hintOffsetX: 30,  
+    hintOffsetY: 60,
+    arrowRotate: '80deg', 
+    arrowTop: -20,       
+    arrowLeft: -15,
   },
   {
     id: 27,
@@ -475,8 +561,8 @@ export const HDA_LESSONS: Lesson[] = [
   },
   {
     id: 31,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON31,
+    modelIcon: MODEL_ICON31,
     title: "Google Project Stitch Prompt Engineering",
     chapter: "Phase 1 | Chapter 7",
     chapterTitle: "Generative Design System Automation",
@@ -487,6 +573,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Inject your custom exported Design.md text parameters directly into the context memory of the AI node.",
       "Train the system to deeply understand your baseline color rules, geometry choices, and style values.",
     ],
+    hintText: "Google Stitch",
+    hintOffsetX: -190,  
+    hintOffsetY: 60,
+    arrowRotate: '200deg', 
+    arrowTop: -20,       
+    arrowLeft: 95,
   },
   {
     id: 32,
@@ -506,8 +598,8 @@ export const HDA_LESSONS: Lesson[] = [
   // ─── Phase 2 | Chapter 8 : Framer Workspace Foundations (Week 5) ───
   {
     id: 33,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON33,
+    modelIcon: MODEL_ICON33,
     title: "The Development Canvas Mindset",
     chapter: "Phase 2 | Chapter 8",
     chapterTitle: "Figma-to-NoCode Translation",
@@ -518,6 +610,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Master the operational logic of code-free web environments and production staging fields.",
       "Safely navigate workspace controls, including staging invite links, preview states, and live publishing loops.",
     ],
+    hintText: "Framer",
+    hintOffsetX: 30,  
+    hintOffsetY: 60,
+    arrowRotate: '80deg', 
+    arrowTop: -20,       
+    arrowLeft: -15,
   },
   {
     id: 34,
@@ -568,8 +666,8 @@ export const HDA_LESSONS: Lesson[] = [
   // ─── Phase 2 | Chapter 10 : Generative 3D Modeling Systems (Week 6) ───
   {
     id: 37,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON37,
+    modelIcon: MODEL_ICON37,
     title: "Text-to-3D Generative Logic",
     chapter: "Phase 2 | Chapter 10",
     chapterTitle: "Generative Spatial Engineering",
@@ -580,6 +678,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Utilize text-to-3D and image-to-3D engines within browser-based workspaces to rapidly build product drafts.",
       "Bypass steep traditional software learning curves to quickly materialize your futuristic project concepts.",
     ],
+    hintText: "Spline, 3D",
+    hintOffsetX: 30,  
+    hintOffsetY: 50,
+    arrowRotate: '80deg', 
+    arrowTop: -20,       
+    arrowLeft: -15,
   },
   {
     id: 38,
@@ -660,8 +764,8 @@ export const HDA_LESSONS: Lesson[] = [
   // ─── Phase 2.5 | Chapter 1 : Advanced Vibe Coding with Claude (Week 7) ───
   {
     id: 43,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON43,
+    modelIcon: MODEL_ICON43,
     title: "The Vibe Coding Terminal Mindset",
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
@@ -672,6 +776,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Master the Claude Command Line Interface (CLI) environment to handle complex background automation runs.",
       "Pipe live terminal logs and script lines into your workspace to audit background executions.",
     ],
+    hintText: "Claude Terminal",
+    hintOffsetX: 30,  
+    hintOffsetY: 50,
+    arrowRotate: '80deg', 
+    arrowTop: -20,       
+    arrowLeft: -15,
   },
   {
     id: 44,
@@ -735,8 +845,8 @@ export const HDA_LESSONS: Lesson[] = [
   },
   {
     id: 48,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON26,
+    modelIcon: MODEL_ICON26,
     title: "Figma Connectors & Asset Sync",
     chapter: "Phase 2.5 | Chapter 1",
     chapterTitle: "Claude Local Terminal & Context Engineering",
@@ -747,6 +857,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Read web typography matrices, local layout tokens, and UI styles directly into your prompt run.",
       "Automate cross-app workflow queries from Figma documents directly into no-code development fields.",
     ],
+    hintText: "Figma Connectors 🛠️",
+    hintOffsetX: -230,  
+    hintOffsetY: 50,
+    arrowRotate: '200deg', 
+    arrowTop: -20,       
+    arrowLeft: 135,
   },
   {
     id: 49,
@@ -811,8 +927,8 @@ export const HDA_LESSONS: Lesson[] = [
   // ─── Phase 2.5 | Chapter 2 : ChatGPT Deep Research (Week 8) ───
   {
     id: 53,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON53,
+    modelIcon: MODEL_ICON53,
     title: "The Deep Research Engine Workflows",
     chapter: "Phase 2.5 | Chapter 2",
     chapterTitle: "Advanced Reasoning & Research Systems",
@@ -823,6 +939,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Learn to structure deep discovery questions to direct the AI agent to dive into market niches over hours.",
       "Synthesize generated research paths down to hyper-detailed competitive analysis briefs for your business.",
     ],
+    hintText: "ChatGPT’ ✨",
+    hintOffsetX: 30,  
+    hintOffsetY: 50,
+    arrowRotate: '80deg', 
+    arrowTop: -20,       
+    arrowLeft: -15,
   },
   {
     id: 54,
@@ -903,8 +1025,8 @@ export const HDA_LESSONS: Lesson[] = [
   // ─── Phase 2.5 | Chapter 4 : Google AI Studio (Week 9) ───
   {
     id: 59,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON59,
+    modelIcon: MODEL_ICON59,
     title: "Hands-Free Ambient Brainstorming",
     chapter: "Phase 2.5 | Chapter 4",
     chapterTitle: "Hands-Free Multimodal Interaction",
@@ -915,6 +1037,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Master expressing complex startup strategies, layout structures, and loose logic ideas fluently without stopping to type.",
       "Learn to capture real-time ambient thoughts and convert conversational audio tracks directly into clear project prompt inputs.",
     ],
+    hintText: "Google AI Studio✨",
+    hintOffsetX: 30,  
+    hintOffsetY: 50,
+    arrowRotate: '80deg', 
+    arrowTop: -20,       
+    arrowLeft: -15,
   },
   {
     id: 60,
@@ -1133,8 +1261,8 @@ export const HDA_LESSONS: Lesson[] = [
   // ─── Phase 2.5 Expert | Chapter 4 : Gemini-Driven App Distribution (Week 11) ───
   {
     id: 74,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON74,
+    modelIcon: MODEL_ICON74,
     title: "Agentic Jetpack Compose Refactoring",
     chapter: "Phase 2.5 Expert | Chapter 4",
     chapterTitle: "Jetpack Compose & Google Play Deployment",
@@ -1145,6 +1273,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Use advanced Android skills to let the agent render live visual layout previews of your screens directly.",
       "Run automated end-to-end user path tests inside your system terminal to audit user flow loops.",
     ],
+     hintText: "Jetpack Compose",
+    hintOffsetX: 30,  
+    hintOffsetY: 50,
+    arrowRotate: '80deg', 
+    arrowTop: -20,       
+    arrowLeft: -15,
   },
   {
     id: 75,
@@ -1191,11 +1325,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Learn to combine distinct reference styles together to formulate one unified visual system in your head.",
       "Feed multi-reference layout blueprints into ChatGPT Images 2.0 to instantly materialize your concept.",
     ],
+    
   },
   {
     id: 78,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON78,
+    modelIcon: MODEL_ICON78,
     title: "ChatGPT Images 2.0 Token Control",
     chapter: "Phase 3 | Chapter 1",
     chapterTitle: "Multi-Source Image Composition",
@@ -1206,6 +1341,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Command aspect changes, camera lenses, lighting styles, and compositional values without code.",
       "Control iteration prompts to tweak specific elements of a generated picture while keeping the rest consistent.",
     ],
+    hintText: "Image 2.0’ ✨",
+    hintOffsetX: -195,  
+    hintOffsetY: 50,
+    arrowRotate: '200deg', 
+    arrowTop: -20,       
+    arrowLeft: 95,
   },
   {
     id: 79,
@@ -1224,8 +1365,8 @@ export const HDA_LESSONS: Lesson[] = [
   },
   {
     id: 80,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON80,
+    modelIcon: MODEL_ICON80,
     title: "Adobe Firefly Boards Setup",
     chapter: "Phase 3 | Chapter 1",
     chapterTitle: "Multi-Source Image Composition",
@@ -1236,6 +1377,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Structure loose design thoughts, vector color palettes, text notes, and mockups in one collaborative space.",
       "Map layout structures sequentially to prepare a professional visual roadmap for your media.",
     ],
+    hintText: "Adobe Firefly",
+    hintOffsetX: -195,  
+    hintOffsetY: 50,
+    arrowRotate: '200deg', 
+    arrowTop: -20,       
+    arrowLeft: 95,
   },
   {
     id: 81,
@@ -1270,8 +1417,8 @@ export const HDA_LESSONS: Lesson[] = [
   // ─── Phase 3 | Chapter 2 : Storytelling Architecture (Week 13) ───
   {
     id: 83,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON83,
+    modelIcon: MODEL_ICON83,
     title: "12 Principles of Animation for Social Media",
     chapter: "Phase 3 | Chapter 2",
     chapterTitle: "Universal Content Planning & Shooting",
@@ -1282,6 +1429,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Map kinetic physics rules onto standard layouts to ensure your text transitions, graphic pop-ins, and scene cuts feel natural.",
       "Learn to engineer rapid, attention-grabbing visual pacing that hooks viewers instantly within the first 3 seconds.",
     ],
+     hintText: "After Effects , Motion Magic ✨",
+    hintOffsetX: 30,  
+    hintOffsetY: 50,
+    arrowRotate: '80deg', 
+    arrowTop: -20,       
+    arrowLeft: -15,
   },
   {
     id: 84,
@@ -1380,8 +1533,8 @@ export const HDA_LESSONS: Lesson[] = [
   // ─── Phase 3 | Chapter 6 : Motion Design in After Effects (Week 15) ───
   {
     id: 90,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON90,
+    modelIcon: MODEL_ICON90,
     title: "After Effects Workspace & AEUX Porting",
     chapter: "Phase 3 | Chapter 6",
     chapterTitle: "Keyframes & Vector Asset Porting",
@@ -1392,6 +1545,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Deploy the AEUX plugin framework to instantly transfer raw vector UI components and layout paths directly out of Figma.",
       "Convert imported layers cleanly into native, editable After Effects shape groups to protect vector scalability.",
     ],
+     hintText: "After Effects",
+    hintOffsetX: 30,  
+    hintOffsetY: 50,
+    arrowRotate: '80deg', 
+    arrowTop: -20,       
+    arrowLeft: -15,
   },
   {
     id: 91,
@@ -1625,8 +1784,8 @@ export const HDA_LESSONS: Lesson[] = [
   // ─── Phase 3 | Chapter 12 : Paid Acquisition & Meta Ads (Week 17) ───
   {
     id: 106,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON106,
+    modelIcon: MODEL_ICON106,
     title: "Meta Ads Campaign Infrastructure",
     chapter: "Phase 3 | Chapter 12",
     chapterTitle: "Algorithmic Campaign Operations",
@@ -1637,6 +1796,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Structure optimization funnels designed to push high-converting vertical video creatives to target buyers.",
       "Balance ad spends across diverse testing hooks to lower your customer acquisition costs.",
     ],
+     hintText: "Meta Ads ✨",
+    hintOffsetX: 30,  
+    hintOffsetY: 50,
+    arrowRotate: '80deg', 
+    arrowTop: -20,       
+    arrowLeft: -15,
   },
   {
     id: 107,

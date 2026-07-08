@@ -23,12 +23,19 @@ function BlurBackdrop({
   animatedIndex,
   close,
 }: BottomSheetBackdropProps & { close: () => void }) {
-  const rPressableStyle = useAnimatedStyle(() => ({
-    pointerEvents: animatedIndex.get() >= 0 ? "auto" : "none",
-  }));
+  const rPressableStyle = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(
+        animatedIndex.value,
+        [-1, 0],
+        [0, 1],
+        Extrapolation.CLAMP,
+      ),
+    };
+  });
   const animatedIntensity = useAnimatedProps(() => ({
     intensity: interpolate(
-      animatedIndex.get(),
+      animatedIndex.value,
       [-1, 0],
       [0, 28],
       Extrapolation.CLAMP,
@@ -36,8 +43,13 @@ function BlurBackdrop({
   }));
   return (
     <AnimatedPressable
-      style={[StyleSheet.absoluteFill, rPressableStyle]}
+      style={[
+        StyleSheet.absoluteFill,
+        rPressableStyle,
+        { backgroundColor: "rgba(0, 0, 0, 0.15)" },
+      ]}
       onPress={close}
+      pointerEvents="auto"
     >
       <AnimatedBlurView
         animatedProps={animatedIntensity}
@@ -83,6 +95,7 @@ export function AppBottomSheet({
           appearsOnIndex={0}
           disappearsOnIndex={-1}
           opacity={0.6}
+          pressBehavior="close"
         />
       );
     }

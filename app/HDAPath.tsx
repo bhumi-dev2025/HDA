@@ -3,6 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
+  BackHandler,
   Dimensions,
   Image,
   ImageBackground,
@@ -71,6 +72,25 @@ export default function HDAPath() {
     const timer = setTimeout(() => setVisibleCount(HDA_LESSONS.length), 300);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    const handleBackButton = () => {
+      if (sheetOpen) {
+        setSheetOpen(false); // જો મોડલ ખુલ્લું હોય તો એને બંધ કરો
+        return true; // આ ટ્રુ રીટર્ન કરવાથી એપ્લિકેશન પાછળના પેજ પર નહીં જાય
+      }
+      return false; // જો મોડલ બંધ હોય તો નોર્મલ બેક જવા દો
+    };
+
+    // ઇવેન્ટ લિસનર એડ કર્યું
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      handleBackButton,
+    );
+
+    // કમ્પોનન્ટ અનમાઉન્ટ થાય ત્યારે લિસનર રીમુવ કરો
+    return () => backHandler.remove();
+  }, [sheetOpen]);
 
   const openLesson = (lesson: Lesson) => {
     const now = Date.now();
@@ -206,6 +226,14 @@ export default function HDAPath() {
                   (W - 97) * ZIGZAG[CAT_LESSON_INDEX % ZIGZAG.length];
                 const catYPos = POSITIONS[CAT_LESSON_INDEX];
 
+                // ડિફોલ્ટ પોઝિશન સેટઅપ + કસ્ટમ ઓફસેટ
+                const defaultTop = yPos - 5;
+                const defaultLeft = xPos + 80;
+
+                // જો ડેટામાં કસ્ટમ ઓફસેટ આપ્યો હોય તો એ પ્લસ થશે, નહીતો 0 ગણાશે
+                const finalTop = defaultTop + (lesson.hintOffsetY ?? 0);
+                const finalLeft = defaultLeft + (lesson.hintOffsetX ?? 0);
+
                 return (
                   <View key={lesson.id}>
                     {/* Chapter Divider */}
@@ -265,13 +293,53 @@ export default function HDAPath() {
                       />
                     </View>
 
+                    {lesson.hintText && (
+                      <View
+                        style={{
+                          position: "absolute",
+                          top: finalTop, // ડાયનેમિક ઉપર-નીચે
+                          left: finalLeft, // ડાયનેમિક ડાબે-જમણે
+                          zIndex: 20,
+                          backgroundColor: "#272727",
+                          paddingHorizontal: 12,
+                          paddingVertical: 6,
+                          borderRadius: 16,
+                          borderWidth: 1,
+                          borderColor: "#4B4B4B",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            color: "#FFFFFF",
+                            fontSize: 11,
+                            fontWeight: "500",
+                          }}
+                        >
+                          {lesson.hintText}
+                        </Text>
+                        <Image
+                          source={require("../assets/2.0/path/Arrow.png")}
+                          style={{
+                            position: "absolute",
+                            width: 18,
+                            top: lesson.arrowTop ?? 24,
+                            left: lesson.arrowLeft ?? 15,
+                            transform: [
+                              { rotate: lesson.arrowRotate ?? "0deg" },
+                            ],
+                          }}
+                          resizeMode="contain"
+                        />
+                      </View>
+                    )}
+
                     {/* Cat Button */}
                     {index === CAT_LESSON_INDEX && (
                       <View
                         style={{
                           position: "absolute",
-                          top: catYPos - 10,
-                          left: catXPos + 110,
+                          top: catYPos - 5,
+                          left: catXPos + 180,
                         }}
                       >
                         <CatButton onPress={() => {}} />

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Human Design Academy",
     "slug": "HumanDesignAcademy",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "app",
@@ -53,6 +53,19 @@
         {
           "android": {
             "minSdkVersion": 26
+          },
+          "ios": {
+            "useFrameworks": "static",
+            "extraPods": [
+              {
+                "name": "GoogleUtilities",
+                "modular_headers": true
+              },
+              {
+                "name": "RecaptchaInterop",
+                "modular_headers": true
+              }
+            ]
           }
         }
       ],

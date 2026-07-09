@@ -1,3 +1,4 @@
+const PATH_ICON1 = require('../assets/2.0/path/s.png');
 const PATH_ICON = require('../assets/2.0/path/p1.png');
 const PATH_ICON9 = require('../assets/2.0/path/p9.png');
 const PATH_ICON26 = require('../assets/2.0/path/p26.png');
@@ -17,6 +18,7 @@ const PATH_ICON90 = require('../assets/2.0/path/p83.png');
 const PATH_ICON106 = require('../assets/2.0/path/p106.png');
 
 
+const MODEL_ICON1 = require('../assets/2.0/path/ss.png');
 const MODEL_ICON = require('../assets/2.0/path/p2.png');
 const MODEL_ICON15 = require('../assets/2.0/path/m15.png');
 const MODEL_ICON26 = require('../assets/2.0/path/m26.png');
@@ -74,8 +76,8 @@ export const HDA_LESSONS: Lesson[] = [
   // ─── Phase 1 | Chapter 1 : Designing Your Mind (Week 1) ───
   {
     id: 1,
-    icon: PATH_ICON,
-    modelIcon: MODEL_ICON,
+    icon: PATH_ICON1,
+    modelIcon: MODEL_ICON1,
     title: "Purpose Deconstruction",
     chapter: "Phase 1 | Chapter 1",
     chapterTitle: "Designing Your Mind",
@@ -86,6 +88,12 @@ export const HDA_LESSONS: Lesson[] = [
       "Evaluate what specific production niches you are naturally good at.",
       "Isolate the creative landscapes that bring you genuine excitement and daily joy.",
     ],
+    hintText: "START 👋",
+    hintOffsetX: 30,  
+    hintOffsetY: 60,
+    arrowRotate: '80deg', 
+    arrowTop: -20,       
+    arrowLeft: -15,
   },
   {
     id: 2,

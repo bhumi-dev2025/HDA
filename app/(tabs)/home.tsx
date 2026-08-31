@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Image,
   ImageBackground,
-  Platform,
   ScrollView,
   StatusBar,
   Text,
@@ -13,7 +12,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { fetchGoogleFitSteps } from "../../lib/googleFitService";
 import { healthEvents } from "../../lib/healthEvents";
 import { todoEvents } from "../../lib/todoEvents";
 import { getTodayLog, updateDailyLog } from "../../lib/TrackerService";
@@ -267,14 +265,12 @@ export default function HomeScreen() {
     undefined as unknown as () => Promise<void>,
   );
 
-  // HealthKit — iOS only (Android pe null)
+  // HealthKit (iOS) / Health Connect (Android) — same interface
   const { requestAuthorization, stepStats } = useHealthSteps();
 
-  // iOS — app open thata j HealthKit permission maango
+  // App open thata j health permission maango — iOS ane Android banne mate
   useEffect(() => {
-    if (Platform.OS === "ios") {
-      requestAuthorization().catch(() => {});
-    }
+    requestAuthorization().catch(() => {});
   }, []);
 
   // ── Ring recalculate helper — Apple app style, instant update ────────────
@@ -369,12 +365,10 @@ export default function HomeScreen() {
     isSyncingSteps.current = true;
     lastStepSyncTime.current = now;
     try {
-      let steps: number | null = null;
-      if (Platform.OS === "android") {
-        steps = await fetchGoogleFitSteps();
-      }
-      // iOS mate autoSync ma koi save nahi — stepStats useEffect handle karshe
-      if (steps !== null && steps !== undefined && Platform.OS === "android") {
+      const steps = await requestAuthorization();
+      // Steps state (stepStats) automatically update thashe — neechena
+      // stepStats useEffect j Supabase save karshe (iOS + Android banne mate)
+      if (steps !== null && steps !== undefined) {
         setStepData(steps.toString());
         setIsStepDone(true);
         recalcRings(
@@ -384,9 +378,6 @@ export default function HomeScreen() {
           waterData,
           todoTasks,
         );
-        const result = await updateDailyLog("step", steps.toString());
-        if (result.success && result.newScore !== undefined)
-          setCurrentScore(result.newScore);
       }
     } catch (error) {
     } finally {
@@ -396,22 +387,8 @@ export default function HomeScreen() {
 
   const handleStepPress = async () => {
     try {
-      // iOS — pehla HealthKit authorization maango
-      if (Platform.OS === "ios") {
-        await requestAuthorization();
-      }
-
-      let steps: number | null = null;
-      if (Platform.OS === "android") {
-        steps = await fetchGoogleFitSteps();
-      } else if (Platform.OS === "ios") {
-        const qty = stepStats?.sumQuantity;
-        const fetched = Math.round(
-          typeof qty === "number" ? qty : ((qty as any)?.quantity ?? 0),
-        );
-        // HealthKit connected hoy ane steps > 0 hoy to use karo
-        steps = fetched > 0 ? fetched : null;
-      }
+      // HealthKit (iOS) / Health Connect (Android) — permission + fresh fetch
+      const steps = await requestAuthorization();
 
       if (steps !== null && steps !== undefined) {
         // Steps mili gaya — auto save
@@ -485,8 +462,8 @@ export default function HomeScreen() {
       if (data.step_count != null) {
         setStepData(data.step_count.toString());
         setIsStepDone(true);
-      } else if (Platform.OS === "ios") {
-        // Supabase ma nahi pan HealthKit ma hoy to — stepStats check karo
+      } else {
+        // Supabase ma nahi pan HealthKit/HealthConnect ma hoy to — stepStats check karo
         const qty = stepStats?.sumQuantity;
         const hkSteps = Math.round(
           typeof qty === "number" ? qty : ((qty as any)?.quantity ?? 0),
@@ -655,7 +632,6 @@ export default function HomeScreen() {
   const lastSyncedSteps = useRef<number>(0);
 
   useEffect(() => {
-    if (Platform.OS !== "ios") return;
     const qty = stepStats?.sumQuantity;
     const steps = Math.round(
       typeof qty === "number" ? qty : ((qty as any)?.quantity ?? 0),

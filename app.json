@@ -8,7 +8,7 @@
     "scheme": "app",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "buildNumber": "13",
+      "buildNumber": "19",
       "supportsTablet": false,
       "bundleIdentifier": "com.simple.humandesignacademy",
       "googleServicesFile": "./GoogleService-Info.plist",
@@ -26,13 +26,14 @@
       }
     },
     "android": {
-      "versionCode": 15,
+      "versionCode": 20,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.simple.humandesignacademy"
+      "package": "com.simple.humandesignacademy",
+      "permissions": ["android.permission.health.READ_STEPS"]
     },
     "web": {
       "output": "static",
@@ -48,11 +49,14 @@
           "healthUpdatePermission": "This app may write health data if needed"
         }
       ],
+      "react-native-health-connect",
       [
         "expo-build-properties",
         {
           "android": {
-            "minSdkVersion": 26
+            "minSdkVersion": 26,
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 35
           },
           "ios": {
             "useFrameworks": "static",

@@ -4,6 +4,7 @@ import {
   useHealthkitAuthorization,
   queryStatisticsForQuantity,
 } from "@kingstinct/react-native-healthkit";
+import { fetchHealthConnectSteps } from "./healthConnectService";
 
 function useHealthStepsIOS() {
   const [steps, setSteps] = useState<number | null>(null);
@@ -28,18 +29,22 @@ function useHealthStepsIOS() {
       const count = Math.round(
         typeof qty === "number" ? qty : ((qty as any)?.quantity ?? 0),
       );
-      setSteps(count > 0 ? count : null);
+      const result = count > 0 ? count : null;
+      setSteps(result);
+      return result;
     } catch {
       // permission nathi — ignore
+      return null;
     }
   }, []);
 
   const requestAuthorization = useCallback(async () => {
     try {
       await requestAuthorizationRaw();
-      await fetchSteps();
+      return await fetchSteps();
     } catch {
       // denied — ignore
+      return null;
     }
   }, [requestAuthorizationRaw, fetchSteps]);
 
@@ -49,7 +54,27 @@ function useHealthStepsIOS() {
 }
 
 function useHealthStepsAndroid() {
-  return { requestAuthorization: async () => {}, stepStats: null };
+  const [steps, setSteps] = useState<number | null>(null);
+
+  const fetchSteps = useCallback(async () => {
+    try {
+      const count = await fetchHealthConnectSteps();
+      setSteps(count);
+      return count;
+    } catch {
+      // Health Connect na hoy / permission na hoy — ignore
+      return null;
+    }
+  }, []);
+
+  // "requestAuthorization" naam iOS jevu j rakhyu — home.tsx ek j interface vapre
+  const requestAuthorization = useCallback(async () => {
+    return await fetchSteps();
+  }, [fetchSteps]);
+
+  const stepStats = steps !== null ? { sumQuantity: steps } : null;
+
+  return { requestAuthorization, stepStats };
 }
 
 export const useHealthSteps =

@@ -338,14 +338,7 @@ const Login = () => {
 
       offlineAccess: true,
 
-      scopes:
-        Platform.OS === "android"
-          ? [
-              "profile",
-              "email",
-              "https://www.googleapis.com/auth/fitness.activity.read",
-            ]
-          : ["profile", "email"],
+      scopes: ["profile", "email"],
     });
   }, []);
 
